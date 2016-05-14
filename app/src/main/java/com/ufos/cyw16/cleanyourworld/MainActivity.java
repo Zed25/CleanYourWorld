@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,8 +15,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.GeolocFragment;
@@ -27,12 +33,12 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflate = new MenuInflater(getApplicationContext());
-        inflate.inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
+    private String[] mPlanetTitles = {"prova", "prova2", "prova3"};
+
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+
+    //private ListView mDrawerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,19 +48,34 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        toolbar.setNavigationIcon(R.drawable.ic_menu_24dp);
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+
         getSupportActionBar().setTitle(""); //delete app title
 
         createFragment(); //set ViewPager and TabLayout
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.hamburger:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+        //it manages the left navigation bar
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                toolbar,
+                R.string.app_name, // nav drawer open - description for accessibility
+                R.string.app_name // nav drawer close - description for accessibility
+        ){
+            public void onDrawerClosed(View view) {
+                // calling onPrepareOptionsMenu() to show action bar icons
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                // calling onPrepareOptionsMenu() to hide action bar icons
+                invalidateOptionsMenu();
+            }
+        };
+        drawerLayout.addDrawerListener(drawerToggle);
+
     }
 
 
