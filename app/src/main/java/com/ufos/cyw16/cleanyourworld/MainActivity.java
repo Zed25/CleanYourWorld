@@ -16,12 +16,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewDebug;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.GeolocFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.SearchFragment;
@@ -29,7 +31,7 @@ import com.ufos.cyw16.cleanyourworld.fragment.SearchFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private Toolbar toolbar;
     private String[] mPlanetTitles = {"prova", "prova2", "prova3"};

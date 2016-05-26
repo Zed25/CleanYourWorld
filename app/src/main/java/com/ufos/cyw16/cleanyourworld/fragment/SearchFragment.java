@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.*;
 
@@ -29,6 +30,8 @@ public class SearchFragment extends Fragment {
 
     private Button btnMaterials, btnBarCode, btnProducts;
 
+    private SubFragmentButtonManager subFragmentButtonManager;
+
     public SearchFragment() {
         // Required empty public constructor
     }
@@ -44,6 +47,8 @@ public class SearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.search_fragment, container, false); //inflate layout
 
+        createFragment(v);
+
         //createFragment(v); //set ViewPager and TabLayout
         return v;
     }
@@ -55,6 +60,12 @@ public class SearchFragment extends Fragment {
         btnBarCode = (Button) v.findViewById(R.id.btnBarCode);
         btnMaterials = (Button) v.findViewById(R.id.btnMaterials);
         btnProducts = (Button) v.findViewById(R.id.btnProducts);
+
+        subFragmentButtonManager = new SubFragmentButtonManager();
+
+        btnBarCode.setOnClickListener(subFragmentButtonManager);
+        btnProducts.setOnClickListener(subFragmentButtonManager);
+        btnMaterials.setOnClickListener(subFragmentButtonManager);
 
         //setupViewPager(viewPager);
 
