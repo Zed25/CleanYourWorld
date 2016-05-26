@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CleanYourWorld</string>
+    <string name="barCode">Barcode</string>
 </resources>

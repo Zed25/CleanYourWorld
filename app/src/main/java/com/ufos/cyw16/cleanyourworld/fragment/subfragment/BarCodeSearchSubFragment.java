@@ -9,9 +9,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -24,7 +26,11 @@ import com.ufos.cyw16.cleanyourworld.R;
  */
 public class BarCodeSearchSubFragment extends Fragment{
 
-    private final int USER_CAMERA_PERMISSION = 0;
+    private final int USER_CAMERA_PERMISSION = 0; //check int for camera permission: 0 equals to PERMISSION_GRANTED
+
+    private TextView tvEAN;
+
+    private final String TAG = "recycleDebug";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,10 +40,13 @@ public class BarCodeSearchSubFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        checkCameraPermission();
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.barcode_search_subfragment, container, false); //inflate layout
 
-        checkCameraPermission();
+        tvEAN = (TextView) v.findViewById(R.id.tvEAN);
 
         //createFragment(v); //set ViewPager and TabLayout
         return v;
@@ -103,11 +112,23 @@ public class BarCodeSearchSubFragment extends Fragment{
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
             String scanContent = scanningResult.getContents();
+            Log.v(TAG, scanContent);
             String scanFormat = scanningResult.getFormatName();
+            Log.v(TAG, scanFormat);
+
+            adaptBarcodeAndEAN(scanContent, scanFormat, tvEAN);
         } else {
             Toast toast = Toast.makeText(this.getActivity(),
                     "No scan data received!", Toast.LENGTH_SHORT);
             toast.show();
         }
     }
+
+    private void adaptBarcodeAndEAN(String scanContent, String scanFormat, TextView tvEAN) {
+        String tvText = getResources().getString(R.string.barCode) + ": " + scanContent + " " + scanFormat;
+
+        tvEAN.setText(tvText);
+    }
+
+
 }
