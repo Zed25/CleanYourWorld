@@ -1,3 +1,13 @@
+/*
+ * Created by Umberto Ferracci from urania on 04/06/16 18.06
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.fragment.subfragment.BarCodeSearchSubFragment
+ * File name: BarCodeSearchSubFragment.java
+ * Class name: BarCodeSearchSubFragment
+ * Last modified: 04/06/16 18.04
+ */
+
 package com.ufos.cyw16.cleanyourworld.fragment.subfragment;
 
 
@@ -18,7 +28,6 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.journeyapps.barcodescanner.CaptureActivity;
 import com.ufos.cyw16.cleanyourworld.R;
 
 /**
@@ -27,10 +36,8 @@ import com.ufos.cyw16.cleanyourworld.R;
 public class BarCodeSearchSubFragment extends Fragment{
 
     private final int USER_CAMERA_PERMISSION = 0; //check int for camera permission: 0 equals to PERMISSION_GRANTED
-
-    private TextView tvEAN;
-
     private final String TAG = "recycleDebug";
+    private TextView tvEAN;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +69,7 @@ public class BarCodeSearchSubFragment extends Fragment{
                     != PackageManager.PERMISSION_GRANTED) {
 
 
-                // Should we show an explanation?
+                // Should we toast an explanation?
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), Manifest.permission.CAMERA)) {
 
                     // Show an explanation to the user *asynchronously* -- don't block

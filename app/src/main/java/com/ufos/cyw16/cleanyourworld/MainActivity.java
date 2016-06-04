@@ -1,6 +1,16 @@
+/*
+ * Created by Umberto Ferracci from urania on 04/06/16 18.06
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.MainActivity
+ * File name: MainActivity.java
+ * Class name: MainActivity
+ * Last modified: 02/06/16 23.48
+ */
+
 package com.ufos.cyw16.cleanyourworld;
 
-import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,29 +19,21 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewDebug;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 
-import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
+import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.GeolocFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.SearchFragment;
+import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private String[] mPlanetTitles = {"prova", "prova2", "prova3"};
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        Message4Debug.log("MainActivity.onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -64,9 +66,9 @@ public class MainActivity extends AppCompatActivity{
                 toolbar,
                 R.string.app_name, // nav drawer open - description for accessibility
                 R.string.app_name // nav drawer close - description for accessibility
-        ){
+        ) {
             public void onDrawerClosed(View view) {
-                // calling onPrepareOptionsMenu() to show action bar icons
+                // calling onPrepareOptionsMenu() to showToast action bar icons
                 invalidateOptionsMenu();
             }
 
@@ -82,11 +84,13 @@ public class MainActivity extends AppCompatActivity{
 
     // Defines the number of tabs by setting appropriate fragment and tab name
     private void setupViewPager(ViewPager viewPager) {
+        Message4Debug.log("MainActivity.setupViewPager()");
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new CalendarFragment(), "Calendar");
         adapter.addFragment(new GeolocFragment(), "Geoloc");
         adapter.addFragment(new SearchFragment(), "Search");
+        adapter.addFragment(new DbFragment(), "Database");
         viewPager.setAdapter(adapter);
     }
 
@@ -120,6 +124,11 @@ public class MainActivity extends AppCompatActivity{
         ImageView tabSearch = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         tabSearch.setImageResource(R.drawable.ic_search_tab_24dp);
         tabLayout.getTabAt(2).setCustomView(tabSearch);
+
+        // set database fragment icon
+        ImageView tabDb = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+        tabSearch.setImageResource(R.drawable.ic_search_tab_24dp);
+        tabLayout.getTabAt(3).setCustomView(tabDb);
     }
 
     // Custom adapter class provides fragments required for the view pager

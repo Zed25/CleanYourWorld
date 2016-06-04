@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Umberto Ferracci from urania on 04/06/16 18.06
+  ~ email:   umberto.ferracci@gmail.com
+  ~ Project: CleanYourWorld
+  ~ Package: /home/urania/AndroidStudioProjects/CleanYourWorld/app/src/main/res/layout/db_fragment.xml
+  ~ File name: db_fragment.xml
+  ~ Class name: db_fragment.xml
+  ~ Last modified: 04/06/16 18.04
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_viewAllRegion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="view all"/>
+
+        <Button
+            android:id="@+id/btn_aggiorna"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="agg, regioni"/>
+
+        <Button
+            android:id="@+id/btn_typeProd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="agg, prodotto"/>
+
+        <Button
+            android:id="@+id/btn_comuni"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:clickable="true"
+            android:text="agg, comuni"/>
+    </LinearLayout>
+</LinearLayout>

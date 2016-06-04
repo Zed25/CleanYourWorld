@@ -1,0 +1,125 @@
+/*
+ * Created by Umberto Ferracci from urania on 04/06/16 18.06
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.CYWOpenHelper
+ * File name: CYWOpenHelper.java
+ * Class name: CYWOpenHelper
+ * Last modified: 03/06/16 19.41
+ */
+
+/*
+ * Created by Umberto Ferracci from urania on 02/06/16 16.41
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.MyNewOpenHelper
+ * File name: MyNewOpenHelper.java
+ * Class name: MyNewOpenHelper
+ * Last modified: 02/06/16 16.41
+ */
+
+package com.ufos.cyw16.cleanyourworld.dal.ddl;
+
+import android.content.Context;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class CYWOpenHelper extends SQLiteOpenHelper {
+    private final static int db_version = 1;
+    private final static String db_name = "cyw16.db";
+    private static CYWOpenHelper mInstance = null;
+    private ArrayList<Table> tables;
+    private HashMap<String, Table> tableHashMap;
+
+
+    private CYWOpenHelper(Context context) {
+        super(context, db_name, null, db_version);
+        tables = new ArrayList<Table>();
+        tableHashMap = new HashMap<String, Table>();
+        tables.add(new Table("comuni", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY"),
+                new Column("comune", "TEXT"),
+                new Column("province_id", "TEXT")
+        }));
+
+        tables.add(new Table("regioni", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY"),
+                new Column("regione", "TEXT")
+        }));
+
+        tables.add(new Table("tipologiaProdotto", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY"),
+                new Column("nome", "TEXT"),
+                new Column("materiali_id", "INTEGER")
+        }));
+
+        /* HashMap delle tabelle */
+        for (Table t : tables) {
+            tableHashMap.put(t.getName(), t);
+        }
+    }
+
+    public static CYWOpenHelper getInstance(Context context) {
+        if (mInstance == null) {
+            mInstance = new CYWOpenHelper(context);
+        }
+        return mInstance;
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        try {
+            for (Table t : tables) {
+                createTable(db, t);
+            }
+        } catch (SQLException e) {
+            Message4Debug.log(e.toString() + "\n" + e.getMessage());
+        }
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        try {
+            for (Table t : tables) {
+                dropTable(db, t);
+                createTable(db, t);
+            }
+        } catch (SQLException e) {
+            Message4Debug.log(e.toString() + "\n" + e.getMessage());
+        }
+    }
+
+    private void createTable(SQLiteDatabase db, Table table) throws SQLException {
+        String qry = "CREATE TABLE " + table.getName() + " (";
+        for (Column column : table.getColumns()) {
+            qry += " " + column.getColumnName() +
+                    " " + column.getColumnType() +
+                    " " + column.getExtraConditions() +
+                    ",";
+        }
+        qry = qry.substring(0, qry.length() - 1) + ");";
+        Message4Debug.log(qry);
+        db.execSQL(qry);
+
+    }
+
+    private void dropTable(SQLiteDatabase db, Table table) throws SQLException {
+        String qry = "DROP TABLE IF EXISTS" + table.getName() + ";";
+        db.execSQL(qry);
+
+    }
+
+    private void alterTable() {
+        // TODO: 02/06/16
+    }
+
+    public Table getTableByName(String name) {
+        return tableHashMap.get(name);
+    }
+}
