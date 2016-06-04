@@ -1,21 +1,11 @@
 /*
- * Created by Umberto Ferracci from urania on 04/06/16 18.06
+ * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.CYWOpenHelper
  * File name: CYWOpenHelper.java
  * Class name: CYWOpenHelper
- * Last modified: 03/06/16 19.41
- */
-
-/*
- * Created by Umberto Ferracci from urania on 02/06/16 16.41
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.MyNewOpenHelper
- * File name: MyNewOpenHelper.java
- * Class name: MyNewOpenHelper
- * Last modified: 02/06/16 16.41
+ * Last modified: 04/06/16 20.15
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.ddl;

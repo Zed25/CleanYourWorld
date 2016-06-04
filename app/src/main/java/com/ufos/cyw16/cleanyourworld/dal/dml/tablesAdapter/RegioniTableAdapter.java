@@ -1,21 +1,11 @@
 /*
- * Created by Umberto Ferracci from urania on 04/06/16 18.06
+ * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter
  * File name: RegioniTableAdapter.java
  * Class name: RegioniTableAdapter
- * Last modified: 03/06/16 19.42
- */
-
-/*
- * Created by Umberto Ferracci from urania on 03/06/16 18.54
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter
- * File name: RegioniTableAdapter.java
- * Class name: RegioniTableAdapter
- * Last modified: 03/06/16 18.54
+ * Last modified: 04/06/16 20.15
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter;

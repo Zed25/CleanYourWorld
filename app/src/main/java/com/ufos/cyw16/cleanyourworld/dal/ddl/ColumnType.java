@@ -1,21 +1,11 @@
 /*
- * Created by Umberto Ferracci from urania on 04/06/16 18.06
+ * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.ColumnType
  * File name: ColumnType.java
  * Class name: ColumnType
- * Last modified: 03/06/16 19.41
- */
-
-/*
- * Created by Umberto Ferracci from urania on 03/06/16 0.03
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.TypeColumn
- * File name: TypeColumn.java
- * Class name: TypeColumn
- * Last modified: 03/06/16 0.03
+ * Last modified: 04/06/16 20.15
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.ddl;

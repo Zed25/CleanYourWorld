@@ -1,21 +1,11 @@
 /*
- * Created by Umberto Ferracci from urania on 04/06/16 18.06
+ * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
  * File name: TableAdapter.java
  * Class name: TableAdapter
- * Last modified: 04/06/16 11.25
- */
-
-/*
- * Created by Umberto Ferracci from urania on 02/06/16 16.32
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.nuovaTableAdapter
- * File name: nuovaTableAdapter.java
- * Class name: nuovaTableAdapter
- * Last modified: 02/06/16 16.32
+ * Last modified: 04/06/16 20.11
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dml;
@@ -63,11 +53,14 @@ public abstract class TableAdapter {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                Message4Debug.log("\n\tDbInsertBigDataTask.onPreExecute() = " + System.currentTimeMillis());
             }
 
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
+                Message4Debug.log("\n\tDbInsertBigDataTask.onPostExecute() = " + System.currentTimeMillis());
+
             }
 
             @Override
@@ -162,11 +155,14 @@ public abstract class TableAdapter {
                 } catch (TableAdapterException e) {
                     Message4Debug.log(e.toString());
                 }
+                Message4Debug.log("\n\tDbFromRemoteServerTask.onPreExecute() = " + System.currentTimeMillis());
+
             }
 
             @Override
             protected void onPostExecute(ArrayList<String[]> strings) {
                 super.onPostExecute(strings);
+                Message4Debug.log("\n\tDbFromRemoteServerTask().onPostExecute() = " + System.currentTimeMillis());
                 insertBigData(strings); // TODO: 04/06/16 verificare questa riga
             }
 
@@ -183,9 +179,7 @@ public abstract class TableAdapter {
             throw new TableAdapterException("Numbers of elements of 'key[]' is different from that of 'values[]'");
 
         ContentValues contentValues = new ContentValues();
-//        String debugQuery = "insert:"; // TODO: 03/06/16 debugString
         for (int i = 0; i < key.length; i++) {
-//            debugQuery += "\t[k: " + key[i] + " -> v: " + values[i] + "]";
             int columnType = table.getColumnType(key[i]);
             switch (columnType) {
                 case ColumnType.FIELD_TYPE_INTEGER:
@@ -201,7 +195,6 @@ public abstract class TableAdapter {
                     throw new TableAdapterException("Cast of typeCode: " + columnType + ", for " + key[i] + " = " + values[i] + " is not supported");
             }
         }
-//        Message4Debug.log(debugQuery);
         return contentValues;
 
 

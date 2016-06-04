@@ -1,11 +1,11 @@
 /*
- * Created by Umberto Ferracci from urania on 04/06/16 18.06
+ * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.fragment.DbFragment
  * File name: DbFragment.java
  * Class name: DbFragment
- * Last modified: 04/06/16 18.04
+ * Last modified: 04/06/16 20.16
  */
 
 package com.ufos.cyw16.cleanyourworld.fragment;

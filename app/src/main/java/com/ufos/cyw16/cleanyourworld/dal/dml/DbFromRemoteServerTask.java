@@ -1,21 +1,11 @@
 /*
- * Created by Umberto Ferracci from urania on 04/06/16 18.06
+ * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dml.DbFromRemoteServerTask
  * File name: DbFromRemoteServerTask.java
  * Class name: DbFromRemoteServerTask
- * Last modified: 04/06/16 17.11
- */
-
-/*
- * Created by Umberto Ferracci from urania on 03/06/16 19.42
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.CSVServerReadTask
- * File name: CSVServerReadTask.java
- * Class name: CSVServerReadTask
- * Last modified: 03/06/16 19.42
+ * Last modified: 04/06/16 20.25
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dml;
@@ -40,15 +30,15 @@ import java.util.ArrayList;
 public class DbFromRemoteServerTask extends AsyncTask<String, String[], ArrayList<String[]>> {
 
     @Override
+
     protected ArrayList<String[]> doInBackground(String... params) {
+        Message4Debug.log("\n\t\tDbFromRemoteServerTask.doInBackground().START = " + System.currentTimeMillis());
         long a = System.currentTimeMillis();
         ArrayList<String[]> list = new ArrayList<>();
         String line = "";
         String query = params[0];
         String csvSeparator = params[1];
-//        query.replace("\"", "");
         try {
-
             URL url = new URL(query);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.connect();
@@ -73,6 +63,8 @@ public class DbFromRemoteServerTask extends AsyncTask<String, String[], ArrayLis
             Message4Debug.log(e.toString() + "\n" + e.getMessage());
         }// TODO: 31/05/16 aggiungere una finally
         Message4Debug.log("hai impiegato " + (System.currentTimeMillis() - a) + " millisecondi per leggere l'intero file");
+        Message4Debug.log("\n\t\tDbFromRemoteServerTask.doInBackground().STOP = " + System.currentTimeMillis());
+
         return list;
 
     }
