@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
+  ~ Created by Umberto Ferracci from urania and published on 07/06/16 5.17
+  ~ email:   umberto.ferracci@gmail.com
+  ~ Project: CleanYourWorld
+  ~ Package: /home/urania/AndroidStudioProjects/CleanYourWorld/app/src/main/res/layout/db_fragment.xml
+  ~ File name: db_fragment.xml
+  ~ Class name: db_fragment.xml
+  ~ Last modified: 07/06/16 5.17
+  -->
+
+<!--
   ~ Created by Umberto Ferracci from urania on 04/06/16 18.06
   ~ email:   umberto.ferracci@gmail.com
   ~ Project: CleanYourWorld
@@ -14,38 +24,65 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:alpha="1.0"
+        android:indeterminate="true"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_viewAllRegion"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="view all"/>
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_aggiorna"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="agg, regioni"/>
+            <Button
+                android:id="@+id/btn_viewAllRegion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:text="view all"/>
 
-        <Button
-            android:id="@+id/btn_typeProd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="agg, prodotto"/>
+            <Button
+                android:id="@+id/btn_aggiorna"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:text="agg, regioni"/>
 
-        <Button
-            android:id="@+id/btn_comuni"
-            android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/btn_typeProd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:text="agg, prodotto"/>
+
+            <Button
+                android:id="@+id/btn_comuni"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:clickable="true"
+                android:text="agg, comuni"/>
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:clickable="true"
-            android:text="agg, comuni"/>
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 </LinearLayout>

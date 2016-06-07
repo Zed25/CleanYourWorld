@@ -1,4 +1,14 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 07/06/16 5.17
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.DbInsertBigDataTask
+ * File name: DbInsertBigDataTask.java
+ * Class name: DbInsertBigDataTask
+ * Last modified: 06/06/16 16.30
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -20,11 +30,6 @@ import java.util.ArrayList;
  *
  */
 public class DbInsertBigDataTask extends AsyncTask<ArrayList<String[]>, String[], Void> {
-
-
-    public DbInsertBigDataTask() {
-    }
-
 
     @Override
     protected Void doInBackground(ArrayList<String[]>... params) {
