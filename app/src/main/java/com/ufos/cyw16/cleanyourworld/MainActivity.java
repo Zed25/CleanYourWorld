@@ -10,7 +10,10 @@
 
 package com.ufos.cyw16.cleanyourworld;
 
+import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,8 +25,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.GeolocFragment;
@@ -40,10 +46,21 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
 
+    private FrameLayout mainFrame;
+    private FrameLayout loadFrame;
+    private FrameLayout configFrame;
+
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+
+    private ComuniTableAdapter comuniTableAdapter;
+
+
     //private ListView mDrawerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         Message4Debug.log("MainActivity.onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -55,6 +72,24 @@ public class MainActivity extends AppCompatActivity {
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         //mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+        mainFrame = (FrameLayout) findViewById(R.id.mainFrame);
+        loadFrame = (FrameLayout) findViewById(R.id.loadFrame);
+        configFrame = (FrameLayout) findViewById(R.id.configFrame);
+
+        mainFrame.setVisibility(View.INVISIBLE);
+        loadFrame.setVisibility(View.VISIBLE);
+
+        ImageView backgroud = (ImageView) findViewById(R.id.backgraound);
+        backgroud.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.clean_your_world));
+
+
+
+        if(checkFirstTime()){
+            prepareForConfiguration();
+        } else {
+            // TODO load configuration if not first time
+        }
 
 
         getSupportActionBar().setTitle(""); // delete app title
@@ -79,6 +114,50 @@ public class MainActivity extends AppCompatActivity {
         };
         drawerLayout.addDrawerListener(drawerToggle);
 
+    }
+
+    private boolean checkFirstTime() {
+        pref = getSharedPreferences("comune",MODE_PRIVATE);
+
+
+        if(pref.getBoolean("firstTime",true)){
+/*            editor = pref.edit();
+            editor.putBoolean("firstTime",false);
+            editor.apply();*/
+            return true;
+        }
+        return false;
+
+    }
+
+    private void prepareForConfiguration() {
+        comuniTableAdapter = new ComuniTableAdapter(this.getBaseContext());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    comuniTableAdapter.updateFromServer(null,null);
+                    comuniTableAdapter.getData(null,null,null);
+                } catch (DaoException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        Thread thread = new Thread(runnable);
+        thread.start();
+        int i = 0;
+        while (thread.isAlive()){
+
+            Message4Debug.log("THREAD ALIVE " + i);
+            i++;
+        }
+
+
+
+        loadFrame.setVisibility(View.INVISIBLE);
+        configFrame.setVisibility(View.VISIBLE);
     }
 
 

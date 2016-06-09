@@ -135,42 +135,27 @@ public class DbFragment extends Fragment {
         tables.add(tipologiaProdottiTableAdapter = new TipologiaProdottiTableAdapter(context));
 
 
+        progressDialog.setMessage("Download of database");
+        progressDialog.show();
+
         /* aggiornamento di tutte le tabelle */
-
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                Message4Debug.log("inizio aggiornamento del database interno...");
-                long start = System.currentTimeMillis();
-                for (TableAdapter t : tables) {
-                    try {
-                        t.updateFromServer(null, null);
-                    } catch (DaoException e) {
-                        Message4Debug.log(e.toString());
-                    } catch (InterruptedException e) {
-                        Message4Debug.log(e.toString());
-                    }
-                }
-                Message4Debug.log("aggiornamento completato in: " + (System.currentTimeMillis() - start));
-                return null;
+        Message4Debug.log("inizio aggiornamento del database interno...");
+        long start = System.currentTimeMillis();
+        for (TableAdapter t : tables) {
+            try {
+                t.updateFromServer(null, null);
+            } catch (DaoException e) {
+                Message4Debug.log(e.toString());
+            } catch (InterruptedException e) {
+                Message4Debug.log(e.toString());
             }
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                progressDialog.setMessage("Download of database");
-                progressDialog.show();
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                progressDialog.dismiss();
-            }
-        }.execute();
+        }
+        Message4Debug.log("aggiornamento completato in: " + (System.currentTimeMillis() - start));
 
 
+        progressDialog.dismiss();
     }
+
 
     /**
      * The type Sub fragment button manager.
