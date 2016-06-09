@@ -1,4 +1,14 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 09/06/16 12.16
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.CYWOpenHelper
+ * File name: CYWOpenHelper.java
+ * Class name: CYWOpenHelper
+ * Last modified: 09/06/16 11.42
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -55,7 +65,7 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
         }
     }
 
-    public static CYWOpenHelper getInstance(Context context) {
+    public static synchronized CYWOpenHelper getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new CYWOpenHelper(context);
         }

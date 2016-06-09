@@ -1,4 +1,14 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 09/06/16 12.16
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.ColumnType
+ * File name: ColumnType.java
+ * Class name: ColumnType
+ * Last modified: 09/06/16 11.39
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld

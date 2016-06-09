@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Umberto Ferracci from urania and published on 09/06/16 12.16
+  ~ email:   umberto.ferracci@gmail.com
+  ~ Project: CleanYourWorld
+  ~ Package: /home/urania/AndroidStudioProjects/CleanYourWorld/app/src/main/res/layout/item_list_simple.xml
+  ~ File name: item_list_simple.xml
+  ~ Class name: item_list_simple.xml
+  ~ Last modified: 09/06/16 12.16
+  -->
+
+<!--
+  ~ Created by Umberto Ferracci from urania and published on 07/06/16 5.42
+  ~ email:   umberto.ferracci@gmail.com
+  ~ Project: CleanYourWorld
+  ~ Package: /home/urania/AndroidStudioProjects/CleanYourWorld/app/src/main/res/layout/item_list_simple.xml
+  ~ File name: item_list_simple.xml
+  ~ Class name: item_list_simple.xml
+  ~ Last modified: 07/06/16 5.42
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="fill_vertical"
+        android:padding="10dp"
+        android:text="Testo"
+        android:textAppearance="?android:attr/textAppearanceListItem"/>
+
+</LinearLayout>

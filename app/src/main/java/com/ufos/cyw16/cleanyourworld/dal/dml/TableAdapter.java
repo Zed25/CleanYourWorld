@@ -1,4 +1,14 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 09/06/16 12.16
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
+ * File name: TableAdapter.java
+ * Class name: TableAdapter
+ * Last modified: 09/06/16 11.50
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 07/06/16 5.17
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -88,7 +98,10 @@ public abstract class TableAdapter {
      */
     public long insert(String[] key, String[] value) throws DaoException {
         SQLiteDatabase db = openHelper.getWritableDatabase();
+        db.beginTransaction();
         long lastId = db.insert(tableName, null, contentValuesCasted(key, value));
+        db.setTransactionSuccessful();
+        db.endTransaction();
         db.close();
         if (lastId > 0)
             return lastId;
@@ -248,20 +261,17 @@ public abstract class TableAdapter {
      *
      * @throws DaoException the dao exception
      */
-    public ArrayList<ArrayList<String>> getData(String[] selectionClauses, String[] selectionArgs) throws DaoException {
+    public ArrayList<ArrayList<String>> getData(String[] selectionClauses, String[] selectionArgs, String orderBy) throws DaoException {
         SQLiteDatabase db = openHelper.getWritableDatabase();
-        Cursor cursor = db.query(table.getName(), null, whereClauseElaborate(selectionClauses, true), selectionArgs, null, null, null);
+        Cursor cursor = db.query(table.getName(), null, whereClauseElaborate(selectionClauses, true), selectionArgs, null, null, orderBy);
         ArrayList<ArrayList<String>> result = new ArrayList<>();
         while (cursor.moveToNext()) {
             String[] columnNames = cursor.getColumnNames();
-            String output = "";
             ArrayList<String> row = new ArrayList<>();
             for (String columnName : columnNames) {
                 row.add(cursor.getString(cursor.getColumnIndex(columnName)));
-                output += columnName + ": " + cursor.getString(cursor.getColumnIndex(columnName)) + " ";
             }
             result.add(row);
-            Message4Debug.log(output + "\n");
         }
         return result;
     }
@@ -374,7 +384,7 @@ public abstract class TableAdapter {
             @Override
             public void run() {
                 try {
-                    deleteAllRows(); // TODO: 07/06/16 da cancellare
+//                    deleteAllRows(); // TODO: 07/06/16 da cancellare
                     URL url = new URL(finalQuery);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.connect();
