@@ -1,4 +1,14 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 09/06/16 15.40
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
+ * File name: TableAdapter.java
+ * Class name: TableAdapter
+ * Last modified: 09/06/16 15.01
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 09/06/16 12.16
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -48,6 +58,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * The type Table adapter.
@@ -56,10 +68,8 @@ public abstract class TableAdapter {
     private CYWOpenHelper openHelper;
     private String tableName;
     private Table table;
-    private String webSite = "http://www.ubuntumby.altervista.org/cyw16.csv/cyw16_table_";
     private String url = "http://www.ubuntumby.altervista.org/cyw16/?androidApp=true";
     private String csvSeparator = ",";
-    private String extensionFile = ".csv";
 
     /**
      * Instantiates a new Table adapter.
@@ -111,66 +121,6 @@ public abstract class TableAdapter {
         throw new DaoException(exceptionMessage);
     }
 
-    /**
-     * Insert big data.
-     *
-     * @param rows the rows
-     *
-     * @throws DaoException the dao exception
-     * @deprecated
-     */
-    public void insertBigData(final ArrayList<String[]> rows) throws DaoException {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                String[] key = rows.get(0);
-                for (int i = 1; i < rows.size(); i++) {
-                    try {
-                        insert(key, rows.get(i));
-                    } catch (DaoException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-        Thread thread = new Thread(runnable);
-        long start = System.currentTimeMillis();
-        thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            Message4Debug.log(e.toString());
-        }
-        Message4Debug.log("Esecuzione del thread in: " + (start - System.currentTimeMillis()) + " ms");
-
-
-//        new DbInsertBigDataTask() {
-//            @Override
-//            protected void onPreExecute() {
-//                super.onPreExecute();
-//                Message4Debug.log("\n\tDbInsertBigDataTask.onPreExecute() = " + System.currentTimeMillis());
-//            }
-//
-//            @Override
-//            protected void onPostExecute(Void aVoid) {
-//                super.onPostExecute(aVoid);
-//                Message4Debug.log("\n\tDbInsertBigDataTask.onPostExecute() = " + System.currentTimeMillis());
-//
-//            }
-//
-//            @Override
-//            protected void onProgressUpdate(String[]... values) {
-//                super.onProgressUpdate(values);
-//                try {
-//                    SQLiteDatabase db = openHelper.getWritableDatabase();
-//                    db.insert(tableName, null, contentValuesCasted(values[0], values[1]));
-//                    db.close();
-//                } catch (DaoException e) {
-//                    Message4Debug.log(e.toString());
-//                }
-//            }
-//        }.execute(rows);
-    }
 
     /**
      * Update int.
@@ -185,7 +135,6 @@ public abstract class TableAdapter {
      * @throws DaoException the dao exception
      */
     public int update(String[] key, String[] newValues, String[] whereClauses, String[] whereArgs) throws DaoException {
-
         SQLiteDatabase db = openHelper.getWritableDatabase();
         String whereClause = whereClauseElaborate(whereClauses);
         if (whereClauses.length != whereArgs.length)
@@ -244,10 +193,7 @@ public abstract class TableAdapter {
         SQLiteDatabase db = openHelper.getWritableDatabase();
         int id = db.delete(tableName, null, null);
         db.close();
-        if (id > 0) {
-            return id;
-        }
-        throw new DaoException(tableName + ": " + "Impossible to empty the table");
+        return id;
     }
 
 
@@ -256,6 +202,7 @@ public abstract class TableAdapter {
      *
      * @param selectionClauses the selection clauses
      * @param selectionArgs    the selection args
+     * @param orderBy          the order by
      *
      * @return the data
      *
@@ -276,95 +223,9 @@ public abstract class TableAdapter {
         return result;
     }
 
-    /**
-     * Update from remote server.
-     *
-     * @deprecated
-     */
-    public void updateFromRemoteServer() {
-        ArrayList<String[]> result = new ArrayList<>();
-        String query = webSite + tableName + extensionFile;
-        String[] params = {query, csvSeparator};
-        final ArrayList<String[]>[] rows = new ArrayList[1];
-        new DbFromRemoteServerTask() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                try {
-                    deleteAllRows();
-                } catch (DaoException e) {
-                    Message4Debug.log(e.toString());
-                }
-
-            }
-
-            @Override
-            protected void onPostExecute(ArrayList<String[]> strings) {
-                super.onPostExecute(strings);
-                try {
-                    insertBigData(strings); // TODO: 04/06/16 verificare questa riga
-                } catch (DaoException e) {
-                    Message4Debug.log(e.toString());
-                }
-
-            }
-
-            @Override
-            protected void onProgressUpdate(String[]... values) {
-                super.onProgressUpdate(values);
-//                try {
-//                    insert(values[0],values[1]);
-//                } catch (TableAdapterException e) {
-//                    e.printStackTrace();
-//                }
-
-            }
-        }.execute(params);
-    }
-
 
     /**
-     * Query server.
-     *
-     * @param keys   the keys
-     * @param values the values
-     *
-     * @throws DaoException the dao exception
-     * @deprecated
-     */
-    public void queryServer(String[] keys, String[] values) throws DaoException {
-        ArrayList<String[]> result = new ArrayList<>();
-        String query = url + "&table=" + tableName;
-        if (keys != null)
-            for (int i = 0; i < keys.length; i++) {
-                query += "&" + keys[i] + "=" + values[i];
-            }
-        new DbQueryServerTask() {
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                try {
-                    deleteAllRows();
-                } catch (DaoException e) {
-                    Message4Debug.log(e.toString());
-                }
-            }
-
-            @Override
-            protected void onPostExecute(ArrayList<String[]> strings) {
-                super.onPostExecute(strings);
-                try {
-                    insertBigData(strings);
-                } catch (DaoException e) {
-                    Message4Debug.log(e.toString());
-                }
-            }
-        }.execute(new String[]{query, csvSeparator});
-    }
-
-
-    /**
-     * Query server 2.
+     * Update from server.
      *
      * @param keys   the keys
      * @param values the values
@@ -372,19 +233,60 @@ public abstract class TableAdapter {
      * @throws DaoException         the dao exception
      * @throws InterruptedException the interrupted exception
      */
-    public void queryServer2(String[] keys, String[] values) throws DaoException, InterruptedException {
-        ArrayList<String[]> result = new ArrayList<>();
+    public void updateFromServer(String[] keys, final String[] values) throws DaoException, InterruptedException {
+        deleteAllRows();
         String query = url + "&table=" + tableName;
         if (keys != null)
             for (int i = 0; i < keys.length; i++) {
                 query += "&" + keys[i] + "=" + values[i];
             }
         final String finalQuery = query;
-        Runnable runnable = new Runnable() {
+        Message4Debug.log(query);
+        BlockingQueue<String[][]> queue = new ArrayBlockingQueue(11);
+
+        class RunnableDb implements Runnable {
+            private final BlockingQueue<String[][]> queue;
+            private SQLiteDatabase db;
+
+            RunnableDb(BlockingQueue<String[][]> queue) {
+                this.queue = queue;
+                this.db = openHelper.getWritableDatabase();
+
+            }
+
+            @Override
+            public void run() {
+                db.beginTransaction();
+                try {
+                    String[][] take = queue.take();
+                    while (take[0] != null & take[1] != null) {
+                        String[] keys = take[0];
+                        String[] values = take[1];
+                        take = queue.take();
+                        db.insert(tableName, null, contentValuesCasted(keys, values));
+                    }
+                } catch (InterruptedException e) {
+                    Message4Debug.log(e.toString());
+                } catch (DaoException e) {
+                    Message4Debug.log(e.toString());
+                } finally {
+                    db.setTransactionSuccessful();
+                    db.endTransaction();
+                    db.close();
+                }
+            }
+        }
+
+        class RunnableServer implements Runnable {
+            private final BlockingQueue<String[][]> queue;
+
+            RunnableServer(BlockingQueue queue) {
+                this.queue = queue;
+            }
+
             @Override
             public void run() {
                 try {
-//                    deleteAllRows(); // TODO: 07/06/16 da cancellare
                     URL url = new URL(finalQuery);
                     HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                     connection.connect();
@@ -394,19 +296,23 @@ public abstract class TableAdapter {
                     String[] keys = String.valueOf(Html.fromHtml(br.readLine())).split(csvSeparator); /* name of fields */
                     while ((line = br.readLine()) != null) {
                         String[] values = String.valueOf(Html.fromHtml(line)).split(csvSeparator);
-                        insert(keys, values);
+                        queue.put(new String[][]{keys, values});
                     }
+                    queue.put(new String[][]{null, null});
                 } catch (IOException e) {
                     Message4Debug.log(e.toString());
-                } catch (DaoException e) {
+                } catch (InterruptedException e) {
                     Message4Debug.log(e.toString());
                 }
             }
-        };
-        Thread thread = new Thread(runnable);
+        }
+        Thread threadServer = new Thread(new RunnableServer(queue));
+        Thread threadDb = new Thread(new RunnableDb(queue));
         long start = System.currentTimeMillis();
-        thread.start();
-        thread.join();
+        threadServer.start();
+        threadDb.start();
+        threadServer.join();
+        threadDb.join();
         Message4Debug.log("Total time: " + (System.currentTimeMillis() - start) + " ms");
 
     }
@@ -447,7 +353,6 @@ public abstract class TableAdapter {
 
     }
 
-
     /**
      * Where clause elaborate string.
      *
@@ -460,7 +365,7 @@ public abstract class TableAdapter {
      */
     private String whereClauseElaborate(String[] whereClauses, boolean isNullable) throws DaoException {
         if (whereClauses == null & !isNullable)
-            throw new DaoException("The 'whereClauses[]' can not be 'null'"); // TODO: 06/06/16 TOGLIERE QUESTA ECCEZIONE
+            throw new DaoException("The 'whereClauses[]' can not be 'null'");
         if (whereClauses == null)
             return null;
         String arg = "?";

@@ -1,4 +1,14 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 09/06/16 15.40
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.CYWOpenHelper
+ * File name: CYWOpenHelper.java
+ * Class name: CYWOpenHelper
+ * Last modified: 09/06/16 14.32
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 09/06/16 12.16
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -42,22 +52,71 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
         super(context, db_name, null, db_version);
         tables = new ArrayList<Table>();
         tableHashMap = new HashMap<String, Table>();
+
+        /* inserimento tabello in tables */
+        tables.add(new Table("regioni", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY"),
+                new Column("regione", "TEXT")
+        }));
+        tables.add(new Table("province", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY"),
+                new Column("provincia", "TEXT"),
+                new Column("regioni_id", "INTEGER")
+        }));
         tables.add(new Table("comuni", new Column[]{
                 new Column("_id", "INTEGER", "PRIMARY KEY"),
                 new Column("comune", "TEXT"),
                 new Column("province_id", "TEXT")
         }));
-
-        tables.add(new Table("regioni", new Column[]{
+        tables.add(new Table("isolaEcologica", new Column[]{
                 new Column("_id", "INTEGER", "PRIMARY KEY"),
-                new Column("regione", "TEXT")
+                new Column("comuni_id", "INTEGER"),
+                new Column("indirizzo", "TEXT"),
+                new Column("coordinate", "TEXT"),
+                new Column("descrizione", "TEXT")
         }));
-
+        tables.add(new Table("preferiti", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY"),
+                new Column("comuni_id", "INTEGER")
+        }));
         tables.add(new Table("tipologiaProdotto", new Column[]{
                 new Column("_id", "INTEGER", "PRIMARY KEY"),
                 new Column("nome", "TEXT"),
                 new Column("materiali_id", "INTEGER")
         }));
+        tables.add(new Table("tipologiaRaccolta", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY"),
+                new Column("nome", "TEXT")
+        }));
+        tables.add(new Table("prodotti", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY"),
+                new Column("nome", "TEXT"),
+                new Column("descrizione", "TEXT"),
+                new Column("EAN", "TEXT"),
+                new Column("tipologiaProdotti_id", "INTEGER")
+        }));
+        tables.add(new Table("materiali", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY"),
+                new Column("nome", "TEXT")
+        }));
+        tables.add(new Table("giorni", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY"),
+                new Column("nome", "TEXT")
+        }));
+        tables.add(new Table("colori", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY"),
+                new Column("colore", "TEXT"),
+                new Column("codiceColore", "TEXT")
+        }));
+        tables.add(new Table("raccolta", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY"),
+                new Column("comuni_id", "INTEGER"),
+                new Column("materiali_id", "INTEGER"),
+                new Column("giorni_id", "INTEGER"),
+                new Column("colori_id", "INTEGER"),
+                new Column("tipologiaRaccolta_id", "INTEGER"),
+        }));
+
 
         /* HashMap delle tabelle */
         for (Table t : tables) {

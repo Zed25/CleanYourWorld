@@ -1,4 +1,14 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 09/06/16 15.40
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.fragment.DbFragment
+ * File name: DbFragment.java
+ * Class name: DbFragment
+ * Last modified: 09/06/16 15.38
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 09/06/16 12.16
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -30,7 +40,9 @@
 
 package com.ufos.cyw16.cleanyourworld.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -46,6 +58,7 @@ import android.widget.ProgressBar;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.ListOfListAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaProdottiTableAdapter;
@@ -65,6 +78,13 @@ public class DbFragment extends Fragment {
     private ListView listView;
     private ProgressBar progressBar;
     private boolean init = true;
+    private Context context;
+    private ArrayList<TableAdapter> tables;
+    private RegioniTableAdapter regioniTableAdapter;
+    private TipologiaProdottiTableAdapter tipologiaProdottiTableAdapter;
+    private ComuniTableAdapter comuniTableAdapter;
+    private ProgressDialog progressDialog;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +106,9 @@ public class DbFragment extends Fragment {
      */
     public void createFragment(View v) {
 
+
+        context = v.getContext();
+
         /* Buttons */
         buttons = new ArrayList<Button>();
         buttons.add(btn_viewAllRegion = (Button) v.findViewById(R.id.btn_viewAllRegion));
@@ -101,7 +124,51 @@ public class DbFragment extends Fragment {
         listView = (ListView) v.findViewById(R.id.listView);
         subListViewOnItemClick = new SubListViewOnItemClick();
         listView.setOnItemClickListener(subListViewOnItemClick);
-        /* ProgressBar */
+
+        /* Waiting dialog */
+        progressDialog = new ProgressDialog(context);
+
+        /* inizializzazione dell'app */
+        tables = new ArrayList<>();
+        tables.add(regioniTableAdapter = new RegioniTableAdapter(context));
+        tables.add(comuniTableAdapter = new ComuniTableAdapter(context));
+        tables.add(tipologiaProdottiTableAdapter = new TipologiaProdottiTableAdapter(context));
+
+
+        /* aggiornamento di tutte le tabelle */
+
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                Message4Debug.log("inizio aggiornamento del database interno...");
+                long start = System.currentTimeMillis();
+                for (TableAdapter t : tables) {
+                    try {
+                        t.updateFromServer(null, null);
+                    } catch (DaoException e) {
+                        Message4Debug.log(e.toString());
+                    } catch (InterruptedException e) {
+                        Message4Debug.log(e.toString());
+                    }
+                }
+                Message4Debug.log("aggiornamento completato in: " + (System.currentTimeMillis() - start));
+                return null;
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                progressDialog.setMessage("Download of database");
+                progressDialog.show();
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                progressDialog.dismiss();
+            }
+        }.execute();
+
 
     }
 
@@ -114,11 +181,7 @@ public class DbFragment extends Fragment {
         public void onClick(View v) {
             FragmentManager fm = getFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            Context context = v.getContext();
-            Message4Debug.log("SubFragmentButtonManager.oncClick()");
-            RegioniTableAdapter regioniTableAdapter = new RegioniTableAdapter(context);
-            TipologiaProdottiTableAdapter tipologiaProdottiTableAdapter = new TipologiaProdottiTableAdapter(context);
-            ComuniTableAdapter comuniTableAdapter = new ComuniTableAdapter(context);
+
 
             switch (v.getId()) {
                 case R.id.btn_setup:
@@ -134,34 +197,21 @@ public class DbFragment extends Fragment {
                     }
                     break;
                 case R.id.btn_aggiorna:
-                    try {
-                        regioniTableAdapter.queryServer2(null, null);
-                    } catch (DaoException e) {
-                        Message4Debug.log(e.toString());
-                    } catch (InterruptedException e) {
-                        Message4Debug.log(e.toString());
-                    }
                     break;
                 case R.id.btn_typeProd:
                     try {
-                        tipologiaProdottiTableAdapter.queryServer2(null, null);
                         ListOfListAdapter listOfListAdapter = new ListOfListAdapter(context, tipologiaProdottiTableAdapter.getData(null, null, null), R.layout.item_list_simple);
                         listView.setAdapter(listOfListAdapter);
                     } catch (DaoException e) {
                         Message4Debug.log(e.toString());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
                     break;
                 case R.id.btn_comuni:
                     try {
-                        comuniTableAdapter.queryServer2(new String[]{"province_id"}, new String[]{"12"});
                         ListOfListAdapter listOfListAdapter = new ListOfListAdapter(context, comuniTableAdapter.getData(null, null, "comune"), R.layout.item_list_simple_whit_icon);
                         listView.setAdapter(listOfListAdapter);
                     } catch (DaoException e) {
                         Message4Debug.log(e.toString());
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
                     }
                     break;
             }

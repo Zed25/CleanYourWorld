@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
+  ~ Created by Umberto Ferracci from urania and published on 09/06/16 15.40
+  ~ email:   umberto.ferracci@gmail.com
+  ~ Project: CleanYourWorld
+  ~ Package: /home/urania/AndroidStudioProjects/CleanYourWorld/app/src/main/res/layout/db_fragment.xml
+  ~ File name: db_fragment.xml
+  ~ Class name: db_fragment.xml
+  ~ Last modified: 09/06/16 12.22
+  -->
+
+<!--
   ~ Created by Umberto Ferracci from urania and published on 09/06/16 12.16
   ~ email:   umberto.ferracci@gmail.com
   ~ Project: CleanYourWorld
@@ -40,12 +50,13 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <Button
                 android:id="@+id/btn_viewAllRegion"
@@ -86,7 +97,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
     </LinearLayout>
 
