@@ -1,4 +1,14 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.DaoException
+ * File name: DaoException.java
+ * Class name: DaoException
+ * Last modified: 07/06/16 5.17
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 07/06/16 5.17
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld

@@ -2,20 +2,20 @@
  * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaProdottiTableAdapter
- * File name: TipologiaProdottiTableAdapter.java
- * Class name: TipologiaProdottiTableAdapter
- * Last modified: 09/06/16 17.35
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.IsolaEcologicaTableAdapter
+ * File name: IsolaEcologicaTableAdapter.java
+ * Class name: IsolaEcologicaTableAdapter
+ * Last modified: 09/06/16 16.37
  */
 
 /*
- * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
+ * Created by Umberto Ferracci from urania and published on 09/06/16 16.20
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaProdottiTableAdapter
- * File name: TipologiaProdottiTableAdapter.java
- * Class name: TipologiaProdottiTableAdapter
- * Last modified: 04/06/16 20.15
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.IsolaEcologica
+ * File name: IsolaEcologica.java
+ * Class name: IsolaEcologica
+ * Last modified: 09/06/16 16.20
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter;
@@ -26,16 +26,16 @@ import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter;
 
 /**
- * The type Tipologia prodotti table adapter.
+ * The type Isola ecologica table adapter.
  */
-public class TipologiaProdottiTableAdapter extends TableAdapter {
+public class IsolaEcologicaTableAdapter extends TableAdapter {
     /**
-     * Instantiates a new Tipologia prodotti table adapter.
+     * Instantiates a new Isola ecologica table adapter.
      *
      * @param context the context
      */
-    public TipologiaProdottiTableAdapter(Context context) {
-        super(context, "tipologiaProdotti");
+    public IsolaEcologicaTableAdapter(Context context) {
+        super(context, "isolaEcologica");
     }
 
     @Override
