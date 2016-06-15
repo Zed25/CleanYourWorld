@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void prepareForConfiguration() {
         comuniTableAdapter = new ComuniTableAdapter(this.getBaseContext());
-        Runnable runnable = new Runnable() {
+       /* Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 try {
@@ -152,12 +152,12 @@ public class MainActivity extends AppCompatActivity {
 
             Message4Debug.log("THREAD ALIVE " + i);
             i++;
-        }
+        }*/
 
 
 
-        loadFrame.setVisibility(View.INVISIBLE);
-        configFrame.setVisibility(View.VISIBLE);
+        //loadFrame.setVisibility(View.INVISIBLE);
+        //configFrame.setVisibility(View.VISIBLE);
     }
 
 

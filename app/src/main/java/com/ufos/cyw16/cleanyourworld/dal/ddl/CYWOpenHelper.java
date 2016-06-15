@@ -84,7 +84,7 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
         tables.add(new Table("comuni", new Column[]{
                 new Column("_id", "INTEGER", "PRIMARY KEY"),
                 new Column("comune", "TEXT"),
-                new Column("province_id", "TEXT")
+                new Column("province_id", "INTEGER")
         }));
         tables.add(new Table("isolaEcologica", new Column[]{
                 new Column("_id", "INTEGER", "PRIMARY KEY"),
