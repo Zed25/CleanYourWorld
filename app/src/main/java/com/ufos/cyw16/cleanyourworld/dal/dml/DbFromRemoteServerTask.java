@@ -1,21 +1,11 @@
 /*
- * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
+ * Created by Umberto Ferracci from urania and published on 17/06/16 7.44
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dml.DbFromRemoteServerTask
  * File name: DbFromRemoteServerTask.java
  * Class name: DbFromRemoteServerTask
- * Last modified: 09/06/16 16.39
- */
-
-/*
- * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.DbFromRemoteServerTask
- * File name: DbFromRemoteServerTask.java
- * Class name: DbFromRemoteServerTask
- * Last modified: 04/06/16 20.25
+ * Last modified: 17/06/16 7.41
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dml;
@@ -36,6 +26,7 @@ import java.util.ArrayList;
 
 /**
  * The type Db from remote server task.
+ * @deprecated
  */
 public class DbFromRemoteServerTask extends AsyncTask<String, String[], ArrayList<String[]>> {
 

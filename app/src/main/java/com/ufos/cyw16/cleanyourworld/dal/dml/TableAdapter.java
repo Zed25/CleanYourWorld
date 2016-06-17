@@ -1,51 +1,11 @@
 /*
- * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
+ * Created by Umberto Ferracci from urania and published on 17/06/16 7.44
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
  * File name: TableAdapter.java
  * Class name: TableAdapter
- * Last modified: 09/06/16 16.43
- */
-
-/*
- * Created by Umberto Ferracci from urania and published on 09/06/16 15.40
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
- * File name: TableAdapter.java
- * Class name: TableAdapter
- * Last modified: 09/06/16 15.01
- */
-
-/*
- * Created by Umberto Ferracci from urania and published on 09/06/16 12.16
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
- * File name: TableAdapter.java
- * Class name: TableAdapter
- * Last modified: 09/06/16 11.50
- */
-
-/*
- * Created by Umberto Ferracci from urania and published on 07/06/16 5.17
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
- * File name: TableAdapter.java
- * Class name: TableAdapter
- * Last modified: 07/06/16 5.13
- */
-
-/*
- * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
- * File name: TableAdapter.java
- * Class name: TableAdapter
- * Last modified: 04/06/16 20.11
+ * Last modified: 17/06/16 7.41
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dml;
@@ -235,7 +195,7 @@ public abstract class TableAdapter {
      */
     public void updateFromServer(String[] keys, final String[] values) throws DaoException, InterruptedException {
         deleteAllRows();
-        String query = url + "&table=" + tableName;
+        String query = url + "&operation=secureSelect&table=" + tableName;
         if (keys != null)
             for (int i = 0; i < keys.length; i++) {
                 query += "&" + keys[i] + "=" + values[i];
@@ -389,6 +349,7 @@ public abstract class TableAdapter {
      * @throws DaoException the dao exception
      */
     public void sendToServer() throws DaoException {
+        String query = url + "&operation=secureInsert&table=" + tableName;
         /// TODO: 09/06/16
     }
 }
