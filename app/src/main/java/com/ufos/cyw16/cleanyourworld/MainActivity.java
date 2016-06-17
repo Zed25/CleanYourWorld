@@ -22,12 +22,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.ufos.cyw16.cleanyourworld.Models.Regione;
+import com.ufos.cyw16.cleanyourworld.config.ConfigAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
@@ -45,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
     private String[] mPlanetTitles = {"prova", "prova2", "prova3"};
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
+
+    private RecyclerView recyclerView;
 
     private FrameLayout mainFrame;
     private FrameLayout loadFrame;
@@ -77,19 +83,32 @@ public class MainActivity extends AppCompatActivity {
         loadFrame = (FrameLayout) findViewById(R.id.loadFrame);
         configFrame = (FrameLayout) findViewById(R.id.configFrame);
 
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
         mainFrame.setVisibility(View.INVISIBLE);
-        loadFrame.setVisibility(View.VISIBLE);
+        loadFrame.setVisibility(View.INVISIBLE);
+        configFrame.setVisibility(View.VISIBLE);
 
         ImageView backgroud = (ImageView) findViewById(R.id.backgraound);
         backgroud.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.clean_your_world));
 
 
 
-        if(checkFirstTime()){
+        if(!checkFirstTime()){
             prepareForConfiguration();
         } else {
             // TODO load configuration if not first time
         }
+
+        ArrayList<Regione> regioni = new ArrayList<>();
+        regioni.add(new Regione(1,"Lazio"));
+        regioni.add(new Regione(2,"Umbria"));
+        ConfigAdapter adapter = new ConfigAdapter(regioni);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
 
 
         getSupportActionBar().setTitle(""); // delete app title
@@ -158,6 +177,10 @@ public class MainActivity extends AppCompatActivity {
 
         //loadFrame.setVisibility(View.INVISIBLE);
         //configFrame.setVisibility(View.VISIBLE);
+
+
+
+
     }
 
 
@@ -239,4 +262,6 @@ public class MainActivity extends AppCompatActivity {
             return mFragmentTitleList.get(position);
         }
     }
+
+
 }
