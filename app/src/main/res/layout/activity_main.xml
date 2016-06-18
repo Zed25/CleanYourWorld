@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:local="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:id="@+id/parentView">
 
 <FrameLayout
     android:id="@+id/mainFrame"
@@ -116,7 +118,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/configFrame"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:layout_width="170dp"
@@ -136,15 +139,26 @@
             android:gravity="center_horizontal" />
 
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginRight="50dp"
-                android:layout_marginLeft="50dp"
-                android:scrollbars="vertical"
-                android:layout_marginTop="250dp"
-                android:layout_marginBottom="70dp"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:scrollbars="vertical"
+            android:layout_marginTop="250dp"
+            android:layout_marginBottom="70dp"/>
+
+        <Button
+            android:id="@+id/continueBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:layout_gravity="bottom|right"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="20dp"
+            />
 
 
 
