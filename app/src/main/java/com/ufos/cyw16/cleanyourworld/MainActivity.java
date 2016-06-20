@@ -11,6 +11,7 @@
 package com.ufos.cyw16.cleanyourworld;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -59,9 +60,6 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
 
-    private RecyclerView recyclerView;
-    private Button continueBtn;
-
     private FrameLayout mainFrame;
     private FrameLayout loadFrame;
     private FrameLayout configFrame;
@@ -93,52 +91,22 @@ public class MainActivity extends AppCompatActivity {
 
         mainFrame = (FrameLayout) findViewById(R.id.mainFrame);
         loadFrame = (FrameLayout) findViewById(R.id.loadFrame);
-        configFrame = (FrameLayout) findViewById(R.id.configFrame);
+
 
 
 
         mainFrame.setVisibility(View.INVISIBLE);
-        loadFrame.setVisibility(View.INVISIBLE);
-        configFrame.setVisibility(View.VISIBLE);
+        loadFrame.setVisibility(View.VISIBLE);
 
         ImageView backgroud = (ImageView) findViewById(R.id.backgraound);
-        backgroud.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.clean_your_world));
-
+        if (backgroud != null) {
+            backgroud.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.clean_your_world));
+        }
 
         //check if it's the first time you start the app
         if(checkFirstTime()){
             // prepare for configuration as to choose your COMUNE
             prepareForConfiguration();
-
-            // start and configure recycler view
-            recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-            continueBtn = (Button) findViewById(R.id.continueBtn);
-            continueBtn.setEnabled(false);
-
-            final ArrayList<Regione> regioni = new ArrayList<>();
-            regioni.add(new Regione(1,"Lazio"));
-            regioni.add(new Regione(2,"Umbria"));
-            ConfigAdapter adapter = new ConfigAdapter(regioni);
-
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-
-            recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setAdapter(adapter);
-
-            recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-                    Regione regione = regioni.get(position);
-                    Toast.makeText(getApplicationContext(),"You chose "+ regione.getName(),Toast.LENGTH_SHORT).show();
-
-                    continueBtn.setEnabled(true);
-                }
-
-                @Override
-                public void onLongClick(View view, int position) {
-
-                }
-            }));
 
         } else {
             // TODO load configuration if not first time
@@ -190,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void prepareForConfiguration() {
+        Intent configurationIntent = new Intent(this.getBaseContext(), ConfigurationActivity.class);
+        startActivity(configurationIntent);
         comuniTableAdapter = new ComuniTableAdapter(this.getBaseContext());
        /* Runnable runnable = new Runnable() {
             @Override
@@ -300,55 +270,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
-        }
-    }
-
-    public interface ClickListener {
-        void onClick(View view, int position);
-
-        void onLongClick(View view, int position);
-    }
-
-    public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
-        private GestureDetector gestureDetector;
-        private MainActivity.ClickListener clickListener;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final MainActivity.ClickListener clickListener) {
-            this.clickListener = clickListener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-
-                @Override
-                public void onLongPress(MotionEvent e) {
-                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
-                    }
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildPosition(child));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
         }
     }
 
