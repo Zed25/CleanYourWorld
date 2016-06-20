@@ -3,13 +3,12 @@
     package="com.ufos.cyw16.cleanyourworld">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
-    <uses-permission-sdk-23 android:name="android.permission.CAMERA"/>
-    <uses-permission-sdk-23 android:name="android.permission.INTERNET"/>
+    <uses-permission-sdk-23 android:name="android.permission.CAMERA" />
+    <uses-permission-sdk-23 android:name="android.permission.INTERNET" />
 
-    <uses-feature android:name="android.hardware.camera2.CameraCaptureSession"/>
-
+    <uses-feature android:name="android.hardware.camera2.CameraCaptureSession" />
 
     <application
         android:allowBackup="true"
@@ -24,6 +23,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ConfigurationActivity"></activity>
     </application>
 
 </manifest>
