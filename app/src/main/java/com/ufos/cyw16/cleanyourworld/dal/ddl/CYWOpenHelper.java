@@ -1,4 +1,24 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 23/06/16 17.49
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.CYWOpenHelper
+ * File name: CYWOpenHelper.java
+ * Class name: CYWOpenHelper
+ * Last modified: 23/06/16 17.34
+ */
+
+/*
+ * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.CYWOpenHelper
+ * File name: CYWOpenHelper.java
+ * Class name: CYWOpenHelper
+ * Last modified: 09/06/16 17.36
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 09/06/16 15.40
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -40,6 +60,9 @@ import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * The type Cyw open helper.
+ */
 public class CYWOpenHelper extends SQLiteOpenHelper {
     private final static int db_version = 1;
     private final static String db_name = "cyw16.db";
@@ -48,6 +71,11 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
     private HashMap<String, Table> tableHashMap;
 
 
+    /**
+     * Instantiates a new Cyw open helper.
+     *
+     * @param context the context
+     */
     private CYWOpenHelper(Context context) {
         super(context, db_name, null, db_version);
         tables = new ArrayList<Table>();
@@ -79,7 +107,7 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
                 new Column("_id", "INTEGER", "PRIMARY KEY"),
                 new Column("comuni_id", "INTEGER")
         }));
-        tables.add(new Table("tipologiaProdotto", new Column[]{
+        tables.add(new Table("tipologiaProdotti", new Column[]{
                 new Column("_id", "INTEGER", "PRIMARY KEY"),
                 new Column("nome", "TEXT"),
                 new Column("materiali_id", "INTEGER")
@@ -124,6 +152,12 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Gets instance.
+     *
+     * @param context the context
+     * @return the instance
+     */
     public static synchronized CYWOpenHelper getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new CYWOpenHelper(context);
@@ -154,6 +188,13 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Create table.
+     *
+     * @param db    the db
+     * @param table the table
+     * @throws SQLException the sql exception
+     */
     private void createTable(SQLiteDatabase db, Table table) throws SQLException {
         String qry = "CREATE TABLE " + table.getName() + " (";
         for (Column column : table.getColumns()) {
@@ -168,16 +209,32 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * Drop table.
+     *
+     * @param db    the db
+     * @param table the table
+     * @throws SQLException the sql exception
+     */
     private void dropTable(SQLiteDatabase db, Table table) throws SQLException {
         String qry = "DROP TABLE IF EXISTS" + table.getName() + ";";
         db.execSQL(qry);
 
     }
 
+    /**
+     * Alter table.
+     */
     private void alterTable() {
         // TODO: 02/06/16
     }
 
+    /**
+     * Gets table by name.
+     *
+     * @param name the name
+     * @return the table by name
+     */
     public Table getTableByName(String name) {
         return tableHashMap.get(name);
     }

@@ -2,9 +2,9 @@
  * Created by Umberto Ferracci from urania and published on 23/06/16 17.49
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter
- * File name: RegioniTableAdapter.java
- * Class name: RegioniTableAdapter
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.IsolaEcologicaTableAdapter
+ * File name: IsolaEcologicaTableAdapter.java
+ * Class name: IsolaEcologicaTableAdapter
  * Last modified: 23/06/16 17.34
  */
 
@@ -12,20 +12,20 @@
  * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter
- * File name: RegioniTableAdapter.java
- * Class name: RegioniTableAdapter
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.IsolaEcologicaTableAdapter
+ * File name: IsolaEcologicaTableAdapter.java
+ * Class name: IsolaEcologicaTableAdapter
  * Last modified: 09/06/16 16.37
  */
 
 /*
- * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
+ * Created by Umberto Ferracci from urania and published on 09/06/16 16.20
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter
- * File name: RegioniTableAdapter.java
- * Class name: RegioniTableAdapter
- * Last modified: 04/06/16 20.15
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.IsolaEcologica
+ * File name: IsolaEcologica.java
+ * Class name: IsolaEcologica
+ * Last modified: 09/06/16 16.20
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter;
@@ -36,16 +36,16 @@ import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter;
 
 /**
- * The type Regioni table adapter.
+ * The type Isola ecologica table adapter.
  */
-public class RegioniTableAdapter extends TableAdapter {
+public class IsolaEcologicaTableAdapter extends TableAdapter {
     /**
-     * Instantiates a new Regioni table adapter.
+     * Instantiates a new Isola ecologica table adapter.
      *
      * @param context the context
      */
-    public RegioniTableAdapter(Context context) {
-        super(context, "regioni");
+    public IsolaEcologicaTableAdapter(Context context) {
+        super(context, "isolaEcologica");
     }
 
     @Override

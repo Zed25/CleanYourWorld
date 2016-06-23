@@ -1,4 +1,14 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 23/06/16 17.49
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.fragment.DbFragment
+ * File name: DbFragment.java
+ * Class name: DbFragment
+ * Last modified: 23/06/16 17.34
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 09/06/16 15.40
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -42,7 +52,6 @@ package com.ufos.cyw16.cleanyourworld.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -59,9 +68,18 @@ import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.ListOfListAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ColoriTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.GiorniTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.IsolaEcologicaTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.MaterialiTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.PreferitiTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ProdottiTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ProvinceTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RaccoltaTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaProdottiTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaRaccoltaTableAdapter;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
@@ -79,11 +97,21 @@ public class DbFragment extends Fragment {
     private ProgressBar progressBar;
     private boolean init = true;
     private Context context;
+    private ProgressDialog progressDialog;
+    /* Tables Adapter*/
     private ArrayList<TableAdapter> tables;
     private RegioniTableAdapter regioniTableAdapter;
-    private TipologiaProdottiTableAdapter tipologiaProdottiTableAdapter;
+    private ProvinceTableAdapter provinceTableAdapter;
     private ComuniTableAdapter comuniTableAdapter;
-    private ProgressDialog progressDialog;
+    private ColoriTableAdapter coloriTableAdapter;
+    private GiorniTableAdapter giorniTableAdapter;
+    private IsolaEcologicaTableAdapter isolaEcologicaTableAdapter;
+    private MaterialiTableAdapter materialiTableAdapter;
+    private PreferitiTableAdapter preferitiTableAdapter;
+    private ProdottiTableAdapter prodottiTableAdapter;
+    private RaccoltaTableAdapter raccoltaTableAdapter;
+    private TipologiaProdottiTableAdapter tipologiaProdottiTableAdapter;
+    private TipologiaRaccoltaTableAdapter tipologiaRaccoltaTableAdapter;
 
 
     @Override
@@ -131,14 +159,22 @@ public class DbFragment extends Fragment {
         /* inizializzazione dell'app */
         tables = new ArrayList<>();
         tables.add(regioniTableAdapter = new RegioniTableAdapter(context));
+        tables.add(provinceTableAdapter = new ProvinceTableAdapter(context));
         tables.add(comuniTableAdapter = new ComuniTableAdapter(context));
+        tables.add(coloriTableAdapter = new ColoriTableAdapter(context));
+        tables.add(giorniTableAdapter = new GiorniTableAdapter(context));
+        tables.add(isolaEcologicaTableAdapter = new IsolaEcologicaTableAdapter(context));
+        tables.add(materialiTableAdapter = new MaterialiTableAdapter(context));
+        tables.add(preferitiTableAdapter = new PreferitiTableAdapter(context));
+        tables.add(prodottiTableAdapter = new ProdottiTableAdapter(context));
+        tables.add(raccoltaTableAdapter = new RaccoltaTableAdapter(context));
         tables.add(tipologiaProdottiTableAdapter = new TipologiaProdottiTableAdapter(context));
+        tables.add(tipologiaRaccoltaTableAdapter = new TipologiaRaccoltaTableAdapter(context));
 
-
-        progressDialog.setMessage("Download of database");
-        progressDialog.show();
 
         /* aggiornamento di tutte le tabelle */
+        progressDialog.setMessage("Download of database");
+        progressDialog.show();
         Message4Debug.log("inizio aggiornamento del database interno...");
         long start = System.currentTimeMillis();
         for (TableAdapter t : tables) {
@@ -151,11 +187,10 @@ public class DbFragment extends Fragment {
             }
         }
         Message4Debug.log("aggiornamento completato in: " + (System.currentTimeMillis() - start));
-
-
         progressDialog.dismiss();
-    }
 
+
+    }
 
     /**
      * The type Sub fragment button manager.

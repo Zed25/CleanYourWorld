@@ -1,4 +1,14 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 23/06/16 17.49
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.MainActivity
+ * File name: MainActivity.java
+ * Class name: MainActivity
+ * Last modified: 23/06/16 17.49
+ */
+
+/*
  * Created by Umberto Ferracci from urania on 04/06/16 18.06
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -10,12 +20,10 @@
 
 package com.ufos.cyw16.cleanyourworld;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,23 +32,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.ufos.cyw16.cleanyourworld.Models.Regione;
-import com.ufos.cyw16.cleanyourworld.config.ConfigAdapter;
-import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
@@ -93,10 +91,8 @@ public class MainActivity extends AppCompatActivity {
         loadFrame = (FrameLayout) findViewById(R.id.loadFrame);
 
 
-
-
-        mainFrame.setVisibility(View.INVISIBLE);
-        loadFrame.setVisibility(View.VISIBLE);
+        mainFrame.setVisibility(View.VISIBLE);
+        loadFrame.setVisibility(View.INVISIBLE);
 
         ImageView backgroud = (ImageView) findViewById(R.id.backgraound);
         if (backgroud != null) {
@@ -106,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         //check if it's the first time you start the app
         if(checkFirstTime()){
             // prepare for configuration as to choose your COMUNE
-            prepareForConfiguration();
+//            prepareForConfiguration();
 
         } else {
             // TODO load configuration if not first time

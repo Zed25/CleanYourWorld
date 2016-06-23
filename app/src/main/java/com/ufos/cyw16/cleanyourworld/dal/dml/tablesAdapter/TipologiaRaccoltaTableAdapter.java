@@ -2,9 +2,9 @@
  * Created by Umberto Ferracci from urania and published on 23/06/16 17.49
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter
- * File name: RegioniTableAdapter.java
- * Class name: RegioniTableAdapter
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaRaccoltaTableAdapter
+ * File name: TipologiaRaccoltaTableAdapter.java
+ * Class name: TipologiaRaccoltaTableAdapter
  * Last modified: 23/06/16 17.34
  */
 
@@ -12,20 +12,20 @@
  * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter
- * File name: RegioniTableAdapter.java
- * Class name: RegioniTableAdapter
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaRaccoltaTableAdapter
+ * File name: TipologiaRaccoltaTableAdapter.java
+ * Class name: TipologiaRaccoltaTableAdapter
  * Last modified: 09/06/16 16.37
  */
 
 /*
- * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
+ * Created by Umberto Ferracci from urania and published on 09/06/16 16.18
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter
- * File name: RegioniTableAdapter.java
- * Class name: RegioniTableAdapter
- * Last modified: 04/06/16 20.15
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaRaccolta
+ * File name: TipologiaRaccolta.java
+ * Class name: TipologiaRaccolta
+ * Last modified: 09/06/16 16.18
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter;
@@ -36,16 +36,16 @@ import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter;
 
 /**
- * The type Regioni table adapter.
+ * The type Tipologia raccolta table adapter.
  */
-public class RegioniTableAdapter extends TableAdapter {
+public class TipologiaRaccoltaTableAdapter extends TableAdapter {
     /**
-     * Instantiates a new Regioni table adapter.
+     * Instantiates a new Tipologia raccolta table adapter.
      *
      * @param context the context
      */
-    public RegioniTableAdapter(Context context) {
-        super(context, "regioni");
+    public TipologiaRaccoltaTableAdapter(Context context) {
+        super(context, "tipologiaRaccolta");
     }
 
     @Override

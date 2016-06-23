@@ -1,21 +1,22 @@
+
 /*
- * Created by Umberto Ferracci from urania and published on 07/06/16 5.17
+ * Created by Umberto Ferracci from urania and published on 23/06/16 17.49
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dml.DbQueryServerTask
  * File name: DbQueryServerTask.java
  * Class name: DbQueryServerTask
- * Last modified: 06/06/16 17.15
+ * Last modified: 23/06/16 17.34
  */
 
 /*
- * Created by Umberto Ferracci from urania and published on 06/06/16 4.39
+ * Created by Umberto Ferracci from urania and published on 17/06/16 7.44
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dml.DbQueryServerTask
  * File name: DbQueryServerTask.java
  * Class name: DbQueryServerTask
- * Last modified: 06/06/16 4.39
+ * Last modified: 17/06/16 7.41
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dml;
@@ -36,7 +37,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- *
+ * The type Db query server task.
+ * @deprecated
  */
 public class DbQueryServerTask extends AsyncTask<String, Void, ArrayList<String[]>> {
     @Override

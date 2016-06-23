@@ -1,41 +1,21 @@
 /*
- * Created by Umberto Ferracci from urania and published on 09/06/16 15.40
+ * Created by Umberto Ferracci from urania and published on 23/06/16 17.49
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
  * File name: TableAdapter.java
  * Class name: TableAdapter
- * Last modified: 09/06/16 15.01
+ * Last modified: 23/06/16 17.34
  */
 
 /*
- * Created by Umberto Ferracci from urania and published on 09/06/16 12.16
+ * Created by Umberto Ferracci from urania and published on 17/06/16 7.44
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
  * File name: TableAdapter.java
  * Class name: TableAdapter
- * Last modified: 09/06/16 11.50
- */
-
-/*
- * Created by Umberto Ferracci from urania and published on 07/06/16 5.17
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
- * File name: TableAdapter.java
- * Class name: TableAdapter
- * Last modified: 07/06/16 5.13
- */
-
-/*
- * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
- * File name: TableAdapter.java
- * Class name: TableAdapter
- * Last modified: 04/06/16 20.11
+ * Last modified: 17/06/16 7.41
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dml;
@@ -101,9 +81,7 @@ public abstract class TableAdapter {
      *
      * @param key   the key
      * @param value the value
-     *
      * @return the long
-     *
      * @throws DaoException the dao exception
      */
     public long insert(String[] key, String[] value) throws DaoException {
@@ -129,9 +107,7 @@ public abstract class TableAdapter {
      * @param newValues    the new values
      * @param whereClauses the where clauses
      * @param whereArgs    the where args
-     *
      * @return the int
-     *
      * @throws DaoException the dao exception
      */
     public int update(String[] key, String[] newValues, String[] whereClauses, String[] whereArgs) throws DaoException {
@@ -158,9 +134,7 @@ public abstract class TableAdapter {
      *
      * @param whereClauses the where clauses
      * @param whereArgs    the where args
-     *
      * @return the int
-     *
      * @throws DaoException the dao exception
      */
     public int delete(String[] whereClauses, String[] whereArgs) throws DaoException {
@@ -186,10 +160,9 @@ public abstract class TableAdapter {
      * Delete all rows int.
      *
      * @return the int
-     *
      * @throws DaoException the dao exception
      */
-    public int deleteAllRows() throws DaoException {
+    private int deleteAllRows() throws DaoException {
         SQLiteDatabase db = openHelper.getWritableDatabase();
         int id = db.delete(tableName, null, null);
         db.close();
@@ -203,9 +176,7 @@ public abstract class TableAdapter {
      * @param selectionClauses the selection clauses
      * @param selectionArgs    the selection args
      * @param orderBy          the order by
-     *
      * @return the data
-     *
      * @throws DaoException the dao exception
      */
     public ArrayList<ArrayList<String>> getData(String[] selectionClauses, String[] selectionArgs, String orderBy) throws DaoException {
@@ -229,13 +200,12 @@ public abstract class TableAdapter {
      *
      * @param keys   the keys
      * @param values the values
-     *
      * @throws DaoException         the dao exception
      * @throws InterruptedException the interrupted exception
      */
     public void updateFromServer(String[] keys, final String[] values) throws DaoException, InterruptedException {
         deleteAllRows();
-        String query = url + "&table=" + tableName;
+        String query = url + "&operation=secureSelect&table=" + tableName;
         if (keys != null)
             for (int i = 0; i < keys.length; i++) {
                 query += "&" + keys[i] + "=" + values[i];
@@ -322,9 +292,7 @@ public abstract class TableAdapter {
      *
      * @param key    the key
      * @param values the values
-     *
      * @return the content values
-     *
      * @throws DaoException the dao exception
      */
     private ContentValues contentValuesCasted(String[] key, String[] values) throws DaoException {
@@ -358,9 +326,7 @@ public abstract class TableAdapter {
      *
      * @param whereClauses the where clauses
      * @param isNullable   the is nullable
-     *
      * @return the string
-     *
      * @throws DaoException the dao exception
      */
     private String whereClauseElaborate(String[] whereClauses, boolean isNullable) throws DaoException {
@@ -380,13 +346,21 @@ public abstract class TableAdapter {
      * Where clause elaborate string.
      *
      * @param whereClauses the where clauses
-     *
      * @return the string
-     *
      * @throws DaoException the dao exception
      */
     private String whereClauseElaborate(String[] whereClauses) throws DaoException {
         return whereClauseElaborate(whereClauses, false);
+    }
+
+    /**
+     * Send to server.
+     *
+     * @throws DaoException the dao exception
+     */
+    public void sendToServer() throws DaoException {
+        String query = url + "&operation=secureInsert&table=" + tableName;
+        /// TODO: 09/06/16
     }
 }
 
