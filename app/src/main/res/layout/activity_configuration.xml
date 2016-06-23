@@ -20,6 +20,7 @@
     tools:context="com.ufos.cyw16.cleanyourworld.ConfigurationActivity">
 
         <ImageView
+            android:id="@+id/mapIV"
             android:layout_width="170dp"
             android:layout_height="170dp"
             android:layout_gravity="center_horizontal"
@@ -28,6 +29,7 @@
             android:layout_centerHorizontal="true" />
 
         <TextView
+            android:id="@+id/chooseTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="200dp"

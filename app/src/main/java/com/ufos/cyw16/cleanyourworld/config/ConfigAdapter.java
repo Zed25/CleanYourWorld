@@ -26,10 +26,10 @@ import java.util.ArrayList;
  */
 public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.MyViewHolder>{
 
-    private ArrayList<Regione> regioni;
+    private ArrayList<ConfigAdapterDataProvider> data;
 
-    public ConfigAdapter(ArrayList<Regione> regioni) {
-        this.regioni = regioni;
+    public ConfigAdapter(ArrayList<ConfigAdapterDataProvider> regioni) {
+        this.data = regioni;
     }
 
     @Override
@@ -43,15 +43,15 @@ public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.MyViewHold
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        Regione regione = regioni.get(position);
+        ConfigAdapterDataProvider element = data.get(position);
 
-        holder.nameTv.setText(regione.getName());
+        holder.nameTv.setText(element.getName());
 
     }
 
     @Override
     public int getItemCount() {
-        return regioni.size();
+        return data.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
