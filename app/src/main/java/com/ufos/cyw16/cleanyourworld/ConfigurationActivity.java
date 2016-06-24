@@ -24,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ufos.cyw16.cleanyourworld.Models.Comune;
+import com.ufos.cyw16.cleanyourworld.Models.Provincia;
 import com.ufos.cyw16.cleanyourworld.Models.Regione;
 import com.ufos.cyw16.cleanyourworld.config.ConfigAdapter;
 import com.ufos.cyw16.cleanyourworld.config.ConfigAdapterDataProvider;
@@ -45,7 +47,10 @@ public class ConfigurationActivity extends AppCompatActivity {
     private ConfigStep step;
     private ArrayList<ConfigAdapterDataProvider> data;
 
+    /* chosen regione,provincia and comune; used later to save in shared prefs */
     private Regione regioneChosen = new Regione(0,"tmp");
+    private Provincia provinciaChosen = new Provincia("tmp",0,0);
+    private Comune comuneChosen = new Comune("tmp",0,0);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,13 +80,13 @@ public class ConfigurationActivity extends AppCompatActivity {
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                /* btnContinue is enabled when you choose an item of the list ;
+                * when it's clicked updates the data array and notifies the adapter that data has changed */
                 startStep(data);
             }
         });
 
-        /* set adapter and layout manager for recycler view*/
+        /* set adapter and layout manager for recycler view */
         adapter = new ConfigAdapter(data);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -95,8 +100,7 @@ public class ConfigurationActivity extends AppCompatActivity {
                 * used in SQL queries (to display only related information);
                 * */
                 ConfigAdapterDataProvider provider = data.get(position);
-                regioneChosen.setId(provider.getId());
-                regioneChosen.setName(provider.getName());
+                setChosenLocation(provider);
                 Toast.makeText(getApplicationContext(),"You chose "+ provider.getName(),Toast.LENGTH_SHORT).show();
 
                 btnContinue.setEnabled(true);
@@ -107,6 +111,26 @@ public class ConfigurationActivity extends AppCompatActivity {
 
             }
         }));
+    }
+
+    private void setChosenLocation(ConfigAdapterDataProvider provider) {
+
+        switch (step){
+            case REGIONE:
+                regioneChosen.setId(provider.getId());
+                regioneChosen.setName(provider.getName());
+                break;
+            case PROVINCIA:
+                provinciaChosen.setId(provider.getId());
+                provinciaChosen.setName(provider.getName());
+                provinciaChosen.setIdRegione(regioneChosen.getId());
+                break;
+            case COMUNE:
+                comuneChosen.setName(provider.getName());
+                comuneChosen.setId(provider.getId());
+                comuneChosen.setIdProvincia(provinciaChosen.getId());
+                break;
+        }
     }
 
     private void startStep(ArrayList<ConfigAdapterDataProvider> data) {
@@ -139,7 +163,9 @@ public class ConfigurationActivity extends AppCompatActivity {
             case REGIONE:
                 RegioniTableAdapter regioni = new RegioniTableAdapter(getApplicationContext());
                 try {
+                    /* downloads all regioni from server and writes them to the local db */
                     regioni.updateFromServer(null,null);
+
                 } catch (DaoException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -149,13 +175,17 @@ public class ConfigurationActivity extends AppCompatActivity {
                 // TODO change return type of .getData()
                 ArrayList<ArrayList<String>> regioni_al = new ArrayList<>();
                 try {
+                    /* returns all data from local db (previously updated from server)*/
                     regioni_al = regioni.getData(null,null,null);
                 } catch (DaoException e) {
                     e.printStackTrace();
                 }
+
                 convertToDataProvider(ConfigStep.REGIONE,data,regioni_al);
+                /* changes next step of config */
                 step = ConfigStep.PROVINCIA;
                 break;
+
             case PROVINCIA:
                 ProvinceTableAdapter provinceTableAdapter = new ProvinceTableAdapter(getApplicationContext());
                 try {
@@ -166,6 +196,7 @@ public class ConfigurationActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 ArrayList<ArrayList<String>> province_al = new ArrayList<>();
+                /* SELECT * FROM province WHERE regioni_id = (id of previously chosen regione) */
                 String[] selection = {"regioni_id"};
                 String[] values = {String.valueOf(regioneChosen.getId())};
                 try {
@@ -179,6 +210,7 @@ public class ConfigurationActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
                 step = ConfigStep.COMUNE;
                 break;
+
             case COMUNE:
                 ComuniTableAdapter comuni = new ComuniTableAdapter(getApplicationContext());
 
@@ -191,8 +223,9 @@ public class ConfigurationActivity extends AppCompatActivity {
                 }
 
                 ArrayList<ArrayList<String>> comuni_al = new ArrayList<>();
+                /* SELECT * from comuni WHERE province_id = (id of previously chosen province)*/
                 String[] select_comuni = {"province_id"};
-                String[] values_comuni = {String.valueOf(regioneChosen.getId())};
+                String[] values_comuni = {String.valueOf(provinciaChosen.getId())};
 
                 try {
                     comuni_al = comuni.getData(select_comuni,values_comuni,null);
@@ -203,7 +236,7 @@ public class ConfigurationActivity extends AppCompatActivity {
                 convertToDataProvider(ConfigStep.COMUNE,data,comuni_al);
                 adapter.notifyDataSetChanged();
 
-
+                step = ConfigStep.END;
                 break;
         }
     }
