@@ -186,6 +186,9 @@ public class ConfigurationActivity extends AppCompatActivity {
     private void startNewActivity(){
 
         Intent main = new Intent(getApplicationContext(),MainActivity.class);
+        Bundle b = new Bundle();
+        b.putBoolean("configDone",true);
+        main.putExtras(b);
         startActivity(main);
     }
 
