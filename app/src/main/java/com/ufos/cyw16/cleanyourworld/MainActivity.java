@@ -93,30 +93,33 @@ public class MainActivity extends AppCompatActivity {
         loadFrame = (FrameLayout) findViewById(R.id.loadFrame);
 
 
-
-
         mainFrame.setVisibility(View.INVISIBLE);
         loadFrame.setVisibility(View.VISIBLE);
+
+        if(configurationDone()){
+
+            mainFrame.setVisibility(View.VISIBLE);
+            loadFrame.setVisibility(View.INVISIBLE);
+
+            printSharedPrefsAfterConfig();
+        } else {
+
+            //check if it's the first time you start the app
+            if(checkFirstTime()){
+                // prepare for configuration as to choose your COMUNE
+                prepareForConfiguration();
+
+            } else {
+                // TODO load configuration if not first time
+            }
+        }
+
+
 
         ImageView backgroud = (ImageView) findViewById(R.id.backgraound);
         if (backgroud != null) {
             backgroud.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.clean_your_world));
         }
-
-        //check if it's the first time you start the app
-        if(checkFirstTime()){
-            // prepare for configuration as to choose your COMUNE
-            prepareForConfiguration();
-
-        } else {
-            // TODO load configuration if not first time
-        }
-
-
-
-
-
-        //((ViewManager)configFrame.getParent()).removeView(configFrame);
 
 
         getSupportActionBar().setTitle(""); // delete app title
@@ -143,6 +146,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // TODO remove before deploy; used only for debug
+    private void printSharedPrefsAfterConfig() {
+
+        SharedPreferences prefs = getSharedPreferences("comune",MODE_PRIVATE);
+        System.out.println("CHOSEN REGIONE ID: " + prefs.getInt("regione_id",0));
+        System.out.println("CHOSEN PROV ID: " + prefs.getInt("provincia_id",0));
+        System.out.println("CHOSEN COMUNE ID: " + prefs.getInt("comune_id",0));
+    }
+
+    private boolean configurationDone() {
+
+        /* if configuration process completed successfully, a configDone Bool variable (set to TRUE)
+         * is passed by the config activity
+         */
+        if(getIntent().hasExtra("configDone")) {
+
+            Bundle b = getIntent().getExtras();
+            Boolean configDone = b.getBoolean("configDone");
+            return configDone;
+        }
+
+        return false;
+
+    }
+
     private boolean checkFirstTime() {
         pref = getSharedPreferences("comune",MODE_PRIVATE);
 
@@ -158,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void prepareForConfiguration() {
+        /* if it's the first time you open the app or you haven't previously chosen a COMUNE,
+        *  a configuration activity starts */
         Intent configurationIntent = new Intent(this.getBaseContext(), ConfigurationActivity.class);
         startActivity(configurationIntent);
         comuniTableAdapter = new ComuniTableAdapter(this.getBaseContext());
