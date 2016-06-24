@@ -12,6 +12,10 @@ package com.ufos.cyw16.cleanyourworld;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -117,15 +121,20 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         switch (step){
             case REGIONE:
-                regioneChosen.setId(provider.getId());
-                regioneChosen.setName(provider.getName());
+
                 break;
             case PROVINCIA:
+                regioneChosen.setId(provider.getId());
+                regioneChosen.setName(provider.getName());
+
+                break;
+            case COMUNE:
                 provinciaChosen.setId(provider.getId());
                 provinciaChosen.setName(provider.getName());
                 provinciaChosen.setIdRegione(regioneChosen.getId());
+
                 break;
-            case COMUNE:
+            case END:
                 comuneChosen.setName(provider.getName());
                 comuneChosen.setId(provider.getId());
                 comuneChosen.setIdProvincia(provinciaChosen.getId());
@@ -134,6 +143,10 @@ public class ConfigurationActivity extends AppCompatActivity {
     }
 
     private void startStep(ArrayList<ConfigAdapterDataProvider> data) {
+        
+        if(step == ConfigStep.END){
+            showRecapDialog();
+        }
 
         data.clear();
         fillDataArray(data);
@@ -141,15 +154,55 @@ public class ConfigurationActivity extends AppCompatActivity {
         btnContinue.setEnabled(false);
     }
 
+    private void showRecapDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogStyle);
+        builder.setTitle("Location");
+        builder.setMessage("You are in : \n" + comuneChosen.getName() + ","+provinciaChosen.getName() + "," + regioneChosen.getName());
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                saveToSharedPrefs();
+                startNewActivity();
+            }
+        });
+        //builder.setNegativeButton("Cancel", null);
+        builder.show();
+    }
+
+    private void saveToSharedPrefs() {
+        SharedPreferences prefs = getSharedPreferences("comune",MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // TODO remove comments when finished
+        //editor.putBoolean("firstTime",false);
+        editor.putInt("regione_id",regioneChosen.getId());
+        editor.putInt("provincia_id",provinciaChosen.getId());
+        editor.putInt("comune_id",comuneChosen.getId());
+
+        editor.apply();
+    }
+
+    private void startNewActivity(){
+
+        Intent main = new Intent(getApplicationContext(),MainActivity.class);
+        startActivity(main);
+    }
+
     private void changeChooseTV() {
 
         switch (step){
             case REGIONE:
+
                 break;
             case PROVINCIA:
-                chooseTV.setText("Choose Your Province");
+
                 break;
             case COMUNE:
+                chooseTV.setText("Choose Your Province");
+
+                break;
+            case END:
                 chooseTV.setText("Choose your Comune");
                 break;
         }

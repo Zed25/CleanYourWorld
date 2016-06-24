@@ -1,0 +1,7 @@
+
+
+NAME          TYPE        INITIAL VALUE
+firstTime   Bool            true
+regione_id  int             id of chosen regione during config
+provincia_id int            id of chosen provincia during config
+comune_id   int             id of chosen comune during config
