@@ -1,4 +1,14 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 26/06/16 1.48
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.MaterialiTableAdapter
+ * File name: MaterialiTableAdapter.java
+ * Class name: MaterialiTableAdapter
+ * Last modified: 25/06/16 19.01
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -28,6 +38,7 @@ import com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter;
 /**
  * The type Materiali table adapter.
  */
+@Deprecated
 public class MaterialiTableAdapter extends TableAdapter {
     /**
      * Instantiates a new Materiali table adapter.

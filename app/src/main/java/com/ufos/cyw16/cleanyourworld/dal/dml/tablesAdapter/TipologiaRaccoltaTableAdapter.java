@@ -1,4 +1,14 @@
 /*
+ * Created by Umberto Ferracci from urania and published on 26/06/16 1.48
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaRaccoltaTableAdapter
+ * File name: TipologiaRaccoltaTableAdapter.java
+ * Class name: TipologiaRaccoltaTableAdapter
+ * Last modified: 25/06/16 19.02
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -28,6 +38,7 @@ import com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter;
 /**
  * The type Tipologia raccolta table adapter.
  */
+@Deprecated
 public class TipologiaRaccoltaTableAdapter extends TableAdapter {
     /**
      * Instantiates a new Tipologia raccolta table adapter.

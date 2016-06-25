@@ -1,42 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Created by Umberto Ferracci from urania and published on 09/06/16 15.40
+  ~ Created by Umberto Ferracci from urania and published on 26/06/16 1.48
   ~ email:   umberto.ferracci@gmail.com
   ~ Project: CleanYourWorld
   ~ Package: /home/urania/AndroidStudioProjects/CleanYourWorld/app/src/main/res/layout/db_fragment.xml
   ~ File name: db_fragment.xml
   ~ Class name: db_fragment.xml
-  ~ Last modified: 09/06/16 12.22
-  -->
-
-<!--
-  ~ Created by Umberto Ferracci from urania and published on 09/06/16 12.16
-  ~ email:   umberto.ferracci@gmail.com
-  ~ Project: CleanYourWorld
-  ~ Package: /home/urania/AndroidStudioProjects/CleanYourWorld/app/src/main/res/layout/db_fragment.xml
-  ~ File name: db_fragment.xml
-  ~ Class name: db_fragment.xml
-  ~ Last modified: 09/06/16 12.16
-  -->
-
-<!--
-  ~ Created by Umberto Ferracci from urania and published on 07/06/16 5.17
-  ~ email:   umberto.ferracci@gmail.com
-  ~ Project: CleanYourWorld
-  ~ Package: /home/urania/AndroidStudioProjects/CleanYourWorld/app/src/main/res/layout/db_fragment.xml
-  ~ File name: db_fragment.xml
-  ~ Class name: db_fragment.xml
-  ~ Last modified: 07/06/16 5.17
-  -->
-
-<!--
-  ~ Created by Umberto Ferracci from urania on 04/06/16 18.06
-  ~ email:   umberto.ferracci@gmail.com
-  ~ Project: CleanYourWorld
-  ~ Package: /home/urania/AndroidStudioProjects/CleanYourWorld/app/src/main/res/layout/db_fragment.xml
-  ~ File name: db_fragment.xml
-  ~ Class name: db_fragment.xml
-  ~ Last modified: 04/06/16 18.04
+  ~ Last modified: 25/06/16 20.20
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -59,37 +29,44 @@
             android:visibility="visible">
 
             <Button
-                android:id="@+id/btn_viewAllRegion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/btn_update"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="update"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/btn_viewAll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:text="view all"/>
 
             <Button
-                android:id="@+id/btn_aggiorna"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/btn_regioni"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:text="agg, regioni"/>
+                android:text="regioni"/>
 
             <Button
                 android:id="@+id/btn_typeProd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:text="agg, prodotto"/>
+                android:text="type prod"/>
 
             <Button
                 android:id="@+id/btn_comuni"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:text="agg, comuni"/>
+                android:text="comuni"/>
         </LinearLayout>
 
         <ListView
@@ -101,11 +78,4 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_setup"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="center_horizontal"
-        android:text="Inizia configurazione"
-        />
 </LinearLayout>

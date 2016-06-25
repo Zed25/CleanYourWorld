@@ -2,20 +2,10 @@
  * Created by Umberto Ferracci from urania and published on 26/06/16 1.48
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
- * File name: TableAdapter.java
- * Class name: TableAdapter
- * Last modified: 25/06/16 19.03
- */
-
-/*
- * Created by Umberto Ferracci from urania and published on 17/06/16 7.44
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
- * File name: TableAdapter.java
- * Class name: TableAdapter
- * Last modified: 17/06/16 7.41
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter_NEW
+ * File name: TableAdapter_NEW.java
+ * Class name: TableAdapter_NEW
+ * Last modified: 26/06/16 1.48
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dml;
@@ -38,14 +28,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
 /**
  * The type Table adapter.
  */
-@Deprecated
-public abstract class TableAdapter {
+public class TableAdapter_NEW {
     private CYWOpenHelper openHelper;
     private String tableName;
     private Table table;
@@ -58,7 +48,7 @@ public abstract class TableAdapter {
      * @param context   the context
      * @param tableName the table name
      */
-    public TableAdapter(Context context, String tableName) {
+    public TableAdapter_NEW(Context context, String tableName) {
         this.openHelper = CYWOpenHelper.getInstance(context);
         this.tableName = tableName;
         this.table = openHelper.getTableByName(tableName);
@@ -165,9 +155,13 @@ public abstract class TableAdapter {
      */
     private int deleteAllRows() throws DaoException {
         SQLiteDatabase db = openHelper.getWritableDatabase();
+//        if (getCount() > 0) {
         int id = db.delete(tableName, null, null);
         db.close();
         return id;
+//        }
+//        throw new DaoException("");
+
     }
 
 
@@ -180,19 +174,19 @@ public abstract class TableAdapter {
      * @return the data
      * @throws DaoException the dao exception
      */
-    public ArrayList<ArrayList<String>> getData(String[] selectionClauses, String[] selectionArgs, String orderBy) throws DaoException {
+    public List<String[]> getData(String[] selectionClauses, String[] selectionArgs, String orderBy) throws DaoException {
         SQLiteDatabase db = openHelper.getWritableDatabase();
         Cursor cursor = db.query(table.getName(), null, whereClauseElaborate(selectionClauses, true), selectionArgs, null, null, orderBy);
-        ArrayList<ArrayList<String>> result = new ArrayList<>();
+        List<String[]> rows = new ArrayList<>();
         while (cursor.moveToNext()) {
-            String[] columnNames = cursor.getColumnNames();
-            ArrayList<String> row = new ArrayList<>();
-            for (String columnName : columnNames) {
-                row.add(cursor.getString(cursor.getColumnIndex(columnName)));
+            int columns = cursor.getColumnNames().length;
+            String[] row = new String[columns];
+            for (int i = 0; i < columns; i++) {
+                row[i] = cursor.getString(i);
             }
-            result.add(row);
+            rows.add(row);
         }
-        return result;
+        return rows;
     }
 
 
