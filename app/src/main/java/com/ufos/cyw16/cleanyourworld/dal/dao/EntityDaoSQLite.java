@@ -1,11 +1,10 @@
+
+
 /*
- * Created by Umberto Ferracci from urania and published on 26/06/16 1.48
- * email:   umberto.ferracci@gmail.com
+ * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite
- * File name: EntityDaoSQLite.java
- * Class name: EntityDaoSQLite
- * Last modified: 25/06/16 20.46
+ * Last modified: 26/06/16 1.55
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dao;

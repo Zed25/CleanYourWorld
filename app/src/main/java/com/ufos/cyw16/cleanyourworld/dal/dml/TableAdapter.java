@@ -1,21 +1,9 @@
-/*
- * Created by Umberto Ferracci from urania and published on 26/06/16 1.48
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
- * File name: TableAdapter.java
- * Class name: TableAdapter
- * Last modified: 25/06/16 19.03
- */
 
 /*
- * Created by Umberto Ferracci from urania and published on 17/06/16 7.44
- * email:   umberto.ferracci@gmail.com
+ * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter
- * File name: TableAdapter.java
- * Class name: TableAdapter
- * Last modified: 17/06/16 7.41
+ * Last modified: 26/06/16 1.55
  */
 
 package com.ufos.cyw16.cleanyourworld.dal.dml;

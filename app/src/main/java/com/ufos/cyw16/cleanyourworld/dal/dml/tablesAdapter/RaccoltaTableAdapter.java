@@ -1,4 +1,21 @@
 /*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RaccoltaTableAdapter
+ * Last modified: 26/06/16 1.52
+ */
+
+/*
+ * Created by Umberto Ferracci from urania and published on 26/06/16 1.49
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RaccoltaTableAdapter
+ * File name: RaccoltaTableAdapter.java
+ * Class name: RaccoltaTableAdapter
+ * Last modified: 26/06/16 1.48
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 26/06/16 1.48
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld

@@ -1,11 +1,10 @@
+
+
 /*
- * Created by Umberto Ferracci from urania and published on 26/06/16 1.48
- * email:   umberto.ferracci@gmail.com
+ * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProductsDao
- * File name: ProductsDao.java
- * Class name: ProductsDao
- * Last modified: 25/06/16 19.57
+ * Last modified: 26/06/16 1.55
  */
 
 package com.ufos.cyw16.cleanyourworld.Models.dao.factories;
