@@ -60,4 +60,15 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true" />
 
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@style/Base.Widget.AppCompat.ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="visible"
+            android:layout_alignWithParentIfMissing="false"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
