@@ -5,5 +5,11 @@
     android:layout_height="match_parent"
     tools:context="com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment">
 
+    <CalendarView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:id="@+id/clndrView"/>
+
 
 </RelativeLayout>
