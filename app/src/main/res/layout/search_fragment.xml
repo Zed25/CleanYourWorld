@@ -4,17 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vpSearch"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
-
-    <LinearLayout
+        <android.support.v4.view.ViewPager
+            android:id="@+id/vpSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    <android.support.v7.widget.ButtonBarLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/btnBarLayout">
 
         <Button
             android:layout_width="wrap_content"
@@ -33,7 +32,7 @@
             android:layout_height="wrap_content"
             android:text="prod"
             android:id="@+id/btnProducts" />
-    </LinearLayout>
+    </android.support.v7.widget.ButtonBarLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>
