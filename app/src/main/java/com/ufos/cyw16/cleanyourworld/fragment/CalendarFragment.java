@@ -118,15 +118,20 @@ public class CalendarFragment extends Fragment{
             dayTrashInfo.setDay(dayName);
             dayTrashInfo.setThrash("quello che va buttato oggi!");
         }
+        //TODO remove
+        return new ArrayList<DayTrashInfo>();
 
     }
 
     //select DAY_OF_WEEK from the start date
     private String selectDay(int day) {
-        int i = day %
+        int i = day ;
         switch (day){
-            case
+
         }
+
+        // TODO remove
+        return "hello";
     }
 
     private void initializeCalendarMonthView(View v) {

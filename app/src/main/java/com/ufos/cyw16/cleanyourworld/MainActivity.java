@@ -11,9 +11,12 @@
 package com.ufos.cyw16.cleanyourworld;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
@@ -23,6 +26,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,6 +54,8 @@ import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.System.exit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -104,17 +110,15 @@ public class MainActivity extends AppCompatActivity {
             printSharedPrefsAfterConfig();
         } else {
 
-            //check if it's the first time you start the app
-            if(checkFirstTime()){
-                // prepare for configuration as to choose your COMUNE
-                prepareForConfiguration();
+                if(!isNetworkAvailable()){
 
-            } else {
-                // TODO load configuration if not first time
-            }
+                    showNoNetworkDialog();
+                } else {
+                    // prepare for configuration as to choose your COMUNE
+                    prepareForConfiguration();
+                }
+
         }
-
-
 
         ImageView backgroud = (ImageView) findViewById(R.id.backgraound);
         if (backgroud != null) {
@@ -124,25 +128,66 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(""); // delete app title
 
-        createFragment(); //set ViewPager and TabLayout
+        if(isNetworkAvailable()) {
 
-        // it manages the left navigation bar
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                toolbar,
-                R.string.app_name, // nav drawer open - description for accessibility
-                R.string.app_name // nav drawer close - description for accessibility
-        ) {
-            public void onDrawerClosed(View view) {
-                // calling onPrepareOptionsMenu() to showToast action bar icons
-                invalidateOptionsMenu();
-            }
+            createFragment(); //set ViewPager and TabLayout
 
-            public void onDrawerOpened(View drawerView) {
-                // calling onPrepareOptionsMenu() to hide action bar icons
-                invalidateOptionsMenu();
+            // it manages the left navigation bar
+            drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+                    toolbar,
+                    R.string.app_name, // nav drawer open - description for accessibility
+                    R.string.app_name // nav drawer close - description for accessibility
+            ) {
+                public void onDrawerClosed(View view) {
+                    // calling onPrepareOptionsMenu() to showToast action bar icons
+                    invalidateOptionsMenu();
+                }
+
+                public void onDrawerOpened(View drawerView) {
+                    // calling onPrepareOptionsMenu() to hide action bar icons
+                    invalidateOptionsMenu();
+                }
+            };
+            drawerLayout.addDrawerListener(drawerToggle);
+
+        }
+
+    }
+
+    private void showNoNetworkDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.MyAlertDialogStyle);
+        builder.setTitle("No Internet Connection");
+        builder.setMessage("Open an Internet connection and try again.");
+
+        String positiveText = "TRY AGAIN";
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // check if internet connect and try again
+                        if(isNetworkAvailable()){
+                            prepareForConfiguration();
+                        }else {
+                            showNoNetworkDialog();
+                        }
+
+                    }
+                });
+
+        String negativeText = "EXIT";
+        builder.setNegativeButton(negativeText, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MainActivity.this.finish();
             }
-        };
-        drawerLayout.addDrawerListener(drawerToggle);
+        });
+
+
+        AlertDialog dialog = builder.create();
+        // display dialog
+        dialog.show();
+
 
     }
 
@@ -171,55 +216,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private boolean checkFirstTime() {
-        pref = getSharedPreferences("comune",MODE_PRIVATE);
-
-
-        if(pref.getBoolean("firstTime",true)){
-/*            editor = pref.edit();
-            editor.putBoolean("firstTime",false);
-            editor.apply();*/
-            return true;
-        }
-        return false;
-
-    }
 
     private void prepareForConfiguration() {
         /* if it's the first time you open the app or you haven't previously chosen a COMUNE,
         *  a configuration activity starts */
         Intent configurationIntent = new Intent(this.getBaseContext(), ConfigurationActivity.class);
         startActivity(configurationIntent);
-        comuniTableAdapter = new ComuniTableAdapter(this.getBaseContext());
-       /* Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    comuniTableAdapter.updateFromServer(null,null);
-                    comuniTableAdapter.getData(null,null,null);
-                } catch (DaoException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        Thread thread = new Thread(runnable);
-        thread.start();
-        int i = 0;
-        while (thread.isAlive()){
-
-            Message4Debug.log("THREAD ALIVE " + i);
-            i++;
-        }*/
-
-
-
-        //loadFrame.setVisibility(View.INVISIBLE);
-        //configFrame.setVisibility(View.VISIBLE);
-
-
-
 
     }
 
@@ -234,6 +236,13 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(new SearchFragment(), "Search");
         adapter.addFragment(new DbFragment(), "Database");
         viewPager.setAdapter(adapter);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public void createFragment() {

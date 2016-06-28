@@ -11,6 +11,8 @@
 package com.ufos.cyw16.cleanyourworld;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +27,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +54,14 @@ public class ConfigurationActivity extends AppCompatActivity {
     private ConfigStep step;
     private ArrayList<ConfigAdapterDataProvider> data;
 
+    /* Animation */
+    private ProgressBar progressBar;
+    private int animationDuration;
+
+    private RegioniTableAdapter regioni;
+    private ProvinceTableAdapter province;
+    private ComuniTableAdapter comuni;
+
     /* chosen regione,provincia and comune; used later to save in shared prefs */
     private Regione regioneChosen = new Regione(0,"tmp");
     private Provincia provinciaChosen = new Provincia("tmp",0,0);
@@ -61,12 +72,20 @@ public class ConfigurationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
 
+        animationDuration = getResources().getInteger(
+                android.R.integer.config_longAnimTime);
+
+
         chooseTV = (TextView) findViewById(R.id.chooseTV);
         mapIV = (ImageView) findViewById(R.id.mapIV);
+
+        progressBar = (ProgressBar) findViewById(R.id.progress);
 
         // start and configure recycler view
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         btnContinue = (Button) findViewById(R.id.btnContinue);
+
+
 
         if (btnContinue != null) {
             btnContinue.setEnabled(false);
@@ -74,6 +93,8 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         step = ConfigStep.REGIONE; // first step
         data = new ArrayList<>();
+
+        updateDBFromServer();
 
         startStep(data);
 
@@ -117,6 +138,62 @@ public class ConfigurationActivity extends AppCompatActivity {
         }));
     }
 
+    private void updateDBFromServer() {
+        /* downloads all regioni,province,comuni from server and inserts into local DB */
+        regioni = new RegioniTableAdapter(getApplicationContext());
+        province = new ProvinceTableAdapter(getApplicationContext());
+        comuni = new ComuniTableAdapter(getApplicationContext());
+        try {
+            regioni.updateFromServer(null,null);
+            province.updateFromServer(null,null );
+            comuni.updateFromServer(null,null);
+
+        } catch (DaoException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void startLoadingAnimation() {
+        recyclerView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+
+
+    }
+
+    private void crossfade() {
+
+
+
+        // Set the content view to 0% opacity but visible, so that it is visible
+        // (but fully transparent) during the animation.
+        recyclerView.setAlpha(0f);
+        recyclerView.setVisibility(View.VISIBLE);
+
+        // Animate the content view to 100% opacity, and clear any animation
+        // listener set on the view.
+        recyclerView.animate()
+                .alpha(1f)
+                .setDuration(animationDuration)
+                .setListener(null);
+
+        // Animate the loading view to 0% opacity. After the animation ends,
+        // set its visibility to GONE as an optimization step (it won't
+        // participate in layout passes, etc.)
+        progressBar.animate()
+                .alpha(0f)
+                .setDuration(animationDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        //progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
+    }
+
     private void setChosenLocation(ConfigAdapterDataProvider provider) {
 
         switch (step){
@@ -148,10 +225,14 @@ public class ConfigurationActivity extends AppCompatActivity {
             showRecapDialog();
         }
 
+        startLoadingAnimation();
+
         data.clear();
         fillDataArray(data);
         changeChooseTV();
         btnContinue.setEnabled(false);
+
+        crossfade();
     }
 
     private void showRecapDialog() {
@@ -186,10 +267,13 @@ public class ConfigurationActivity extends AppCompatActivity {
     private void startNewActivity(){
 
         Intent main = new Intent(getApplicationContext(),MainActivity.class);
+        //when the new activity starts, this one calls finish so you can't return to it with the back button
+        main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         Bundle b = new Bundle();
         b.putBoolean("configDone",true);
         main.putExtras(b);
         startActivity(main);
+        finish();
     }
 
     private void changeChooseTV() {
@@ -217,16 +301,6 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         switch (step){
             case REGIONE:
-                RegioniTableAdapter regioni = new RegioniTableAdapter(getApplicationContext());
-                try {
-                    /* downloads all regioni from server and writes them to the local db */
-                    regioni.updateFromServer(null,null);
-
-                } catch (DaoException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
                 // TODO change return type of .getData()
                 ArrayList<ArrayList<String>> regioni_al = new ArrayList<>();
@@ -243,20 +317,13 @@ public class ConfigurationActivity extends AppCompatActivity {
                 break;
 
             case PROVINCIA:
-                ProvinceTableAdapter provinceTableAdapter = new ProvinceTableAdapter(getApplicationContext());
-                try {
-                    provinceTableAdapter.updateFromServer(null,null );
-                } catch (DaoException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+
                 ArrayList<ArrayList<String>> province_al = new ArrayList<>();
                 /* SELECT * FROM province WHERE regioni_id = (id of previously chosen regione) */
                 String[] selection = {"regioni_id"};
                 String[] values = {String.valueOf(regioneChosen.getId())};
                 try {
-                    province_al = provinceTableAdapter.getData(selection,values,null);
+                    province_al = province.getData(selection,values,null);
                 } catch (DaoException e) {
                     e.printStackTrace();
                 }
@@ -268,15 +335,6 @@ public class ConfigurationActivity extends AppCompatActivity {
                 break;
 
             case COMUNE:
-                ComuniTableAdapter comuni = new ComuniTableAdapter(getApplicationContext());
-
-                try {
-                    comuni.updateFromServer(null,null);
-                } catch (DaoException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
                 ArrayList<ArrayList<String>> comuni_al = new ArrayList<>();
                 /* SELECT * from comuni WHERE province_id = (id of previously chosen province)*/
