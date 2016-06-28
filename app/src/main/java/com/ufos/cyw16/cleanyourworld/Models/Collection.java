@@ -10,22 +10,24 @@
 
 package com.ufos.cyw16.cleanyourworld.Models;
 
+import java.util.ArrayList;
+
 /**
  * Created by simone_mancini on 15/06/16.
  */
 public class Collection {
-    private int id, idComune, idMaterial, idDay, idColor, idCollectionType;
-    //TODO enum days;
+    private int id, idComune, idDay;
+    private ArrayList<Materials> materials;
+    private String color, collectionType;
 
-    public Collection(int id, int idComune, int idMaterial, int idDay, int idColor, int idCollectionType) {
+    public Collection(int id, int idComune, int idDay, ArrayList<Materials> materials, String color, String collectionType) {
         this.id = id;
         this.idComune = idComune;
-        this.idMaterial = idMaterial;
         this.idDay = idDay;
-        this.idColor = idColor;
-        this.idCollectionType = idCollectionType;
+        this.materials = materials;
+        this.color = color;
+        this.collectionType = collectionType;
     }
-
 
     public int getId() {
         return id;
@@ -43,14 +45,6 @@ public class Collection {
         this.idComune = idComune;
     }
 
-    public int getIdMaterial() {
-        return idMaterial;
-    }
-
-    public void setIdMaterial(int idMaterial) {
-        this.idMaterial = idMaterial;
-    }
-
     public int getIdDay() {
         return idDay;
     }
@@ -59,19 +53,27 @@ public class Collection {
         this.idDay = idDay;
     }
 
-    public int getIdColor() {
-        return idColor;
+    public ArrayList<Materials> getMaterials() {
+        return materials;
     }
 
-    public void setIdColor(int idColor) {
-        this.idColor = idColor;
+    public void setMaterials(ArrayList<Materials> materials) {
+        this.materials = materials;
     }
 
-    public int getIdCollectionType() {
-        return idCollectionType;
+    public String getColor() {
+        return color;
     }
 
-    public void setIdCollectionType(int idCollectionType) {
-        this.idCollectionType = idCollectionType;
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getCollectionType() {
+        return collectionType;
+    }
+
+    public void setCollectionType(String collectionType) {
+        this.collectionType = collectionType;
     }
 }

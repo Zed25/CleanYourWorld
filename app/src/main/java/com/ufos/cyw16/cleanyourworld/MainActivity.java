@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showNoNetworkDialog() {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.MyAlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.YellowAlertDialogStyle);
         builder.setTitle("No Internet Connection");
         builder.setMessage("Open an Internet connection and try again.");
 

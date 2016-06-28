@@ -31,6 +31,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ufos.cyw16.cleanyourworld.DAO.MaterialiDAO;
 import com.ufos.cyw16.cleanyourworld.Models.Comune;
 import com.ufos.cyw16.cleanyourworld.Models.Provincia;
 import com.ufos.cyw16.cleanyourworld.Models.Regione;
@@ -93,6 +94,9 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         step = ConfigStep.REGIONE; // first step
         data = new ArrayList<>();
+
+        MaterialiDAO dao = new MaterialiDAO(getApplicationContext());
+        dao.getAllMaterials();
 
         updateDBFromServer();
 
