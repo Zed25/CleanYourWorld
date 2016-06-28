@@ -66,7 +66,7 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
      *
      * @param context the context
      */
-    private CYWOpenHelper(Context context) {
+    public CYWOpenHelper(Context context) {
         super(context, db_name, null, db_version);
         tables = new ArrayList<Table>();
         tableHashMap = new HashMap<String, Table>();

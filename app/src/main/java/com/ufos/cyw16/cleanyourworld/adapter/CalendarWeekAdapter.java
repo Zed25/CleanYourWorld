@@ -41,7 +41,7 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapte
     @Override
     public void onBindViewHolder(CalendarWeekHolder calendarWeekHolder, int i) {
         DayTrashInfo dayTrashInfo = lvDayTrashInfo.get(i);
-        calendarWeekHolder.tvCardViewDate.setText(Integer.toString(dayTrashInfo.getDate()));
+        calendarWeekHolder.tvCardViewDate.setText(dayTrashInfo.getDate());
         calendarWeekHolder.tvCardViewDay.setText(dayTrashInfo.getDay());
         calendarWeekHolder.tvCardViewTrash.setText(dayTrashInfo.getThrash());}
 
@@ -67,3 +67,4 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapte
 
     }
 }
+

@@ -4,10 +4,9 @@ package com.ufos.cyw16.cleanyourworld.Models;
  * Created by simone_mancini on 27/06/16.
  */
 public class DayTrashInfo {
-    private String day, thrash;
-    private int date;
+    private String day, thrash, date;
 
-    public int getDate() {
+    public String getDate() {
         return date;
     }
 
@@ -19,7 +18,7 @@ public class DayTrashInfo {
         return thrash;
     }
 
-    public void setDate(int date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
