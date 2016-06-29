@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,6 +14,7 @@
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:fabSize="normal"
         android:id="@+id/fabChooseDay"
         android:tint="@color/colorAccent"
         android:foreground="@drawable/ic_calendar_tab_24dp"
@@ -23,6 +23,7 @@
         android:layout_margin="@dimen/activity_horizontal_margin"
         app:layout_anchor="@id/rvWeekList"
         app:layout_anchorGravity="bottom|right"
-        android:cropToPadding="false" />
+        app:layout_behavior="com.ufos.cyw16.cleanyourworld.ScrollAwareFABBehavior"
+        android:cropToPadding="false"/>
 
 </android.support.design.widget.CoordinatorLayout>
