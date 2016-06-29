@@ -43,7 +43,9 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapte
         DayTrashInfo dayTrashInfo = lvDayTrashInfo.get(i);
         calendarWeekHolder.tvCardViewDate.setText(dayTrashInfo.getDate());
         calendarWeekHolder.tvCardViewDay.setText(dayTrashInfo.getDay());
-        calendarWeekHolder.tvCardViewTrash.setText(dayTrashInfo.getThrash());}
+        calendarWeekHolder.tvCardViewTrash.setText(dayTrashInfo.getThrash());
+        //calendarWeekHolder.tvColorOfTheDay.setBackgroundColor(dayTrashInfo.getColorOfTheDay());
+        }
 
     @Override
     public CalendarWeekHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -57,13 +59,15 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapte
 
     public static class CalendarWeekHolder extends RecyclerView.ViewHolder{
 
-        protected TextView tvCardViewDay, tvCardViewDate, tvCardViewTrash;
+        protected TextView tvCardViewDay, tvCardViewDate, tvCardViewTrash, tvColorOfTheDay;
 
         public CalendarWeekHolder(View v) {
             super(v);
             tvCardViewDate =  (TextView) v.findViewById(R.id.tvCardViewDate);
             tvCardViewDay = (TextView)  v.findViewById(R.id.tvCardViewDay);
-            tvCardViewTrash = (TextView)  v.findViewById(R.id.tvCardViewTrash);}
+            tvCardViewTrash = (TextView)  v.findViewById(R.id.tvCardViewTrash);
+            tvColorOfTheDay = (TextView) v.findViewById(R.id.tvColorOfTheDay);
+        }
 
     }
 }
