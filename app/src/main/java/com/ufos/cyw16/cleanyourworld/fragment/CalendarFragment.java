@@ -52,15 +52,16 @@ public class CalendarFragment extends Fragment{
 
     private CalendarViewType viewMode;
 
-    public static CalendarWeekAdapter calendarWeekAdapter;
-
     private RecyclerView rvWeekList;
 
+    /**this attributes are static becouse they are filled initially and passed to DatePickerFragment
+    class that if any of them is uninitialized or equals to null, for any reason, it elaborate them**/
+    public static CalendarWeekAdapter calendarWeekAdapter;
     public static List<DayTrashInfo> dayTrashInfoList;
-
+    public static CalendarFragment calendarFragmentInstance;
     public static int[] dayChoosen;
 
-    public static CalendarFragment calendarFragmentInstance;
+
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -75,6 +76,7 @@ public class CalendarFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //if calendarFragmentInstance is equals to null initialize it
         if (calendarFragmentInstance == null){
             setCalendarFragmentInstance(this);
         }
@@ -87,30 +89,34 @@ public class CalendarFragment extends Fragment{
         return v;
     }
 
+
+    /**this method determinates which modeView is set and prepare fragment for the right configuration**/
     private View initializeCalendar(CalendarViewType viewMode, LayoutInflater inflater, ViewGroup container) {
         View v;
         switch(viewMode){
             case MONTH:
-                // Inflate the layout for this fragment
+                // Inflate the layout for Calendarfragment's month view
                 v = inflater.inflate(R.layout.calendar_fragment_month_view, container, false);
                 initializeCalendarMonthView(v);
                 return v;
 
             case WEEK:
-                // Inflate the layout for this fragment
+                // Inflate the layout for Calendarfragment's week view
                 v = inflater.inflate(R.layout.calendar_fragment_week_view, container,false);
                 initializeCalendarWeekView(v);
                 return v;
 
         }
-        // Inflate the layout for this fragment
+        // Inflate the layout for Calendarfragment's default view (week view)
         v = inflater.inflate(R.layout.calendar_fragment_week_view, container, false);
         return v;
     }
 
+    /**this method initializes calendar week view**/
     private void initializeCalendarWeekView(View v) {
         //initialize components
         rvWeekList = (RecyclerView) v.findViewById(R.id.rvWeekList);
+        //if dayTrashInfoList is equals to null initialized it
         if (dayTrashInfoList == null) {
             dayTrashInfoList = new ArrayList<>();
         }
@@ -133,16 +139,17 @@ public class CalendarFragment extends Fragment{
         fabDayChooser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCalendarDialog(); //this function return void but there is setDayChoosen() in it, so dayChoosen is setted after this function return
+                showCalendarDialog(); //show Calendar and compute choosen day, then rebuild the recycler view
             }
         });
 
-        //create a list of 7 elements
-        //theese elements are the 7 days next to the choose one
+        //if dayChoosen is equals to null initialize it whit the current day
         if(dayChoosen == null) {
             dayChoosen = computeToday();
         }
         if (dayTrashInfoList != null) {
+            //create a list of 7 elements
+            //theese elements are the 7 days next to the choose one
             generateWeekDayTrashList(dayTrashInfoList, dayChoosen);
         }
             //create and set the adapter for the recycler view
@@ -151,12 +158,13 @@ public class CalendarFragment extends Fragment{
     }
 
 
-    //choose a day and set dayChoosen variable
+    /**choose a day and set dayChoosen variable, then rebuild the recycler view**/
     private void showCalendarDialog(){
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(this.getActivity().getSupportFragmentManager(), "datePicker");
     }
 
+    /**this method determinates the current date**/
     private int[] computeToday() {
         GregorianCalendar calendar = new GregorianCalendar();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -169,11 +177,14 @@ public class CalendarFragment extends Fragment{
     }
 
 
-    //create a list of DayTrashInfo that include the 7 days next to date
+    /**this method creates a list of DayTrashInfo that include the 7 days next to date**/
     private void generateWeekDayTrashList(List<DayTrashInfo> list, int[] date) {
+        //clear the list because if create another one the recycler view's adapter changes the riferiment list, so notifyDataSetChanged() doesen't work
         list.clear();
+
         GregorianCalendar calendar = new GregorianCalendar(date[2], date[1], date[0]);
         for (int i = 0; i < 7; i++){
+            //base structure for card view
             DayTrashInfo dayTrashInfo = new DayTrashInfo();
             String dayDate = computeDateString(calendar);
             dayTrashInfo.setDate(dayDate);
@@ -181,9 +192,12 @@ public class CalendarFragment extends Fragment{
             dayTrashInfo.setDay(dayName);
             dayTrashInfo.setThrash("quello che va buttato oggi!");
             list.add(dayTrashInfo);
+
+            //next day
             calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
 
+        //if calendarWeekAdapter isn't equals to null notyfy data set changed and rebuild recycler view
         if(calendarWeekAdapter != null) {
             calendarWeekAdapter.notifyDataSetChanged();
         }
@@ -192,16 +206,19 @@ public class CalendarFragment extends Fragment{
     }
 
 
-    //To select the correct language day this function doesen't use getResurces() and R class
-    // because with the date picker this function is called before the onAttach() function
+    /**To select the correct language day this function doesen't use getResurces() and R class
+     because with the date picker this function is called before the onAttach() function, so
+     resources are unavailable**/
     private String selectDay(GregorianCalendar calendar) {
         int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
         String str = null;
         String phoneLanguage, italian;
+
+        //determinate default phone language and italian language
         phoneLanguage = Locale.getDefault().getDisplayLanguage();
-        Message4Debug.log("default value is: " + phoneLanguage);
         italian = Locale.ITALIAN.getDisplayLanguage();
-        Message4Debug.log("italian's value is: " + italian);
+
+        //compare phoneLanguage with italinLanguage and establish which are the right language for phone's user
         switch(dayOfWeekNumber) {
             case 1:
                 if(phoneLanguage.equals(italian)){
@@ -260,6 +277,8 @@ public class CalendarFragment extends Fragment{
                 }
                 break;
         }
+
+        //if after switch str == null a problem as occured
         if (str == null) {
             if (phoneLanguage.equals(italian)) {
                 str = "Un problema è occorso";
@@ -271,7 +290,7 @@ public class CalendarFragment extends Fragment{
     }
 
 
-    //it creates the string dd/mm/yyyy
+    /**this method creates the string dd/mm/yyyy**/
     private String computeDateString(GregorianCalendar calendar) {
 
         String date;
@@ -283,12 +302,14 @@ public class CalendarFragment extends Fragment{
         return date;
     }
 
+    /**this method initialize CalendarView's month view**/
     private void initializeCalendarMonthView(View v) {
+        //initialize components
         calendarView = (CalendarView) v.findViewById(R.id.clndrView);
-
         tvDate = (TextView) v.findViewById(R.id.tvDate);
         tvTrash = (TextView) v.findViewById(R.id.tvTrash);
 
+        //manage the reaction of the view to a date change
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
@@ -298,11 +319,11 @@ public class CalendarFragment extends Fragment{
                 tvDate.setText(dayOfMonth + " / " + month + " / " + year);
 
                 tvTrash.setText("quella del giorno"); //TODO insert day's trash
-                Toast.makeText(getContext(), "Date: " + dayOfMonth + " / " + month + " / " + year, Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    /**this method determinates which moode is stored into SharedPreferences**/
     private CalendarViewType getViewMode(SharedPreferences pref) {
         int i;
         CalendarViewType type;
@@ -320,9 +341,12 @@ public class CalendarFragment extends Fragment{
                     return type;
             }
         }
+        //default choice
         return CalendarViewType.WEEK;
     }
 
+
+    /**GETTER AND SETTER**/
     public static int[] getDayChoosen() {
         return dayChoosen;
     }
@@ -361,12 +385,17 @@ public class CalendarFragment extends Fragment{
         }
     }
 
+
+    /**this class manages the date picker
+     * it is a fragment which is placed above the current view and allows to choose
+     * a date between the minimum and the maximum one**/
     public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             int year, month, day;
 
+            //if dayChoosen is equal to null determinate the current date
             if (dayChoosen != null) {
                 //Use the last date choosen to initialize date picker
                 final GregorianCalendar calendar = new GregorianCalendar(dayChoosen[2], dayChoosen[1], dayChoosen[0]);
@@ -396,6 +425,7 @@ public class CalendarFragment extends Fragment{
 
             setDayChoosen(date);
 
+            //if the static attributes of CalendarView class are not null generateWeekDayTrashList()
             if (getDayTrashInfoList() != null && getDayChoosen() != null && getCalendarWeekAdapter() != null && getCalendarFragmentInstance() != null) {
                 getCalendarFragmentInstance().generateWeekDayTrashList(getDayTrashInfoList(), getDayChoosen());
             }
