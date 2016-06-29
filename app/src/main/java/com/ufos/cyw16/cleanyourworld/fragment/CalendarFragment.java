@@ -199,12 +199,12 @@ public class CalendarFragment extends Fragment{
         String str = null;
         String phoneLanguage, italian;
         phoneLanguage = Locale.getDefault().getDisplayLanguage();
-        italian = Locale.ITALIAN.getLanguage();
+        Message4Debug.log("default value is: " + phoneLanguage);
+        italian = Locale.ITALIAN.getDisplayLanguage();
+        Message4Debug.log("italian's value is: " + italian);
         switch(dayOfWeekNumber) {
             case 1:
-                Resources resources = getContext().getResources();
-                Configuration configuration = resources.getConfiguration();
-                if(phoneLanguage == italian){
+                if(phoneLanguage.equals(italian)){
                     str = "Domenica";
 
                 }else{
@@ -212,7 +212,7 @@ public class CalendarFragment extends Fragment{
                 }
                 break;
             case 2:
-                if(phoneLanguage == italian){
+                if(phoneLanguage.equals(italian)){
                     str = "Lunedì";
 
                 }else{
@@ -220,7 +220,7 @@ public class CalendarFragment extends Fragment{
                 }
                 break;
             case 3:
-                if(phoneLanguage == italian){
+                if(phoneLanguage.equals(italian)){
                     str = "Martedì";
 
                 }else{
@@ -228,7 +228,7 @@ public class CalendarFragment extends Fragment{
                 }
                 break;
             case 4:
-                if(phoneLanguage == italian){
+                if(phoneLanguage.equals(italian)){
                 str = "Mercoledi";
 
                 }else{
@@ -236,7 +236,7 @@ public class CalendarFragment extends Fragment{
                 }
                 break;
             case 5:
-                if(phoneLanguage == italian){
+                if(phoneLanguage.equals(italian)){
                     str = "Giovedì";
 
                 }else{
@@ -244,7 +244,7 @@ public class CalendarFragment extends Fragment{
                 }
                 break;
             case 6:
-                if(phoneLanguage == italian){
+                if(phoneLanguage.equals(italian)){
                     str = "Venerdì";
 
                 }else{
@@ -252,7 +252,7 @@ public class CalendarFragment extends Fragment{
                 }
                 break;
             case 7:
-                if(phoneLanguage == italian){
+                if(phoneLanguage.equals(italian)){
                     str = "Sabato";
 
                 }else{
@@ -261,7 +261,7 @@ public class CalendarFragment extends Fragment{
                 break;
         }
         if (str == null) {
-            if (phoneLanguage == italian) {
+            if (phoneLanguage.equals(italian)) {
                 str = "Un problema è occorso";
             }else {
                 str = "There is a problem";
