@@ -18,14 +18,15 @@ import java.util.ArrayList;
 public class Collection {
     private int id, idComune, idDay;
     private ArrayList<Materials> materials;
-    private String color, collectionType;
+    private String collectionType;
+    private ArrayList<Colors> colors;
 
-    public Collection(int id, int idComune, int idDay, ArrayList<Materials> materials, String color, String collectionType) {
+    public Collection(int id, int idComune, int idDay, ArrayList<Materials> materials, ArrayList<Colors> colors, String collectionType) {
         this.id = id;
         this.idComune = idComune;
         this.idDay = idDay;
         this.materials = materials;
-        this.color = color;
+        this.colors = colors;
         this.collectionType = collectionType;
     }
 
@@ -35,6 +36,18 @@ public class Collection {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Collection{" +
+                "id=" + id +
+                ", idComune=" + idComune +
+                ", idDay=" + idDay +
+                ", materials=" + materials +
+                ", color='" + colors + '\'' +
+                ", collectionType='" + collectionType + '\'' +
+                '}';
     }
 
     public int getIdComune() {
@@ -61,12 +74,12 @@ public class Collection {
         this.materials = materials;
     }
 
-    public String getColor() {
-        return color;
+    public ArrayList<Colors> getColor() {
+        return colors;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setColor(ArrayList<Colors> colors) {
+        this.colors = colors;
     }
 
     public String getCollectionType() {
