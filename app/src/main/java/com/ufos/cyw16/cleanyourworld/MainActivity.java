@@ -294,6 +294,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ft.replace(R.id.fragmentContent, new CalendarFragment(), "fragment_screen");
                 ft.commit();
                 break;
+            case R.id.dbFragment:
+                ft.replace(R.id.fragmentContent, new DbFragment(), "fragment_screen");
+                ft.commit();
+                break;
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

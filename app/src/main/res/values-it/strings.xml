@@ -8,13 +8,13 @@
 
 <resources>
     <string name="app_name">CleanYourWorld</string>
-    <string name="barCode"></string>
+    <string name="barCode">Codei a barre</string>
     <string name="calSection">Calendario</string>
     <string name="glcFind">Isole Ecologiche</string>
     <string name="glcSection">Nelle Vicinanze</string>
     <string name="srcMaterial">Materiali</string>
     <string name="srcProduct">Prodotti</string>
-    <string name="srcScan"></string>
+    <string name="srcScan">Scannerizza codice</string>
     <string name="srcSection">Ricerca</string>
     <string name="strFriday">Venerdì</string>
     <string name="strMonday">Lunedì</string>
