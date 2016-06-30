@@ -10,6 +10,8 @@
 
 package com.ufos.cyw16.cleanyourworld;
 
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,10 +20,11 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,6 +32,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -39,12 +44,13 @@ import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity;
 import com.ufos.cyw16.cleanyourworld.fragment.SearchFragment;
+import com.ufos.cyw16.cleanyourworld.fragment.subfragment.BarCodeSearchSubFragment;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private RelativeLayout parent;
 
@@ -56,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout mainFrame;
     private FrameLayout loadFrame;
     private FrameLayout configFrame;
+
+    //private ViewPagerAdapter viewPagerAdapter;
+    //private ViewPager viewPager;
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -124,18 +133,23 @@ public class MainActivity extends AppCompatActivity {
                     toolbar,
                     R.string.app_name, // nav drawer open - description for accessibility
                     R.string.app_name // nav drawer close - description for accessibility
-            ) {
-                public void onDrawerClosed(View view) {
+            );
+            //{
+            //    public void onDrawerClosed(View view) {
                     // calling onPrepareOptionsMenu() to showToast action bar icons
-                    invalidateOptionsMenu();
-                }
+            //        invalidateOptionsMenu();
+            //    }
 
-                public void onDrawerOpened(View drawerView) {
+            //    public void onDrawerOpened(View drawerView) {
                     // calling onPrepareOptionsMenu() to hide action bar icons
-                    invalidateOptionsMenu();
-                }
-            };
+                    //invalidateOptionsMenu();
+            //    }
+            //};
             drawerLayout.addDrawerListener(drawerToggle);
+            drawerToggle.syncState();
+
+            NavigationView navigationView = (NavigationView) findViewById(R.id.lmSideBar);
+            navigationView.setNavigationItemSelectedListener(this);
 
         }
 
@@ -214,16 +228,16 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Defines the number of tabs by setting appropriate fragment and tab name
-    private void setupViewPager(ViewPager viewPager) {
-        Message4Debug.log("MainActivity.setupViewPager()");
+    //private void setupViewPager(ViewPager viewPager) {
+    //    Message4Debug.log("MainActivity.setupViewPager()");
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new CalendarFragment(), "Calendar");
+    //    viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+    //    viewPagerAdapter.addFragment(new CalendarFragment(), "Calendar");
         //startActivity(new Intent(this, GeolocalizationActivity.class));
-        adapter.addFragment(new SearchFragment(), "Search");
-        adapter.addFragment(new DbFragment(), "Database");
-        viewPager.setAdapter(adapter);
-    }
+        //adapter.addFragment(new SearchFragment(), "Search");
+        //adapter.addFragment(new DbFragment(), "Database");
+    //    viewPager.setAdapter(viewPagerAdapter);
+    //}
 
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
@@ -233,66 +247,116 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.fragmentContent, new CalendarFragment(), "fragment_screen");
+        ft.commit();
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+    //    viewPager = (ViewPager) findViewById(R.id.viewpager);
+    //    setupViewPager(viewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        //TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         //tabLayout.setTabTextColors(Color.parseColor("#e62b1e"), Color.parseColor("#e62b1e"));
-        tabLayout.setupWithViewPager(viewPager); //Assigns the ViewPager to TabLayout
+        //tabLayout.setupWithViewPager(viewPager); //Assigns the ViewPager to TabLayout
 
-        setupTabIcons(tabLayout);
+        //setupTabIcons(tabLayout);
 
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        switch (item.getItemId()){
+            case R.id.srchScan:
+                ft.replace(R.id.fragmentContent, new BarCodeSearchSubFragment(), "fragment_screen");
+                ft.commit();
+                break;
+            case R.id.srchProduct:
+                break;
+            case R.id.srchMaterial:
+                break;
+            case R.id.geolocalizzation:
+                Intent intent = new Intent(getBaseContext(), GeolocalizationActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.calendar:
+                ft.replace(R.id.fragmentContent, new CalendarFragment(), "fragment_screen");
+                ft.commit();
+                break;
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     // set tab icons (calendar, geolocalization and research) to fragments to improve user interface
-    private void setupTabIcons(TabLayout tabLayout) {
+    //private void setupTabIcons(TabLayout tabLayout) {
 
         // set calendar fragment icon
-        ImageView tabCalendar = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-        tabCalendar.setImageResource(R.drawable.ic_calendar_tab_24dp);
-        tabLayout.getTabAt(0).setCustomView(tabCalendar);
+    //    ImageView tabCalendar = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+    //    tabCalendar.setImageResource(R.drawable.ic_calendar_tab_24dp);
+    //    tabLayout.getTabAt(0).setCustomView(tabCalendar);
 
         // set research fragment icon
-        ImageView tabSearch = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-        tabSearch.setImageResource(R.drawable.ic_search_tab_24dp);
-        tabLayout.getTabAt(1).setCustomView(tabSearch);
+    //    ImageView tabSearch = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+    //    tabSearch.setImageResource(R.drawable.ic_search_tab_24dp);
+    //    tabLayout.getTabAt(1).setCustomView(tabSearch);
 
         // set database fragment icon
-        ImageView tabDb = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-        tabSearch.setImageResource(R.drawable.ic_search_tab_24dp);
-        tabLayout.getTabAt(2).setCustomView(tabDb);
-    }
+    //    ImageView tabDb = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
+    //    tabSearch.setImageResource(R.drawable.ic_search_tab_24dp);
+    //    tabLayout.getTabAt(2).setCustomView(tabDb);
+    //}
 
     // Custom adapter class provides fragments required for the view pager
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+    //class ViewPagerAdapter extends FragmentPagerAdapter {
+    //    private final List<Fragment> mFragmentList = new ArrayList<>();
+    //    private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
+    //    public ViewPagerAdapter(FragmentManager manager) {
+    //        super(manager);
+    //    }
 
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
+    //    @Override
+    //    public Fragment getItem(int position) {
+    //        return mFragmentList.get(position);
+    //    }
 
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
+    //    @Override
+    //    public int getCount() {
+    //        return mFragmentList.size();
+    //    }
 
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
+    //    public void addFragment(Fragment fragment, String title) {
+    //        mFragmentList.add(fragment);
+    //        mFragmentTitleList.add(title);
+    //    }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
+    //    public boolean clearFragment(){
+    //        mFragmentList.clear();
+    //        mFragmentTitleList.clear();
+    //        if(mFragmentList.size() == 0 && mFragmentTitleList.size() == 0){
+    //            return true;
+    //        }
+    //        return false;
+    //    }
+
+    //    @Override
+    //    public CharSequence getPageTitle(int position) {
+    //        return mFragmentTitleList.get(position);
+    //    }
+    //}
 
 
 }
