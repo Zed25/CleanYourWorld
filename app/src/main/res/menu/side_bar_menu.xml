@@ -1,11 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Search section">
+
+        <menu>
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/searchItem"
-            android:checked="false"
-            android:title="Search"
-            android:icon="@drawable/ic_search_tab_24dp"/>
+            android:id="@+id/srchProduct"
+            android:title="Search By Product"
+            android:icon="@drawable/ic_product_black_24dp"/>
+        <item
+            android:id="@+id/srchScan"
+            android:title="Seach BY Scann"
+            android:icon="@drawable/ic_camera_black_24dp"/>
+        <item
+            android:id="@+id/srchMaterial"
+            android:title="Search By Material"
+            android:icon="@drawable/ic_material_black_24dp"/>
     </group>
+        </menu>
+    </item>
+    <item android:title="Geoloc section">
+
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/geolocalizzation"
+                    android:title="Geolocalizzation"
+                    android:icon="@drawable/ic_geolocalizzation_black_24dp"/>
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Calendar section">
+
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/calendar"
+                    android:title="Calendar"
+                    android:icon="@drawable/ic_calendar_tab_24dp"/>
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Settings section">
+
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/settings"
+                    android:title="Settings"
+                    android:icon="@drawable/ic_settings_black_24dp"/>
+            </group>
+        </menu>
+    </item>
 </menu>

@@ -63,7 +63,6 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapte
     public static class CalendarWeekHolder extends RecyclerView.ViewHolder{
 
         protected TextView tvCardViewDay, tvCardViewDate, tvCardViewTrash, tvColorOfTheDay;
-        public static CardView cardView;
 
         public CalendarWeekHolder(View v) {
             super(v);
@@ -71,8 +70,6 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapte
             tvCardViewDay = (TextView)  v.findViewById(R.id.tvCardViewDay);
             tvCardViewTrash = (TextView)  v.findViewById(R.id.tvCardViewTrash);
             tvColorOfTheDay = (TextView) v.findViewById(R.id.tvColorOfTheDay);
-
-            cardView = (CardView) v.findViewById(R.id.cvCalendar);
         }
     }
 }

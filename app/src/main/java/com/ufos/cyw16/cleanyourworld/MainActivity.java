@@ -219,8 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new CalendarFragment(), "Calendar");
-        //adapter.addFragment(new GeolocalizationActivity(), "Geoloc");
-        startActivity(new Intent(this, GeolocalizationActivity.class));
+        //startActivity(new Intent(this, GeolocalizationActivity.class));
         adapter.addFragment(new SearchFragment(), "Search");
         adapter.addFragment(new DbFragment(), "Database");
         viewPager.setAdapter(adapter);
@@ -254,20 +253,15 @@ public class MainActivity extends AppCompatActivity {
         tabCalendar.setImageResource(R.drawable.ic_calendar_tab_24dp);
         tabLayout.getTabAt(0).setCustomView(tabCalendar);
 
-        // set geolocalization fragment icon
-        ImageView tabGeoloc = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-        tabGeoloc.setImageResource(R.drawable.ic_geoloc_tab_24dp);
-        tabLayout.getTabAt(1).setCustomView(tabGeoloc);
-
         // set research fragment icon
         ImageView tabSearch = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         tabSearch.setImageResource(R.drawable.ic_search_tab_24dp);
-        tabLayout.getTabAt(2).setCustomView(tabSearch);
+        tabLayout.getTabAt(1).setCustomView(tabSearch);
 
         // set database fragment icon
         ImageView tabDb = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
         tabSearch.setImageResource(R.drawable.ic_search_tab_24dp);
-        tabLayout.getTabAt(3).setCustomView(tabDb);
+        tabLayout.getTabAt(2).setCustomView(tabDb);
     }
 
     // Custom adapter class provides fragments required for the view pager

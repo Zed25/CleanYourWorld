@@ -365,7 +365,7 @@ public class CalendarFragment extends Fragment{
         int i;
         CalendarViewType type;
         if (pref != null) {
-            i = pref.getInt("calendarMode", 0);
+            i = pref.getInt("calendarMode", 1);
             switch (i) {
                 case 0:
                     type = CalendarViewType.MONTH;
