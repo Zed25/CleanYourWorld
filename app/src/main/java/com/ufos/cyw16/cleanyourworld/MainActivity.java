@@ -18,7 +18,6 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -28,34 +27,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.ufos.cyw16.cleanyourworld.Models.Regione;
-import com.ufos.cyw16.cleanyourworld.config.ConfigAdapter;
-import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
-import com.ufos.cyw16.cleanyourworld.fragment.GeolocFragment;
+import com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity;
 import com.ufos.cyw16.cleanyourworld.fragment.SearchFragment;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.System.exit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -232,7 +219,8 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new CalendarFragment(), "Calendar");
-        adapter.addFragment(new GeolocFragment(), "Geoloc");
+        //adapter.addFragment(new GeolocalizationActivity(), "Geoloc");
+        startActivity(new Intent(this, GeolocalizationActivity.class));
         adapter.addFragment(new SearchFragment(), "Search");
         adapter.addFragment(new DbFragment(), "Database");
         viewPager.setAdapter(adapter);
