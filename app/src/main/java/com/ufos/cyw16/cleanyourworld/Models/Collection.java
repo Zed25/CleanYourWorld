@@ -1,4 +1,11 @@
 /*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.Models.Collection
+ * Last modified: 30/06/16 10.34
+ */
+
+/*
  * Created by Umberto Ferracci from simone_mancini and published on 15/06/16 12.50
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -10,18 +17,18 @@
 
 package com.ufos.cyw16.cleanyourworld.Models;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by simone_mancini on 15/06/16.
  */
 public class Collection {
     private int id, idComune, idDay;
-    private ArrayList<Materials> materials;
+    private List<Materials> materials;
     private String collectionType;
-    private ArrayList<Colors> colors;
+    private List<Colors> colors;
 
-    public Collection(int id, int idComune, int idDay, ArrayList<Materials> materials, ArrayList<Colors> colors, String collectionType) {
+    public Collection(int id, int idComune, int idDay, List<Materials> materials, List<Colors> colors, String collectionType) {
         this.id = id;
         this.idComune = idComune;
         this.idDay = idDay;
@@ -66,19 +73,19 @@ public class Collection {
         this.idDay = idDay;
     }
 
-    public ArrayList<Materials> getMaterials() {
+    public List<Materials> getMaterials() {
         return materials;
     }
 
-    public void setMaterials(ArrayList<Materials> materials) {
+    public void setMaterials(List<Materials> materials) {
         this.materials = materials;
     }
 
-    public ArrayList<Colors> getColor() {
+    public List<Colors> getColor() {
         return colors;
     }
 
-    public void setColor(ArrayList<Colors> colors) {
+    public void setColor(List<Colors> colors) {
         this.colors = colors;
     }
 

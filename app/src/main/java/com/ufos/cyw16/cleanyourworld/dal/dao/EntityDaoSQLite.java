@@ -4,6 +4,13 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite
+ * Last modified: 30/06/16 10.34
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite
  * Last modified: 26/06/16 1.55
  */
 
@@ -23,12 +30,19 @@ import java.util.List;
  *
  */
 public abstract class EntityDaoSQLite<T> implements EntityDao<T> {
+    private final Context context;
     private Class<T> persistentClass;
     private TableAdapter_NEW tableAdapter;
+
+    public Context getContext() {
+        return context;
+    }
 
     public EntityDaoSQLite(Context context, String tableName) {
         persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]; // istanzio la classe di tipo entity;
         tableAdapter = new TableAdapter_NEW(context, tableName);
+        this.context = context;
+
     }
 
     protected final TableAdapter_NEW getTableAdapter() {
