@@ -16,6 +16,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.ufos.cyw16.cleanyourworld.Models.Collection;
+import com.ufos.cyw16.cleanyourworld.Models.CollectionType;
+import com.ufos.cyw16.cleanyourworld.Models.Colors;
 import com.ufos.cyw16.cleanyourworld.Models.Materials;
 import com.ufos.cyw16.cleanyourworld.dal.ddl.CYWOpenHelper;
 
@@ -95,23 +97,52 @@ public class MaterialiDAO {
 
         Cursor c = database.rawQuery(query,null);
 
+        // array of materials (there could be more than 1 in a day)
+        ArrayList<Materials> materials = new ArrayList<>();
+        // array of colors. colors[i] correspends to materials[i]
+        ArrayList<Colors> colors = new ArrayList<>();
+        //  collection type..is unique for all materials
+        CollectionType collectionType = null;
+        int id = 0;
+
         if(c.moveToFirst()){
             do {
 
-                int id = c.getInt(0);
+                id = c.getInt(0);
                 int material_id = c.getInt(2);
                 int color_id = c.getInt(4);
                 int collType_id = c.getInt(5);
 
+                System.out.println("ID :" + id+" MAT_ID :" + material_id);
 
+                /* inner query to find materials */
+                Cursor cursor = database.rawQuery("SELECT * FROM materiali WHERE _id="+material_id,null);
+                if(cursor.moveToFirst()){
+                    Materials material = new Materials(c.getInt(0),c.getString(1));
+                    materials.add(material);
+                }
 
+                System.out.println("QUERY MAT_NAME = " + cursor.getString(1));
+
+                /* inner query to find color */
+                Cursor colorCur = database.rawQuery("SELECT * FROM colori WHERE _id="+color_id,null);
+                if(colorCur.moveToFirst()){
+                    Colors color = new Colors(c.getInt(0),colorCur.getString(1),colorCur.getString(2));
+                    colors.add(color);
+                }
+
+                /* inner query to find collection type */
+                Cursor collTypeCur = database.rawQuery("SELECT * from tipologiaRaccolta WHERE _id="+collType_id,null);
+                if(collTypeCur.moveToFirst()){
+                    collectionType = new CollectionType(collTypeCur.getInt(0),collTypeCur.getString(1));
+                }
 
 
             } while (c.moveToNext());
 
         }
 
-        Collection collection = new Collection(0,0,0,null,"","");
+        Collection collection = new Collection(id,comuneID,dayOfWeek,materials,colors,collectionType.getName());
 
         return collection;
 
