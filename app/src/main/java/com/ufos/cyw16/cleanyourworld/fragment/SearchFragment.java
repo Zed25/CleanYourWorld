@@ -133,15 +133,15 @@ public class SearchFragment extends Fragment {
             FragmentTransaction ft = fm.beginTransaction();
             switch (v.getId()){
                 case R.id.btnBarCode:
-                    ft.replace(R.id.show_fragment, new BarCodeSearchSubFragment(), "fragment_screen");
+                    ft.replace(R.id.showFragment, new BarCodeSearchSubFragment(), "fragment_screen");
                     ft.commit();
                     break;
                 case R.id.btnMaterials:
-                    ft.replace(R.id.show_fragment, new MaterialsSearchSubFragment(), "fragment_screen");
+                    ft.replace(R.id.showFragment, new MaterialsSearchSubFragment(), "fragment_screen");
                     ft.commit();
                     break;
                 case R.id.btnProducts:
-                    ft.replace(R.id.show_fragment, new ProductsSearchSubFragment(), "fragment_screen");
+                    ft.replace(R.id.showFragment, new ProductsSearchSubFragment(), "fragment_screen");
                     ft.commit();
                     break;
             }

@@ -1,4 +1,31 @@
 /*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ProvinceTableAdapter
+ * Last modified: 26/06/16 1.52
+ */
+
+/*
+ * Created by Umberto Ferracci from urania and published on 26/06/16 1.49
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ProvinceTableAdapter
+ * File name: ProvinceTableAdapter.java
+ * Class name: ProvinceTableAdapter
+ * Last modified: 26/06/16 1.48
+ */
+
+/*
+ * Created by Umberto Ferracci from urania and published on 26/06/16 1.48
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ProvinceTableAdapter
+ * File name: ProvinceTableAdapter.java
+ * Class name: ProvinceTableAdapter
+ * Last modified: 25/06/16 19.01
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -28,6 +55,7 @@ import com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter;
 /**
  * The type Province table adapter.
  */
+@Deprecated
 public class ProvinceTableAdapter extends TableAdapter {
     /**
      * Instantiates a new Province table adapter.

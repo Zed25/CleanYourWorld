@@ -1,4 +1,31 @@
 /*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter
+ * Last modified: 26/06/16 1.52
+ */
+
+/*
+ * Created by Umberto Ferracci from urania and published on 26/06/16 1.49
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter
+ * File name: RegioniTableAdapter.java
+ * Class name: RegioniTableAdapter
+ * Last modified: 26/06/16 1.48
+ */
+
+/*
+ * Created by Umberto Ferracci from urania and published on 26/06/16 1.48
+ * email:   umberto.ferracci@gmail.com
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter
+ * File name: RegioniTableAdapter.java
+ * Class name: RegioniTableAdapter
+ * Last modified: 25/06/16 19.02
+ */
+
+/*
  * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -28,6 +55,7 @@ import com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter;
 /**
  * The type Regioni table adapter.
  */
+@Deprecated
 public class RegioniTableAdapter extends TableAdapter {
     /**
      * Instantiates a new Regioni table adapter.
