@@ -1,7 +1,10 @@
 package com.ufos.cyw16.cleanyourworld.fragment;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -11,6 +14,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -28,11 +32,6 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
     private GoogleApiClient client;
 
-    PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-            getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
-    MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-
     public GeolocalizationActivity() {
         // Required empty public constructor
     }
@@ -41,6 +40,11 @@ public class GeolocalizationActivity extends FragmentActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.geolocalization);
+
+        //PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+        //      getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 
         //connecting to Google API
         client = new GoogleApiClient
@@ -56,7 +60,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
         super.onStart();
         client.connect();
 
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        /*autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
@@ -66,7 +70,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
             public void onError(Status status) {
                 // TODO: Handle the error.
             }
-        });
+        });*/
     }
 
     @Override
@@ -82,6 +86,21 @@ public class GeolocalizationActivity extends FragmentActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //TODO: current location
+        LatLng sydney = new LatLng(-33.867, 151.206);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        googleMap.setMyLocationEnabled(true);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
         googleMap.addMarker(new MarkerOptions().position(new LatLng(0,0)).title("Marker"));
     }
 }
