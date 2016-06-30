@@ -10,6 +10,8 @@
 
 package com.ufos.cyw16.cleanyourworld.adapter;
 
+import android.content.SharedPreferences;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,9 +59,11 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapte
     }
 
 
+
     public static class CalendarWeekHolder extends RecyclerView.ViewHolder{
 
         protected TextView tvCardViewDay, tvCardViewDate, tvCardViewTrash, tvColorOfTheDay;
+        public static CardView cardView;
 
         public CalendarWeekHolder(View v) {
             super(v);
@@ -67,8 +71,9 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapte
             tvCardViewDay = (TextView)  v.findViewById(R.id.tvCardViewDay);
             tvCardViewTrash = (TextView)  v.findViewById(R.id.tvCardViewTrash);
             tvColorOfTheDay = (TextView) v.findViewById(R.id.tvColorOfTheDay);
-        }
 
+            cardView = (CardView) v.findViewById(R.id.cvCalendar);
+        }
     }
 }
 

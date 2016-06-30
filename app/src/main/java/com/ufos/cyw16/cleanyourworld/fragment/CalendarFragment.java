@@ -115,25 +115,8 @@ public class CalendarFragment extends Fragment{
     /**this method initializes calendar week view**/
     private void initializeCalendarWeekView(View v) {
         //initialize components
-        rvWeekList = (RecyclerView) v.findViewById(R.id.rvWeekList);
-        //if dayTrashInfoList is equals to null initialized it
-        if (dayTrashInfoList == null) {
-            dayTrashInfoList = new ArrayList<>();
-        }
+        initializerecyclerView(v);
         FloatingActionButton fabDayChooser = (FloatingActionButton) v.findViewById(R.id.fabChooseDay);
-
-        //set RecyclerView's size fixed
-        rvWeekList.setHasFixedSize(true);
-
-        //create the layout manager to insert into the recycler view
-        //linear layout manager is similar to layout manager for the list view
-        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
-        //set the layout manager in recycler view
-        rvWeekList.setLayoutManager(linearLayoutManager);
-
-
 
         //setOnClickListener on the flay
         fabDayChooser.setOnClickListener(new View.OnClickListener() {
@@ -143,18 +126,12 @@ public class CalendarFragment extends Fragment{
             }
         });
 
-        //if dayChoosen is equals to null initialize it whit the current day
-        if(dayChoosen == null) {
-            dayChoosen = computeToday();
-        }
+
         if (dayTrashInfoList != null) {
             //create a list of 7 elements
             //theese elements are the 7 days next to the choose one
             generateWeekDayTrashList(dayTrashInfoList, dayChoosen);
         }
-            //create and set the adapter for the recycler view
-            calendarWeekAdapter = new CalendarWeekAdapter(dayTrashInfoList);
-            rvWeekList.setAdapter(calendarWeekAdapter);
     }
 
 
@@ -184,13 +161,8 @@ public class CalendarFragment extends Fragment{
 
         GregorianCalendar calendar = new GregorianCalendar(date[2], date[1], date[0]);
         for (int i = 0; i < 7; i++){
-            //base structure for card view
-            DayTrashInfo dayTrashInfo = new DayTrashInfo();
-            String dayDate = computeDateString(calendar);
-            dayTrashInfo.setDate(dayDate);
-            String dayName = selectDay(calendar);
-            dayTrashInfo.setDay(dayName);
-            dayTrashInfo.setThrash("quello che va buttato oggi!");
+            //create base structure for card view
+            DayTrashInfo dayTrashInfo = createCardStructure(calendar);
             list.add(dayTrashInfo);
 
             //next day
@@ -203,6 +175,16 @@ public class CalendarFragment extends Fragment{
         }
 
 
+    }
+
+    private DayTrashInfo createCardStructure(GregorianCalendar calendar) {
+        DayTrashInfo dayTrashInfo = new DayTrashInfo();
+        String dayDate = computeDateString(calendar);
+        dayTrashInfo.setDate(dayDate);
+        String dayName = selectDay(calendar);
+        dayTrashInfo.setDay(dayName);
+        dayTrashInfo.setThrash("quello che va buttato oggi!");
+        return dayTrashInfo;
     }
 
 
@@ -302,25 +284,80 @@ public class CalendarFragment extends Fragment{
         return date;
     }
 
+
+    /**initialize Recycler View
+     *
+     * Called in either in week view or in month view **/
+    private void initializerecyclerView(View v){
+        rvWeekList = (RecyclerView) v.findViewById(R.id.rvWeekList);
+
+        //if dayTrashInfoList is equals to null initialized it
+        if (dayTrashInfoList == null) {
+            dayTrashInfoList = new ArrayList<>();
+        }
+
+        //set RecyclerView's size fixed
+        rvWeekList.setHasFixedSize(true);
+
+        //create the layout manager to insert into the recycler view
+        //linear layout manager is similar to layout manager for the list view
+        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        //set the layout manager in recycler view
+        rvWeekList.setLayoutManager(linearLayoutManager);
+
+        //if dayChoosen is equals to null initialize it whit the current day
+        if(dayChoosen == null) {
+            dayChoosen = computeToday();
+        }
+        //create and set the adapter for the recycler view
+        if(calendarWeekAdapter == null) {
+            calendarWeekAdapter = new CalendarWeekAdapter(dayTrashInfoList);
+        }
+
+        rvWeekList.setAdapter(calendarWeekAdapter);
+    }
+
+
+
     /**this method initialize CalendarView's month view**/
     private void initializeCalendarMonthView(View v) {
         //initialize components
+        initializerecyclerView(v);
         calendarView = (CalendarView) v.findViewById(R.id.clndrView);
-        tvDate = (TextView) v.findViewById(R.id.tvDate);
-        tvTrash = (TextView) v.findViewById(R.id.tvTrash);
+
+        if(dayTrashInfoList != null){
+            generateDayTrashCard(dayTrashInfoList, dayChoosen);
+        }
 
         //manage the reaction of the view to a date change
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-
-                //TODO read db and rturn color and name of day's trash
-
-                tvDate.setText(dayOfMonth + " / " + month + " / " + year);
-
-                tvTrash.setText("quella del giorno"); //TODO insert day's trash
+                int date[] = {dayOfMonth, month, year};
+                setDayChoosen(date);
+                if (dayTrashInfoList != null) {
+                    generateDayTrashCard(dayTrashInfoList, dayChoosen);
+                }
             }
         });
+    }
+
+    private void generateDayTrashCard(List<DayTrashInfo> list, int[] date) {
+        //clear the list because if create another one the recycler view's adapter changes the riferiment list, so notifyDataSetChanged() doesen't work
+        list.clear();
+
+        GregorianCalendar calendar = new GregorianCalendar(date[2], date[1], date[0]);
+
+        //create base structure for card view
+        DayTrashInfo dayTrashInfo = createCardStructure(calendar);
+        list.add(dayTrashInfo);
+
+        //if calendarWeekAdapter isn't equals to null notyfy data set changed and rebuild recycler view
+        if(calendarWeekAdapter != null) {
+            calendarWeekAdapter.notifyDataSetChanged();
+        }
     }
 
     /**this method determinates which moode is stored into SharedPreferences**/
@@ -328,7 +365,7 @@ public class CalendarFragment extends Fragment{
         int i;
         CalendarViewType type;
         if (pref != null) {
-            i = pref.getInt("calendarMode", 1);
+            i = pref.getInt("calendarMode", 0);
             switch (i) {
                 case 0:
                     type = CalendarViewType.MONTH;
