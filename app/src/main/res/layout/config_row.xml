@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Umberto Ferracci from ovidiudanielbarba and published on 6/15/16 12:35 PM
+  ~ email:   umberto.ferracci@gmail.com
+  ~ Project: CleanYourWorld
+  ~ Package: /Users/ovidiudanielbarba/AndroidStudioProjects/CleanYourWorld/app/src/main/res/layout/config_row.xml
+  ~ File name: config_row.xml
+  ~ Class name: config_row.xml
+  ~ Last modified: 6/15/16 12:35 PM
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:clickable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
+
+
+
+    <TextView
+        android:id="@+id/name"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#2fb266" />
+
+
+</RelativeLayout>

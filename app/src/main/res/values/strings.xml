@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">CleanYourWorld</string>
+    <string name="barCode">Barcode</string>
+    <string name="strMonday">Monday</string>
+    <string name="strTuesday">Tuesday</string>
+    <string name="strWednesday">Wednesday</string>
+    <string name="strThursday">Thursday</string>
+    <string name="strFriday">Friday</string>
+    <string name="strSaturday">Saturday</string>
+    <string name="strSunday">Sunday</string>
 </resources>
