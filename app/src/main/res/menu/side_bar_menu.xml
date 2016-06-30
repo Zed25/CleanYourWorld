@@ -1,56 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Search section">
+    <item android:title="@string/srcSection">
 
         <menu>
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/srchProduct"
-            android:title="Search By Product"
+            android:title="@string/srcProduct"
             android:icon="@drawable/ic_product_black_24dp"/>
         <item
             android:id="@+id/srchScan"
-            android:title="Seach BY Scann"
+            android:title="@string/srcScan"
             android:icon="@drawable/ic_camera_black_24dp"/>
         <item
             android:id="@+id/srchMaterial"
-            android:title="Search By Material"
+            android:title="@string/srcMaterial"
             android:icon="@drawable/ic_material_black_24dp"/>
     </group>
         </menu>
     </item>
-    <item android:title="Geoloc section">
+    <item android:title="@string/glcSection">
 
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/geolocalizzation"
-                    android:title="Geolocalizzation"
+                    android:title="@string/glcFind"
                     android:icon="@drawable/ic_geolocalizzation_black_24dp"/>
             </group>
         </menu>
     </item>
 
-    <item android:title="Calendar section">
+    <item android:title="@string/calSection">
 
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/calendar"
-                    android:title="Calendar"
+                    android:title="@string/calSection"
                     android:icon="@drawable/ic_calendar_tab_24dp"/>
             </group>
         </menu>
     </item>
 
-    <item android:title="Settings section">
+    <item android:title="@string/sttSection">
 
         <menu>
             <group android:checkableBehavior="single">
                 <item
                     android:id="@+id/settings"
-                    android:title="Settings"
+                    android:title="@string/sttSection"
                     android:icon="@drawable/ic_settings_black_24dp"/>
             </group>
         </menu>

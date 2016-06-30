@@ -24,7 +24,7 @@ import com.ufos.cyw16.cleanyourworld.R;
  */
 
 public class GeolocalizationActivity extends FragmentActivity implements
-        GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback{
+        GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
 
     private GoogleApiClient client;
 
@@ -65,7 +65,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
             @Override
             public void onError(Status status) {
                 // TODO: Handle the error.
-                }
+            }
         });
     }
 
@@ -81,6 +81,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        //TODO: current location
         googleMap.addMarker(new MarkerOptions().position(new LatLng(0,0)).title("Marker"));
     }
 }
