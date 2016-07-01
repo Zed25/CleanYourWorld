@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(isNetworkAvailable()) {
 
-            createFragment(); //set ViewPager and TabLayout
+            createFragment(); //set initial fragment on the view
 
             // it manages the left navigation bar
             drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
@@ -249,19 +249,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void createFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragmentContent, new CalendarFragment(), "fragment_screen");
-        ft.commit();
-
-    //    viewPager = (ViewPager) findViewById(R.id.viewpager);
-    //    setupViewPager(viewPager);
-
-        //TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        //tabLayout.setTabTextColors(Color.parseColor("#e62b1e"), Color.parseColor("#e62b1e"));
-        //tabLayout.setupWithViewPager(viewPager); //Assigns the ViewPager to TabLayout
-
-        //setupTabIcons(tabLayout);
+        //FragmentManager fm = getSupportFragmentManager();
+        //FragmentTransaction ft = fm.beginTransaction();
+        //ft.replace(R.id.fragmentContent, new CalendarFragment(), "fragment_screen");
+        //ft.commit();
 
     }
 
@@ -296,10 +287,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(getBaseContext(), GeolocalizationActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.calendar:
-                ft.replace(R.id.fragmentContent, new CalendarFragment(), "fragment_screen");
-                ft.commit();
-                break;
+            //case R.id.calendar:
+            //    ft.replace(R.id.fragmentContent, new CalendarFragment(), "fragment_screen");
+            //    ft.commit();
+            //    break;
             case R.id.settings:
                 Intent settingsIntent = new Intent(getBaseContext(), ConfigurationActivity.class);
                 startActivity(settingsIntent);

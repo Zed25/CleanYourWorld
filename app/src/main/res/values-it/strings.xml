@@ -24,4 +24,5 @@
     <string name="strTuesday">Martedì</string>
     <string name="strWednesday">Mercoledì</string>
     <string name="sttSection">Impostazioni</string>
+    <string name="strProblem">Un problema è occorso</string>
 </resources>

@@ -16,4 +16,5 @@
     <string name="glcFind">Garbage Islands</string>
     <string name="calSection">Calendar</string>
     <string name="sttSection">Settings</string>
+    <string name="strProblem">A problem as occurred</string>
 </resources>

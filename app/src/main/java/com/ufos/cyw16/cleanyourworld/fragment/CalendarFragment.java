@@ -4,14 +4,15 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.CardView;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,20 +20,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ufos.cyw16.cleanyourworld.CalendarViewType;
-import com.ufos.cyw16.cleanyourworld.ConfigurationActivity;
 import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarWeekAdapter;
+import com.ufos.cyw16.cleanyourworld.fragment.subfragment.CalendarMonthViewSubFragment;
+import com.ufos.cyw16.cleanyourworld.fragment.subfragment.CalendarWeekViewSubFragment;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -54,13 +54,9 @@ public class CalendarFragment extends Fragment{
 
     private RecyclerView rvWeekList;
 
-    /**this attributes are static becouse they are filled initially and passed to DatePickerFragment
-    class that if any of them is uninitialized or equals to null, for any reason, it elaborate them**/
-    public static CalendarWeekAdapter calendarWeekAdapter;
-    public static List<DayTrashInfo> dayTrashInfoList;
-    public static CalendarFragment calendarFragmentInstance;
-    public static int[] dayChoosen;
+    private ViewPager viewPager;
 
+    private ViewPagerAdapter viewPagerAdapter;
 
 
     public CalendarFragment() {
@@ -77,100 +73,163 @@ public class CalendarFragment extends Fragment{
                              Bundle savedInstanceState) {
 
         //if calendarFragmentInstance is equals to null initialize it
-        if (calendarFragmentInstance == null){
+        /*if (calendarFragmentInstance == null){
             setCalendarFragmentInstance(this);
         }
         //determinate mode view
         pref = getActivity().getSharedPreferences("calendarFragment", Context.MODE_PRIVATE);
-        viewMode = getViewMode(pref);
+        viewMode = getViewMode(pref);*/
 
         //initialize calendar fragment's view
-        View v = initializeCalendar(viewMode, inflater, container);
+        Message4Debug.log("Sono nella onCreateView di calendar fragment");
+        View v = createFragment(inflater, container);
         return v;
     }
 
-
-    /**this method determinates which modeView is set and prepare fragment for the right configuration**/
-    private View initializeCalendar(CalendarViewType viewMode, LayoutInflater inflater, ViewGroup container) {
+    public View createFragment(LayoutInflater inflater, ViewGroup container) {
         View v;
-        switch(viewMode){
-            case MONTH:
-                // Inflate the layout for Calendarfragment's month view
-                v = inflater.inflate(R.layout.calendar_fragment_month_view, container, false);
-                initializeCalendarMonthView(v);
-                return v;
 
-            case WEEK:
-                // Inflate the layout for Calendarfragment's week view
-                v = inflater.inflate(R.layout.calendar_fragment_week_view, container,false);
-                initializeCalendarWeekView(v);
-                return v;
-
-        }
         // Inflate the layout for Calendarfragment's default view (week view)
-        v = inflater.inflate(R.layout.calendar_fragment_week_view, container, false);
+        v = inflater.inflate(R.layout.calendar_fragment, container, false);
+
+        Message4Debug.log("Ho fatto l'inflate");
+        viewPager = (ViewPager) v.findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+        Message4Debug.log("Ho settato la view pager");
+
+        TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager); //Assigns the ViewPager to TabLayout
+
+        Message4Debug.log("Ho settato le tab layout");
+        setupTabIcons(tabLayout);
         return v;
     }
 
-    /**this method initializes calendar week view**/
-    private void initializeCalendarWeekView(View v) {
+    // Defines the number of tabs by setting appropriate fragment and tab name
+    private void setupViewPager(ViewPager viewPager) {
+
+        Message4Debug.log("Inizializzo la View Pager");
+
+        viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+        viewPagerAdapter.addFragment(new CalendarMonthViewSubFragment(), "MontView");
+        viewPagerAdapter.addFragment(new CalendarWeekViewSubFragment(), "WeekView");
+        Message4Debug.log("Setto l'adapter");
+        viewPager.setAdapter(viewPagerAdapter);
+    }
+
+    // set tab icons (month and week) to fragments to improve user interface
+    private void setupTabIcons(TabLayout tabLayout) {
+
+        // set calendar month sub fragment icon
+        ImageView tabMonth = (ImageView) LayoutInflater.from(this.getContext()).inflate(R.layout.custom_tab, null);
+        tabMonth.setImageResource(R.drawable.ic_calendar_tab_24dp);
+        tabLayout.getTabAt(0).setCustomView(tabMonth);
+
+        // set calendar week fragment icon
+        ImageView tabWeek = (ImageView) LayoutInflater.from(this.getContext()).inflate(R.layout.custom_tab, null);
+        tabWeek.setImageResource(R.drawable.ic_cached);
+        tabLayout.getTabAt(1).setCustomView(tabWeek);
+    }
+
+    /**GETTE AND SETTER**/
+    public ViewPager getViewPager() {
+        return viewPager;
+    }
+
+    public void setViewPager(ViewPager viewPager) {
+        this.viewPager = viewPager;
+    }
+
+
+    ///**this method prepare fragment for the configuration**/
+    //private View initializeCalendar(CalendarViewType viewMode, LayoutInflater inflater, ViewGroup container) {
+    //    View v;
+        // Inflate the layout for Calendarfragment's default view (week view)
+    //    v = inflater.inflate(R.layout.calendar_fragment, container, false);
+    //    return v;
+    //}
+
+    ///**this method determinates which modeView is set and prepare fragment for the right configuration**/
+    //private View initializeCalendar(CalendarViewType viewMode, LayoutInflater inflater, ViewGroup container) {
+    //    View v;
+    //    switch(viewMode){
+    //        case MONTH:
+    //            // Inflate the layout for Calendarfragment's month view
+    //            v = inflater.inflate(R.layout.calendar_subfragment_month_view, container, false);
+    //            initializeCalendarMonthView(v);
+    //            return v;
+
+    //        case WEEK:
+    //            // Inflate the layout for Calendarfragment's week view
+    //            v = inflater.inflate(R.layout.calendar_subfragment_week_view, container,false);
+    //            initializeCalendarWeekView(v);
+    //            return v;
+
+    //    }
+    //    // Inflate the layout for Calendarfragment's default view (week view)
+    //    v = inflater.inflate(R.layout.calendar_subfragment_week_view, container, false);
+    //    return v;
+    //}
+
+    ///**this method initializes calendar week view**/
+    //private void initializeCalendarWeekView(View v) {
         //initialize components
-        initializerecyclerView(v);
-        FloatingActionButton fabDayChooser = (FloatingActionButton) v.findViewById(R.id.fabChooseDay);
+    //    initializerecyclerView(v);
+    //    FloatingActionButton fabDayChooser = (FloatingActionButton) v.findViewById(R.id.fabChooseDay);
 
         //setOnClickListener on the flay
-        fabDayChooser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCalendarDialog(); //show Calendar and compute choosen day, then rebuild the recycler view
-            }
-        });
+    //    fabDayChooser.setOnClickListener(new View.OnClickListener() {
+    //        @Override
+    //        public void onClick(View v) {
+    //            showCalendarDialog(); //show Calendar and compute choosen day, then rebuild the recycler view
+    //        }
+    //    });
 
 
-        if (dayTrashInfoList != null) {
+    //    if (dayTrashInfoList != null) {
             //create a list of 7 elements
             //theese elements are the 7 days next to the choose one
-            generateWeekDayTrashList(dayTrashInfoList, dayChoosen);
-        }
-    }
+    //        generateWeekDayTrashList(dayTrashInfoList, dayChoosen);
+    //    }
+    //}
 
 
-    /**choose a day and set dayChoosen variable, then rebuild the recycler view**/
-    private void showCalendarDialog(){
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(this.getActivity().getSupportFragmentManager(), "datePicker");
-    }
+    ///**choose a day and set dayChoosen variable, then rebuild the recycler view**/
+    //private void showCalendarDialog(){
+    //    DialogFragment newFragment = new DatePickerFragment();
+    //    newFragment.show(this.getActivity().getSupportFragmentManager(), "datePicker");
+    //}
 
-    /**this method determinates the current date**/
-    private int[] computeToday() {
-        GregorianCalendar calendar = new GregorianCalendar();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
+    ///**this method determinates the current date**/
+    //private int[] computeToday() {
+    //    GregorianCalendar calendar = new GregorianCalendar();
+    //    int day = calendar.get(Calendar.DAY_OF_MONTH);
+    //    int month = calendar.get(Calendar.MONTH);
+    //    int year = calendar.get(Calendar.YEAR);
 
-        int[] dateInformations = {day, month, year};
+    //    int[] dateInformations = {day, month, year};
 
-        return dateInformations;
-    }
+    //    return dateInformations;
+    //}
 
 
-    /**this method creates a list of DayTrashInfo that include the 7 days next to date**/
-    private void generateWeekDayTrashList(List<DayTrashInfo> list, int[] date) {
+    ///**this method creates a list of DayTrashInfo that include the 7 days next to date**/
+    //private void generateWeekDayTrashList(List<DayTrashInfo> list, int[] date) {
         //clear the list because if create another one the recycler view's adapter changes the riferiment list, so notifyDataSetChanged() doesen't work
-        list.clear();
+    //    list.clear();
 
-        GregorianCalendar calendar = new GregorianCalendar(date[2], date[1], date[0]);
-        for (int i = 0; i < 7; i++){
+    //GregorianCalendar calendar = new GregorianCalendar(date[2], date[1], date[0]);
+    //    for (int i = 0; i < 7; i++){
             //create base structure for card view
-            DayTrashInfo dayTrashInfo = createCardStructure(calendar);
-            list.add(dayTrashInfo);
+    //        DayTrashInfo dayTrashInfo = createCardStructure(calendar);
+    //        list.add(dayTrashInfo);
 
             //next day
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-        }
+    //        calendar.add(Calendar.DAY_OF_MONTH, 1);
+    //    }
 
         //if calendarWeekAdapter isn't equals to null notyfy data set changed and rebuild recycler view
-        if(calendarWeekAdapter != null) {
+    /*    if(calendarWeekAdapter != null) {
             calendarWeekAdapter.notifyDataSetChanged();
         }
 
@@ -191,7 +250,7 @@ public class CalendarFragment extends Fragment{
     /**To select the correct language day this function doesen't use getResurces() and R class
      because with the date picker this function is called before the onAttach() function, so
      resources are unavailable**/
-    private String selectDay(GregorianCalendar calendar) {
+    /*private String selectDay(GregorianCalendar calendar) {
         int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
         String str = null;
         String phoneLanguage, italian;
@@ -273,7 +332,7 @@ public class CalendarFragment extends Fragment{
 
 
     /**this method creates the string dd/mm/yyyy**/
-    private String computeDateString(GregorianCalendar calendar) {
+    /*private String computeDateString(GregorianCalendar calendar) {
 
         String date;
 
@@ -288,7 +347,7 @@ public class CalendarFragment extends Fragment{
     /**initialize Recycler View
      *
      * Called in either in week view or in month view **/
-    private void initializerecyclerView(View v){
+    /*private void initializerecyclerView(View v){
         rvWeekList = (RecyclerView) v.findViewById(R.id.rvWeekList);
 
         //if dayTrashInfoList is equals to null initialized it
@@ -322,7 +381,7 @@ public class CalendarFragment extends Fragment{
 
 
     /**this method initialize CalendarView's month view**/
-    private void initializeCalendarMonthView(View v) {
+    /*private void initializeCalendarMonthView(View v) {
         //initialize components
         initializerecyclerView(v);
         calendarView = (CalendarView) v.findViewById(R.id.clndrView);
@@ -361,7 +420,7 @@ public class CalendarFragment extends Fragment{
     }
 
     /**this method determinates which moode is stored into SharedPreferences**/
-    private CalendarViewType getViewMode(SharedPreferences pref) {
+    /*private CalendarViewType getViewMode(SharedPreferences pref) {
         int i;
         CalendarViewType type;
         if (pref != null) {
@@ -384,7 +443,7 @@ public class CalendarFragment extends Fragment{
 
 
     /**GETTER AND SETTER**/
-    public static int[] getDayChoosen() {
+    /*public static int[] getDayChoosen() {
         return dayChoosen;
     }
 
@@ -426,7 +485,7 @@ public class CalendarFragment extends Fragment{
     /**this class manages the date picker
      * it is a fragment which is placed above the current view and allows to choose
      * a date between the minimum and the maximum one**/
-    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+    /*public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -469,6 +528,44 @@ public class CalendarFragment extends Fragment{
 
 
         }
-    }
+    }*/
 
+    //Custom adapter class provides fragments required for the view pager
+    public class ViewPagerAdapter extends FragmentPagerAdapter{
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        public boolean clearFragment(){
+            mFragmentList.clear();
+            mFragmentTitleList.clear();
+            if(mFragmentList.size() == 0 && mFragmentTitleList.size() == 0){
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
 }
