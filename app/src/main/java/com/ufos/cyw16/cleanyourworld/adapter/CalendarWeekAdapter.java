@@ -46,7 +46,7 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapte
         calendarWeekHolder.tvCardViewDate.setText(dayTrashInfo.getDate());
         calendarWeekHolder.tvCardViewDay.setText(dayTrashInfo.getDay());
         calendarWeekHolder.tvCardViewTrash.setText(dayTrashInfo.getThrash());
-        //calendarWeekHolder.tvColorOfTheDay.setBackgroundColor(dayTrashInfo.getColorOfTheDay());
+        calendarWeekHolder.tvColorOfTheDay.setBackgroundColor(dayTrashInfo.getColorOfTheDay());
         }
 
     @Override

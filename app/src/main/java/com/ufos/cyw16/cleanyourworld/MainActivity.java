@@ -39,7 +39,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ColoriTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.MaterialiTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RaccoltaTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaProdottiTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaRaccoltaTableAdapter;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity;
@@ -82,6 +88,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Message4Debug.log("MainActivity.onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        RaccoltaTableAdapter raccoltaTableAdapter = new RaccoltaTableAdapter(getBaseContext());
+        ColoriTableAdapter coloriTableAdapter = new ColoriTableAdapter(getBaseContext());
+        MaterialiTableAdapter materialiTableAdapter = new MaterialiTableAdapter(getBaseContext());
+        TipologiaRaccoltaTableAdapter tipologiaRaccoltaTableAdapter = new TipologiaRaccoltaTableAdapter(getBaseContext());
+        try {
+            raccoltaTableAdapter.updateFromServer(null, null);
+            coloriTableAdapter.updateFromServer(null,null);
+            materialiTableAdapter.updateFromServer(null,null);
+            tipologiaRaccoltaTableAdapter.updateFromServer(null,null);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
 
         parent = (RelativeLayout) findViewById(R.id.parentView);
 

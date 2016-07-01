@@ -20,6 +20,8 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.CalendarViewType;
+import com.ufos.cyw16.cleanyourworld.DAO.MaterialiDAO;
+import com.ufos.cyw16.cleanyourworld.Models.Collection;
 import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarWeekAdapter;
@@ -171,7 +173,18 @@ public class CalendarMonthViewSubFragment extends Fragment {
         dayTrashInfo.setDate(dayDate);
         String dayName = selectDay(calendar);
         dayTrashInfo.setDay(dayName);
-        dayTrashInfo.setThrash("quello che va buttato oggi!");
+        MaterialiDAO materialiDAO = new MaterialiDAO(getContext());
+        Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, calendar.DAY_OF_WEEK);
+        String trash, trashColor;
+        if (collection.getMaterials().size() == 0){
+            trash = "Nulla";
+            trashColor = "#29d96a";
+        }else{
+            trash = collection.getMaterials().get(0).getName();
+            trashColor = collection.getColor().get(0).getColorCode();
+        }
+        dayTrashInfo.setThrash(trash);
+        dayTrashInfo.setColorOfTheDay(trashColor);
         return dayTrashInfo;
     }
 

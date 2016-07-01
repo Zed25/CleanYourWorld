@@ -93,6 +93,7 @@ public class CalendarFragment extends Fragment{
         v = inflater.inflate(R.layout.calendar_fragment, container, false);
 
         Message4Debug.log("Ho fatto l'inflate");
+
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
         setupViewPager(viewPager);
         Message4Debug.log("Ho settato la view pager");
@@ -113,6 +114,7 @@ public class CalendarFragment extends Fragment{
         viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         viewPagerAdapter.addFragment(new CalendarMonthViewSubFragment(), "MontView");
         viewPagerAdapter.addFragment(new CalendarWeekViewSubFragment(), "WeekView");
+
         Message4Debug.log("Setto l'adapter");
         viewPager.setAdapter(viewPagerAdapter);
     }
@@ -139,6 +141,7 @@ public class CalendarFragment extends Fragment{
     public void setViewPager(ViewPager viewPager) {
         this.viewPager = viewPager;
     }
+
 
 
     ///**this method prepare fragment for the configuration**/

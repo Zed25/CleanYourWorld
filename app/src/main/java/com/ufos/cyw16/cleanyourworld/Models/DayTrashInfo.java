@@ -1,11 +1,12 @@
 package com.ufos.cyw16.cleanyourworld.Models;
 
+import android.graphics.Color;
+
 /**
  * Created by simone_mancini on 27/06/16.
  */
 public class DayTrashInfo {
-    protected String day, thrash, date;
-    protected int colorOfTheDay;
+    protected String day, thrash, date, colorOfTheDay;
 
     public String getDate() {
         return date;
@@ -32,10 +33,11 @@ public class DayTrashInfo {
     }
 
     public int getColorOfTheDay() {
-        return colorOfTheDay;
+        int color = Color.parseColor(colorOfTheDay);
+        return color;
     }
 
-    public void setColorOfTheDay(int colorOfTheDay) {
+    public void setColorOfTheDay(String colorOfTheDay) {
         this.colorOfTheDay = colorOfTheDay;
     }
 }

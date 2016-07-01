@@ -142,9 +142,13 @@ public class MaterialiDAO {
 
         }
 
-        Collection collection = new Collection(id,comuneID,dayOfWeek,materials,colors,collectionType.getName());
-
-        return collection;
+        if(collectionType != null) {
+            Collection collection = new Collection(id, comuneID, dayOfWeek, materials, colors, collectionType.getName());
+            return collection;
+        }else {
+            Collection collection = new Collection(id, comuneID, dayOfWeek, materials, colors, "Cassonetto pubblico");
+            return collection;
+        }
 
     }
 
