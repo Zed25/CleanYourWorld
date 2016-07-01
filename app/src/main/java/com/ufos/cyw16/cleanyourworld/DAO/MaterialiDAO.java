@@ -118,7 +118,7 @@ public class MaterialiDAO {
                 /* inner query to find materials */
                 Cursor cursor = database.rawQuery("SELECT * FROM materiali WHERE _id="+material_id,null);
                 if(cursor.moveToFirst()){
-                    Materials material = new Materials(c.getInt(0),c.getString(1));
+                    Materials material = new Materials(cursor.getInt(0),cursor.getString(1));
                     materials.add(material);
                 }
 
@@ -127,7 +127,7 @@ public class MaterialiDAO {
                 /* inner query to find color */
                 Cursor colorCur = database.rawQuery("SELECT * FROM colori WHERE _id="+color_id,null);
                 if(colorCur.moveToFirst()){
-                    Colors color = new Colors(c.getInt(0),colorCur.getString(1),colorCur.getString(2));
+                    Colors color = new Colors(colorCur.getInt(0),colorCur.getString(1),colorCur.getString(2));
                     colors.add(color);
                 }
 
