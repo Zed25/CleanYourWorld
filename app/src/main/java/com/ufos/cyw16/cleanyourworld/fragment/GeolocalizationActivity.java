@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -32,6 +33,8 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
     private GoogleApiClient client;
 
+    //TODO: insert toolbar
+
     public GeolocalizationActivity() {
         // Required empty public constructor
     }
@@ -41,16 +44,15 @@ public class GeolocalizationActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.geolocalization);
 
-        //PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-        //      getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
-        //connecting to Google API
+        //adding Google API's
         client = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
+                .addApi(LocationServices.API)
                 .enableAutoManage(this, this)
                 .build();
     }
@@ -58,23 +60,14 @@ public class GeolocalizationActivity extends FragmentActivity implements
     @Override
     protected void onStart() {
         super.onStart();
+        //Connecting to Google API's
         client.connect();
-
-        /*autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-                // TODO: Get info about the selected place.
-            }
-
-            @Override
-            public void onError(Status status) {
-                // TODO: Handle the error.
-            }
-        });*/
     }
 
     @Override
     protected void onStop() {
+        //Disconnecting to Google API's
+        client.disconnect();
         super.onStop();
     }
 
@@ -84,9 +77,34 @@ public class GeolocalizationActivity extends FragmentActivity implements
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        //TODO: current location
+    public void onMapReady(final GoogleMap googleMap) {
+
+        //TODO: green markers on garbage islands
+        //TODO: if gps !isActive() marker on COMUNE, else on current location (PROBLEM: LatLng???)
+
         LatLng sydney = new LatLng(-33.867, 151.206);
+
+        //Autocomplete fragment declaration
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        //Autocomplete fragment listener
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+
+            //When place is chosen, camera is moved on it
+            @Override
+            public void onPlaceSelected(Place place) {
+                LatLng selectedPlace = place.getLatLng();
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedPlace, 15));
+                googleMap.addMarker(new MarkerOptions().position(selectedPlace).title(place.getAddress().toString()));
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+            }
+        });
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -100,7 +118,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
             return;
         }
         googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(0,0)).title("Marker"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
+        googleMap.addMarker(new MarkerOptions().position(sydney).title("You are here"));
     }
 }
