@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -44,6 +43,8 @@ public class GeolocalizationActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.geolocalization);
 
+
+        //Map fragment declaration
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -52,22 +53,26 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .addApi(Places.PLACE_DETECTION_API)
-                .addApi(LocationServices.API)
                 .enableAutoManage(this, this)
                 .build();
+
     }
 
     @Override
     protected void onStart() {
+
         super.onStart();
+
         //Connecting to Google API's
         client.connect();
     }
 
     @Override
     protected void onStop() {
+
         //Disconnecting to Google API's
         client.disconnect();
+
         super.onStop();
     }
 
@@ -79,10 +84,15 @@ public class GeolocalizationActivity extends FragmentActivity implements
     @Override
     public void onMapReady(final GoogleMap googleMap) {
 
-        //TODO: green markers on garbage islands
         //TODO: if gps !isActive() marker on COMUNE, else on current location (PROBLEM: LatLng???)
+        //TODO: garb islands around (filtered) green markers
 
+
+        //Default start
         LatLng sydney = new LatLng(-33.867, 151.206);
+        googleMap.setMyLocationEnabled(true);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
+        googleMap.addMarker(new MarkerOptions().position(sydney).title("You are here!"));
 
         //Autocomplete fragment declaration
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
@@ -95,7 +105,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
             @Override
             public void onPlaceSelected(Place place) {
                 LatLng selectedPlace = place.getLatLng();
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(selectedPlace, 15));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(selectedPlace, 15));
                 googleMap.addMarker(new MarkerOptions().position(selectedPlace).title(place.getAddress().toString()));
             }
 
@@ -117,8 +127,5 @@ public class GeolocalizationActivity extends FragmentActivity implements
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
-        googleMap.addMarker(new MarkerOptions().position(sydney).title("You are here"));
     }
 }
