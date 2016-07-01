@@ -22,6 +22,12 @@
         <item name="android:background">#4CAF50</item>
     </style>
 
+    <style name="BackButton" parent="Theme.AppCompat.Light">
+        <item name="colorButtonNormal">#E91E63
+        </item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
     <style name="YellowAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:colorAccent">#FBC02D</item>
         <item name="android:textColorPrimary">#795548</item>

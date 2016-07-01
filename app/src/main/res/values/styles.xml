@@ -18,5 +18,11 @@
     </style>
 
 
+    <style name="BackButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">#E91E63
+        </item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
 
 </resources>

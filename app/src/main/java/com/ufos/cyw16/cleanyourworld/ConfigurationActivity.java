@@ -41,6 +41,7 @@ import com.ufos.cyw16.cleanyourworld.config.ConfigStep;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ProvinceTableAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RaccoltaTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter;
 
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ import java.util.ArrayList;
 public class ConfigurationActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Button btnContinue;
+    private Button btnBack;
     private TextView chooseTV;
     private ImageView mapIV;
 
@@ -85,18 +87,14 @@ public class ConfigurationActivity extends AppCompatActivity {
         // start and configure recycler view
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         btnContinue = (Button) findViewById(R.id.btnContinue);
+        btnBack = (Button) findViewById(R.id.btnBack);
 
+        btnContinue.setEnabled(false);
+        btnBack.setVisibility(View.INVISIBLE);
 
-
-        if (btnContinue != null) {
-            btnContinue.setEnabled(false);
-        }
 
         step = ConfigStep.REGIONE; // first step
         data = new ArrayList<>();
-
-        MaterialiDAO dao = new MaterialiDAO(getApplicationContext());
-        dao.getAllMaterials();
 
         updateDBFromServer();
 
@@ -111,6 +109,28 @@ public class ConfigurationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 /* btnContinue is enabled when you choose an item of the list ;
                 * when it's clicked updates the data array and notifies the adapter that data has changed */
+                startStep(data);
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (step){
+                    case PROVINCIA:
+                        step = ConfigStep.REGIONE;
+                        break;
+                    case COMUNE:
+                        step = ConfigStep.REGIONE;
+                        break;
+                    case END:
+                        step = ConfigStep.PROVINCIA;
+                        break;
+                    default:
+                        step = ConfigStep.COMUNE;
+                        break;
+                }
+
                 startStep(data);
             }
         });
@@ -133,6 +153,7 @@ public class ConfigurationActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"You chose "+ provider.getName(),Toast.LENGTH_SHORT).show();
 
                 btnContinue.setEnabled(true);
+
             }
 
             @Override
@@ -236,6 +257,12 @@ public class ConfigurationActivity extends AppCompatActivity {
         changeChooseTV();
         btnContinue.setEnabled(false);
 
+        if(step == ConfigStep.PROVINCIA) {
+            btnBack.setVisibility(View.INVISIBLE);
+        } else {
+            btnBack.setVisibility(View.VISIBLE);
+        }
+
         crossfade();
     }
 
@@ -251,7 +278,15 @@ public class ConfigurationActivity extends AppCompatActivity {
                 startNewActivity();
             }
         });
-        //builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                step = ConfigStep.COMUNE;
+                startStep(data);
+            }
+        });
+
         builder.show();
     }
 
@@ -287,7 +322,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
                 break;
             case PROVINCIA:
-
+                chooseTV.setText("Choose Your Regione");
                 break;
             case COMUNE:
                 chooseTV.setText("Choose Your Province");
@@ -316,6 +351,10 @@ public class ConfigurationActivity extends AppCompatActivity {
                 }
 
                 convertToDataProvider(ConfigStep.REGIONE,data,regioni_al);
+
+                if(adapter != null){
+                    adapter.notifyDataSetChanged();
+                }
                 /* changes next step of config */
                 step = ConfigStep.PROVINCIA;
                 break;
