@@ -45,6 +45,8 @@ import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity;
 import com.ufos.cyw16.cleanyourworld.fragment.SearchFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.BarCodeSearchSubFragment;
+import com.ufos.cyw16.cleanyourworld.fragment.subfragment.MaterialsSearchSubFragment;
+import com.ufos.cyw16.cleanyourworld.fragment.subfragment.ProductsSearchSubFragment;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
@@ -283,8 +285,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ft.commit();
                 break;
             case R.id.srchProduct:
+                ft.replace(R.id.fragmentContent, new ProductsSearchSubFragment(), "fragment_screen");
+                ft.commit();
                 break;
             case R.id.srchMaterial:
+                ft.replace(R.id.fragmentContent, new MaterialsSearchSubFragment(), "fragment_screen");
+                ft.commit();
                 break;
             case R.id.geolocalizzation:
                 Intent intent = new Intent(getBaseContext(), GeolocalizationActivity.class);
@@ -293,6 +299,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.calendar:
                 ft.replace(R.id.fragmentContent, new CalendarFragment(), "fragment_screen");
                 ft.commit();
+                break;
+            case R.id.settings:
+                Intent settingsIntent = new Intent(getBaseContext(), ConfigurationActivity.class);
+                startActivity(settingsIntent);
                 break;
             case R.id.dbFragment:
                 ft.replace(R.id.fragmentContent, new DbFragment(), "fragment_screen");
