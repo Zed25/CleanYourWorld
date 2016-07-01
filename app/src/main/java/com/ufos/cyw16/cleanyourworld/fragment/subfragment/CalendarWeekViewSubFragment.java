@@ -201,15 +201,23 @@ public class CalendarWeekViewSubFragment extends Fragment {
         String dayName = selectDay(calendar);
         dayTrashInfo.setDay(dayName);
         MaterialiDAO materialiDAO = new MaterialiDAO(getContext());
-        Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, calendar.DAY_OF_WEEK);
-        String trash, trashColor;
+        Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
+        String trash = "", trashColor = "";
+        System.out.println("CREATE CARD QUERY DAY OF WEEK = " + calendar.get(Calendar.DAY_OF_WEEK));
+
+        // no trash that day
         if (collection.getMaterials().size() == 0){
             trash = "Nulla";
             trashColor = "#29d96a";
         }else{
-        trash = collection.getMaterials().get(0).getName();
-        trashColor = collection.getColor().get(0).getColorCode();
+            for(int i = 0; i < collection.getMaterials().size(); i++) {
+                trash += collection.getMaterials().get(i).getName() + "\n";
+                // use only one color to display even if there are multiple materials
+                trashColor = collection.getColor().get(0).getColorCode();
+            }
         }
+
+        System.out.println("TRASH : " +trash + "TRASH COLOR :" + trashColor);
         dayTrashInfo.setThrash(trash);
         dayTrashInfo.setColorOfTheDay(trashColor);
         return dayTrashInfo;

@@ -88,67 +88,89 @@ public class MaterialiDAO {
     }
 
     public Collection getCollectionByDayOfWeek(int comuneID,int dayOfWeek){
+
+        System.out.println("GETCOLLECTION BY DAY OF WEEK");
         CYWOpenHelper openHelper = CYWOpenHelper.getInstance(context);
         SQLiteDatabase database = openHelper.getReadableDatabase();
 
         String[] columns = {ID_COLUMN,COLLECTION_COMUNE_COLUMN,COLLECTION_MATERIALS_COLUMN,COLLECTION_DAYS_COLUMN,COLLECTION_COLORS_COLUMN,COLLECTION_COLLTYPE_COLUMN};
 
-        String query = "SELECT * FROM raccolta WHERE comuni_id = " + comuneID + " AND giorni_id = " + dayOfWeek;
+        // get raccolta by comune_id and day of week
+        String query = "SELECT * FROM raccolta WHERE comuni_id = ? AND giorni_id = ?";
+        Cursor c = database.rawQuery(query,new String[]{String.valueOf(comuneID), String.valueOf(dayOfWeek)});
 
-        Cursor c = database.rawQuery(query,null);
 
         // array of materials (there could be more than 1 in a day)
         ArrayList<Materials> materials = new ArrayList<>();
+        //materials.add(new Materials(1,"Plastica"));
         // array of colors. colors[i] correspends to materials[i]
         ArrayList<Colors> colors = new ArrayList<>();
+        //colors.add(new Colors(1,"blue","#2196f3"));
         //  collection type..is unique for all materials
-        CollectionType collectionType = null;
+        CollectionType collectionType = new CollectionType(2,"porta a porta");
         int id = 0;
+        int material_id = 1,color_id = 1,collType_id = 2;
 
         if(c.moveToFirst()){
             do {
 
+                // get all ID's to use in further queries
                 id = c.getInt(0);
-                int material_id = c.getInt(2);
-                int color_id = c.getInt(4);
-                int collType_id = c.getInt(5);
+                material_id = c.getInt(2);
+                color_id = c.getInt(4);
+                collType_id = c.getInt(5);
 
                 System.out.println("ID :" + id+" MAT_ID :" + material_id);
 
-                /* inner query to find materials */
-                Cursor cursor = database.rawQuery("SELECT * FROM materiali WHERE _id="+material_id,null);
+                 /* inner query to find materials */
+                Cursor cursor = database.rawQuery("SELECT * FROM materiali WHERE _id = ?",new String[]{String.valueOf(material_id)});
                 if(cursor.moveToFirst()){
-                    Materials material = new Materials(cursor.getInt(0),cursor.getString(1));
+
+                    Materials material = new Materials(cursor.getInt(0), cursor.getString(1));
                     materials.add(material);
+                    System.out.println("MATERIALI DAO MATERIALS " + material.getName());
+
                 }
 
-                System.out.println("QUERY MAT_NAME = " + cursor.getString(1));
+                cursor.close();
+
 
                 /* inner query to find color */
-                Cursor colorCur = database.rawQuery("SELECT * FROM colori WHERE _id="+color_id,null);
+                Cursor colorCur = database.rawQuery("SELECT * FROM colori WHERE _id = ?",new String[]{String.valueOf(color_id)});
                 if(colorCur.moveToFirst()){
-                    Colors color = new Colors(colorCur.getInt(0),colorCur.getString(1),colorCur.getString(2));
+                    Colors color = new Colors(colorCur.getInt(0), colorCur.getString(1), colorCur.getString(2));
                     colors.add(color);
+                    System.out.println("MATERIALI DAO : COLOR " + color.getColor() + " " + color.getColorCode());
+
                 }
 
+                colorCur.close();
+
+
+
                 /* inner query to find collection type */
-                Cursor collTypeCur = database.rawQuery("SELECT * from tipologiaRaccolta WHERE _id="+collType_id,null);
+                Cursor collTypeCur = database.rawQuery("SELECT * from tipologiaRaccolta WHERE _id = ?",new String[]{String.valueOf(collType_id)});
                 if(collTypeCur.moveToFirst()){
                     collectionType = new CollectionType(collTypeCur.getInt(0),collTypeCur.getString(1));
                 }
 
+                collTypeCur.close();
 
             } while (c.moveToNext());
 
         }
 
-        if(collectionType != null) {
-            Collection collection = new Collection(id, comuneID, dayOfWeek, materials, colors, collectionType.getName());
-            return collection;
-        }else {
-            Collection collection = new Collection(id, comuneID, dayOfWeek, materials, colors, "Cassonetto pubblico");
-            return collection;
-        }
+        // close the cursor to reuse it later
+        c.close();
+
+
+
+        // close db to remove unused resource
+        database.close();
+
+
+        return new Collection(id,comuneID,dayOfWeek,materials,colors,collectionType.getName());
+
 
     }
 
