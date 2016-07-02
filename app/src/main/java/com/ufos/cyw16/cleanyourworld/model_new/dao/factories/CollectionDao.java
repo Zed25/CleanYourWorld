@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface CollectionDao extends EntityDao<Collection> {
-    Collection getCollectionByDayOfWeek(int comuneID, int dayOfWeek);
+    List<Collection> getCollectionByDayOfWeek(int comuneID, int dayOfWeek) throws DaoException;
 
     List<Collection> getCollectionsByIdComune(int id) throws DaoException;
 
@@ -60,7 +60,7 @@ public interface CollectionDao extends EntityDao<Collection> {
         }
 
         @Override
-        public Collection getCollectionByDayOfWeek(int comuneID, int dayOfWeek) throws DaoException{
+        public List<Collection> getCollectionByDayOfWeek(int comuneID, int dayOfWeek) throws DaoException {
             List<String[]> queryResult = getTableAdapter().getData(new String[]{"_id", "giorni_id"}, new String[]{String.valueOf(comuneID), String.valueOf(dayOfWeek)}, null);
             List<Collection> collections = new ArrayList<>();
             for (String[] s : queryResult) {
