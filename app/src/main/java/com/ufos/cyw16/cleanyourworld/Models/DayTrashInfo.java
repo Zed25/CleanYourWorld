@@ -34,7 +34,7 @@ public class DayTrashInfo {
 
     public int getColorOfTheDay() {
         int color = Color.parseColor(colorOfTheDay);
-        color = Color.parseColor("#ff0000");
+//        color = Color.parseColor("#ff0000");
         return color;
     }
 
