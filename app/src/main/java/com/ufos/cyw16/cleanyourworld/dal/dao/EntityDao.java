@@ -17,7 +17,7 @@ import java.util.List;
  *
  */
 public interface EntityDao<T> {
-    List<T> findFromServer(String[] keys, String[] values) throws DaoException, InterruptedException;
+    List<T> updateFromServer(String[] keys, String[] values) throws DaoException, InterruptedException;
 
     T findById(int id) throws DaoException;
 

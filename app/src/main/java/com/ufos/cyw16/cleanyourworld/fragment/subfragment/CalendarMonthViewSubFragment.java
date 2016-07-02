@@ -171,6 +171,7 @@ public class CalendarMonthViewSubFragment extends Fragment {
         dayTrashInfo.setDate(dayDate);
         String dayName = selectDay(calendar);
         dayTrashInfo.setDay(dayName);
+        // FIXME: 02/07/16 [DAO] sostituire le DAO ed implementare getCollectionByDayOfWeek(..) in CollectionDao
         MaterialiDAO materialiDAO = new MaterialiDAO(getContext());
         Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, Calendar.DAY_OF_WEEK);
         String trash, trashColor;

@@ -10,7 +10,7 @@ package com.ufos.cyw16.cleanyourworld.model_new;
 import java.util.List;
 
 public class Comune {
-
+    // FIXME: 02/07/16 addConstuctor
     private int idComune;
     private String name;
     private IsolaEcologica isolaEcologica;

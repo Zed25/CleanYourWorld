@@ -17,9 +17,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
@@ -31,7 +31,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ufos.cyw16.cleanyourworld.DAO.MaterialiDAO;
 import com.ufos.cyw16.cleanyourworld.Models.Comune;
 import com.ufos.cyw16.cleanyourworld.Models.Provincia;
 import com.ufos.cyw16.cleanyourworld.Models.Regione;
@@ -41,7 +40,6 @@ import com.ufos.cyw16.cleanyourworld.config.ConfigStep;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ProvinceTableAdapter;
-import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RaccoltaTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter;
 
 import java.util.ArrayList;
@@ -61,6 +59,7 @@ public class ConfigurationActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private int animationDuration;
 
+    // FIXME: 02/07/16 [DAO - MODELS] togliere i tablesAdapter e mettere le DAO
     private RegioniTableAdapter regioni;
     private ProvinceTableAdapter province;
     private ComuniTableAdapter comuni;
@@ -165,6 +164,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
     private void updateDBFromServer() {
         /* downloads all regioni,province,comuni from server and inserts into local DB */
+        // FIXME: 02/07/16 [DAO] Mettere le DAO
         regioni = new RegioniTableAdapter(getApplicationContext());
         province = new ProvinceTableAdapter(getApplicationContext());
         comuni = new ComuniTableAdapter(getApplicationContext());
@@ -220,7 +220,7 @@ public class ConfigurationActivity extends AppCompatActivity {
     }
 
     private void setChosenLocation(ConfigAdapterDataProvider provider) {
-
+        // FIXME: 02/07/16 [MODELS] Sostituire con nuovi model
         switch (step){
             case REGIONE:
 
@@ -296,6 +296,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // TODO remove comments when finished
         //editor.putBoolean("firstTime",false);
+        // FIXME: 02/07/16 [MODELS] sostituire con nuovi model
         editor.putInt("regione_id",regioneChosen.getId());
         editor.putInt("provincia_id",provinciaChosen.getId());
         editor.putInt("comune_id",comuneChosen.getId());
@@ -337,7 +338,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
     /* fills data array depending on the step of the configuration you are in */
     private void fillDataArray(ArrayList<ConfigAdapterDataProvider> data) {
-
+        // FIXME: 02/07/16 [DAO - MODELS] controllare i nuovi models e le chiamate ai tablesAdapter
         switch (step){
             case REGIONE:
 

@@ -10,7 +10,7 @@ package com.ufos.cyw16.cleanyourworld.model_new;
 import java.util.List;
 
 public class Provincia {
-
+    // FIXME: 02/07/16 addConstuctor
     private int idProvincia;
     private String name;
     private List<Comune> comuni;

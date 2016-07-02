@@ -143,7 +143,7 @@ public class DbFragment extends Fragment {
                     for (EntityDao entity : entities) {
                         try {
                             Message4Debug.log(entity.getClass().getSimpleName());
-                            entity.findFromServer(null, null);
+                            entity.updateFromServer(null, null);
                         } catch (DaoException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {

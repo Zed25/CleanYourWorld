@@ -54,9 +54,11 @@ public abstract class EntityDaoSQLite<T> implements EntityDao<T> {
     }
 
     @Override
-    public List<T> findFromServer(String[] keys, String[] values) throws DaoException, InterruptedException {
+    public List<T> updateFromServer(String[] keys, String[] values) throws DaoException, InterruptedException {
+        // FIXME: 02/07/16 [TYPE] public void updateFromServer(...) in quando rallenta l'applicazione
         getTableAdapter().updateFromServer(keys, values);
-        return find(keys, values, null);
+//        return find(keys, values, null);
+        return null;
     }
 
     @Override

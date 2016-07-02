@@ -11,7 +11,7 @@ package com.ufos.cyw16.cleanyourworld.model_new;
 import java.util.List;
 
 public class Regione {
-
+    // FIXME: 02/07/16 addConstuctor
     private int idRegione_int;
     private String name;
     private List<Provincia> province;

@@ -10,8 +10,6 @@
 
 package com.ufos.cyw16.cleanyourworld;
 
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,18 +19,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -44,19 +38,14 @@ import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ColoriTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.MaterialiTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RaccoltaTableAdapter;
-import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaProdottiTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaRaccoltaTableAdapter;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity;
-import com.ufos.cyw16.cleanyourworld.fragment.SearchFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.BarCodeSearchSubFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.MaterialsSearchSubFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.ProductsSearchSubFragment;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -89,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        // FIXME: 02/07/16 [DAO] togliere i tablesAdapter ed utilizzare le dao
         RaccoltaTableAdapter raccoltaTableAdapter = new RaccoltaTableAdapter(getBaseContext());
         ColoriTableAdapter coloriTableAdapter = new ColoriTableAdapter(getBaseContext());
         MaterialiTableAdapter materialiTableAdapter = new MaterialiTableAdapter(getBaseContext());

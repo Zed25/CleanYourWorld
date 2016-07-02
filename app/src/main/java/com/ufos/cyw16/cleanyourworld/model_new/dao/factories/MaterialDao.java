@@ -24,7 +24,7 @@ public interface MaterialDao extends EntityDao<Material> {
             Material material = new Material();
             material.setIdMaterial(Integer.parseInt(args[0]));
             material.setName(args[1]);
-            // TODO: 01/07/16 how do i get the ProductType list avoiding the loop?
+            // TODO: 01/07/16 how do i get the ProductType list avoiding the loop? [Risolto - non cancellare]
             /*
              * Implementazione della RELAZIONE DI AGGREGAZIONE:
              * devo passargli me stesso

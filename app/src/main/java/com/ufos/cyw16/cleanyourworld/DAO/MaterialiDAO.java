@@ -25,6 +25,7 @@ import java.util.ArrayList;
 /**
  * Created by ovidiudanielbarba on 28/06/16.
  */
+@Deprecated
 public class MaterialiDAO {
 
     private Context context;

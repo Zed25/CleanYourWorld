@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface CollectionDao extends EntityDao<Collection> {
+    Collection getCollectionByDayOfWeek(int comuneID, int dayOfWeek);
 
     List<Collection> getCollectionsByIdComune(int id) throws DaoException;
 
@@ -56,6 +57,11 @@ public interface CollectionDao extends EntityDao<Collection> {
                 Message4Debug.log(e.getMessage());
             }
             return collection;
+        }
+
+        @Override
+        public Collection getCollectionByDayOfWeek(int comuneID, int dayOfWeek) {
+            return null;
         }
 
         @Override

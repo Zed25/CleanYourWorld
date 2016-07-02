@@ -45,7 +45,7 @@ public interface ComuneDao extends EntityDao<Comune> {
             } catch (DaoException e) {
                 Message4Debug.log(e.getMessage());
             }
-            // FIXME: 01/07/16 get collection
+            // FIXME: 01/07/16 get collection [Risolto - non cancellare]
             return comune;
         }
 
