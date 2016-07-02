@@ -33,6 +33,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ColoriTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
@@ -45,7 +46,22 @@ import com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.BarCodeSearchSubFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.MaterialsSearchSubFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.ProductsSearchSubFragment;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionTypeDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ColorDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ComuneDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.DayDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.IsolaEcologicaDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.RegioneDao;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -69,6 +85,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ComuniTableAdapter comuniTableAdapter;
 
 
+    private CollectionDao collectionDao;
+    private CollectionTypeDao collectionTypeDao;
+    private ColorDao colorDao;
+    private ComuneDao comuneDao;
+    private IsolaEcologicaDao isolaEcologicaDao;
+    private MaterialDao materialDao;
+    private ProductDao productDao;
+    private ProductTypeDao productTypeDao;
+    private ProvinciaDao provinciaDao;
+    private RegioneDao regioneDao;
+    private DayDao dayDao;
+
+
     //private ListView mDrawerList;
 
     @Override
@@ -77,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Message4Debug.log("MainActivity.onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        updateServer();
 
         // FIXME: 02/07/16 [DAO] togliere i tablesAdapter ed utilizzare le dao
         RaccoltaTableAdapter raccoltaTableAdapter = new RaccoltaTableAdapter(getBaseContext());
@@ -166,6 +197,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
+    }
+
+    private void updateServer() {
+
+         /* DAOFactory */
+        DaoFactory_def daoFactory = DaoFactory_def.getInstance(getBaseContext());
+
+        /* Factories */
+        List<EntityDao> entities = new ArrayList<>();
+        entities.add((collectionDao = daoFactory.getCollectionDao()));
+        entities.add((collectionTypeDao = daoFactory.getCollectionTypeDao()));
+        entities.add((colorDao = daoFactory.getColorDao()));
+        entities.add((comuneDao = daoFactory.getComuneDao()));
+        entities.add((isolaEcologicaDao = daoFactory.getIsolaEcologicaDao()));
+        entities.add((materialDao = daoFactory.getMaterialDao()));
+        entities.add((productDao = daoFactory.getProductDao()));
+        entities.add((productTypeDao = daoFactory.getProtuctTypeDao()));
+        entities.add((provinciaDao = daoFactory.getProvinciaDao()));
+        entities.add((regioneDao = daoFactory.getRegioneDao()));
+        entities.add((dayDao = daoFactory.getDayDao()));
+        Message4Debug.log("inizio aggiornamento del database interno...");
+        long start = System.currentTimeMillis();
+        for (EntityDao entity : entities) {
+            try {
+                Message4Debug.log(entity.getClass().getSimpleName());
+                entity.updateFromServer(null, null);
+            } catch (DaoException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        Message4Debug.log("aggiornamento completato in: " + (System.currentTimeMillis() - start));
     }
 
     private void showNoNetworkDialog() {
