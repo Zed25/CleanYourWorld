@@ -11,7 +11,6 @@
 package com.ufos.cyw16.cleanyourworld.DAO;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -169,7 +168,8 @@ public class MaterialiDAO {
         database.close();
 
 
-        return new Collection(id,comuneID,dayOfWeek,materials,colors,collectionType.getName());
+//        return new Collection(id,comuneID,dayOfWeek,materials,colors,collectionType.getName());
+        return null;
 
 
     }

@@ -1,12 +1,5 @@
 
 
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.RegioneDao
- * Last modified: 26/06/16 1.55
- */
-
 package com.ufos.cyw16.cleanyourworld.Models.dao.factories;
 
 import android.content.Context;
@@ -14,6 +7,8 @@ import android.content.Context;
 import com.ufos.cyw16.cleanyourworld.Models.Regione;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
+
+@Deprecated
 
 public interface RegioneDao extends EntityDao<Regione> {
     class RegioneDaoSQLite extends EntityDaoSQLite<Regione> implements RegioneDao {

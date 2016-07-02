@@ -7,10 +7,9 @@
 
 package com.ufos.cyw16.cleanyourworld.fragment.subfragment;
 
-import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.content.SharedPreferences;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,7 +29,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by simone_mancini on 01/07/16.
@@ -174,9 +172,10 @@ public class CalendarMonthViewSubFragment extends Fragment {
         String dayName = selectDay(calendar);
         dayTrashInfo.setDay(dayName);
         MaterialiDAO materialiDAO = new MaterialiDAO(getContext());
-        Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, calendar.DAY_OF_WEEK);
+        Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, Calendar.DAY_OF_WEEK);
         String trash, trashColor;
-        if (collection.getMaterials().size() == 0){
+//        if (collection.getMaterials().size() == 0){
+        if (true) { // FIXME: 01/07/16
             trash = "Nulla";
             trashColor = "#29d96a";
         }else{

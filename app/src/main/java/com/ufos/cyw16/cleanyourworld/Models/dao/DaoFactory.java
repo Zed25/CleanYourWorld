@@ -1,12 +1,4 @@
 
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.DaoFactory
- * Last modified: 26/06/16 1.55
- */
-
 package com.ufos.cyw16.cleanyourworld.Models.dao;
 
 import android.content.Context;
@@ -22,6 +14,7 @@ import com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProductsDao;
 import com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProvinciaDao;
 import com.ufos.cyw16.cleanyourworld.Models.dao.factories.RegioneDao;
 
+@Deprecated
 public class DaoFactory {
     private static DaoFactory instance = null;
     private Context context;

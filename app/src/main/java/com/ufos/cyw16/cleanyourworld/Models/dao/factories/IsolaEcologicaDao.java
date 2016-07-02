@@ -1,11 +1,4 @@
 
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.IsolaEcologicaDao
- * Last modified: 26/06/16 1.55
- */
-
 package com.ufos.cyw16.cleanyourworld.Models.dao.factories;
 
 import android.content.Context;
@@ -13,6 +6,8 @@ import android.content.Context;
 import com.ufos.cyw16.cleanyourworld.Models.IsolaEcologica;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
+
+@Deprecated
 
 public interface IsolaEcologicaDao extends EntityDao<IsolaEcologica> {
     class IsolaEcologicaDaoSQLite extends EntityDaoSQLite<IsolaEcologica> implements IsolaEcologicaDao {

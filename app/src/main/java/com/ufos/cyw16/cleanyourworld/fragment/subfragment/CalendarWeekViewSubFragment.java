@@ -9,12 +9,11 @@ package com.ufos.cyw16.cleanyourworld.fragment.subfragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.support.v4.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,8 +29,6 @@ import com.ufos.cyw16.cleanyourworld.Models.Collection;
 import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarWeekAdapter;
-import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
-import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -206,7 +203,8 @@ public class CalendarWeekViewSubFragment extends Fragment {
         System.out.println("CREATE CARD QUERY DAY OF WEEK = " + calendar.get(Calendar.DAY_OF_WEEK));
 
         // no trash that day
-        if (collection.getMaterials().size() == 0){
+//        if (collection.getMaterials().size() == 0){
+        if (true) { // FIXME: 01/07/16
             trash = "Nulla";
             trashColor = "#29d96a";
         }else{

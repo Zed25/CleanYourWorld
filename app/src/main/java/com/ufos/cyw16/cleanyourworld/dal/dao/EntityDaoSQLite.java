@@ -62,6 +62,8 @@ public abstract class EntityDaoSQLite<T> implements EntityDao<T> {
     @Override
     public T findById(int id) throws DaoException {
         List<String[]> list = getTableAdapter().getData(new String[]{"_id"}, new String[]{String.valueOf(id)}, null);
+        if (list.size() < 1)
+            throw new DaoException("Nothing elements in " + getTableAdapter().getTableName() + "for <_id = " + id + ">");
         return instanceEntity(list.get(0));
     }
 

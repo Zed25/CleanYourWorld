@@ -35,6 +35,15 @@ import java.util.concurrent.BlockingQueue;
  */
 public class TableAdapter_NEW {
     private CYWOpenHelper openHelper;
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
     private String tableName;
     private Table table;
     private String url = "http://www.ubuntumby.altervista.org/cyw16/?androidApp=true";

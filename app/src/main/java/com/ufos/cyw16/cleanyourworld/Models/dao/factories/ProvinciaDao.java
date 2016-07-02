@@ -1,12 +1,3 @@
-
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProvinciaDao
- * Last modified: 26/06/16 1.55
- */
-
 package com.ufos.cyw16.cleanyourworld.Models.dao.factories;
 
 import android.content.Context;
@@ -14,6 +5,8 @@ import android.content.Context;
 import com.ufos.cyw16.cleanyourworld.Models.Provincia;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
+
+@Deprecated
 
 public interface ProvinciaDao extends EntityDao<Provincia> {
     class ProvinciaDAOSQLite extends EntityDaoSQLite<Provincia> implements ProvinciaDao {

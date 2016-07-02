@@ -1,18 +1,10 @@
-/*
- * Created by Umberto Ferracci from simone_mancini and published on 15/06/16 12.39
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.IsolaEcologica
- * File name: IsolaEcologica.java
- * Class name: IsolaEcologica
- * Last modified: 15/06/16 12.39
- */
 
 package com.ufos.cyw16.cleanyourworld.Models;
 
 /**
  * Created by simone_mancini on 15/06/16.
  */
+@Deprecated
 public class IsolaEcologica {
 
     private int id, idComune;

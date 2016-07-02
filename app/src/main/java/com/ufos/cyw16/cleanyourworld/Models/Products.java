@@ -1,18 +1,10 @@
-/*
- * Created by Umberto Ferracci from simone_mancini and published on 15/06/16 12.46
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.Products
- * File name: Products.java
- * Class name: Products
- * Last modified: 15/06/16 12.46
- */
 
 package com.ufos.cyw16.cleanyourworld.Models;
 
 /**
  * Created by simone_mancini on 15/06/16.
  */
+@Deprecated
 public class Products {
     private int id, ProductType;
     private String name, description, EAN;

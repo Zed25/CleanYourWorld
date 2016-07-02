@@ -1,24 +1,9 @@
-
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.CollectionDao
- * Last modified: 30/06/16 10.34
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.CollectionDao
- * Last modified: 26/06/16 1.55
- */
-
 package com.ufos.cyw16.cleanyourworld.Models.dao.factories;
 
 import android.content.Context;
 
 import com.ufos.cyw16.cleanyourworld.Models.Collection;
+import com.ufos.cyw16.cleanyourworld.Models.CollectionType;
 import com.ufos.cyw16.cleanyourworld.Models.Colors;
 import com.ufos.cyw16.cleanyourworld.Models.Materials;
 import com.ufos.cyw16.cleanyourworld.Models.dao.DaoFactory;
@@ -29,6 +14,7 @@ import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.List;
 
+@Deprecated
 public interface CollectionDao extends EntityDao<Collection> {
     class CollectionDaoSQLite extends EntityDaoSQLite<Collection> implements CollectionDao {
 
@@ -41,11 +27,11 @@ public interface CollectionDao extends EntityDao<Collection> {
             DaoFactory factory = DaoFactory.getInstance(getContext());
             List<Materials> materials = null;
             List<Colors> colors = null;
-            String collectionType = "";
+            List<CollectionType> collectionType = null;
             try {
                 materials = factory.getMaterialsDao().findAll();
                 colors = factory.getColorsDao().findAll();
-                collectionType = factory.getCollectionTypeDao().findById(0).getName();
+                collectionType = factory.getCollectionTypeDao().findAll();
             } catch (DaoException e) {
                 e.printStackTrace();
                 Message4Debug.log(e.getMessage());

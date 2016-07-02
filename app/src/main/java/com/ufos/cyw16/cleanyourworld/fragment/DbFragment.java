@@ -19,20 +19,23 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.ufos.cyw16.cleanyourworld.Models.dao.DaoFactory;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.CollectionDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.CollectionTypeDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.ColorsDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.ComuneDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.IsolaEcologicaDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.MaterialsDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProductTypeDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProductsDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProvinciaDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.RegioneDao;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.model_new.Collection;
+import com.ufos.cyw16.cleanyourworld.model_new.Product;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionTypeDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ColorDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ComuneDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.DayDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.IsolaEcologicaDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.RegioneDao;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
@@ -53,22 +56,23 @@ public class DbFragment extends Fragment {
     private Context context;
 
     /* DAOFactory */
-    private DaoFactory daoFactory;
+    private DaoFactory_def daoFactory;
     private CollectionDao collectionDao;
     private CollectionTypeDao collectionTypeDao;
-    private ColorsDao colorsDao;
+    private ColorDao colorDao;
     private ComuneDao comuneDao;
     private IsolaEcologicaDao isolaEcologicaDao;
-    private MaterialsDao materialsDao;
-    private ProductsDao productsDao;
+    private MaterialDao materialDao;
+    private ProductDao productDao;
     private ProductTypeDao productTypeDao;
     private ProvinciaDao provinciaDao;
     private RegioneDao regioneDao;
+    private DayDao dayDao;
     private List<EntityDao> entities;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
     }
 
@@ -85,8 +89,6 @@ public class DbFragment extends Fragment {
      * @param v the v
      */
     public void createFragment(View v) {
-
-
         context = v.getContext();
 
         /* Buttons */
@@ -105,52 +107,23 @@ public class DbFragment extends Fragment {
         subListViewOnItemClick = new SubListViewOnItemClick();
         listView.setOnItemClickListener(subListViewOnItemClick);
 
-
-        /* inizializzazione dell'app */
-//        tables = new ArrayList<>();
-//        tables.add(regioniTableAdapter = new RegioniTableAdapter(context));
-//        tables.add(provinceTableAdapter = new ProvinceTableAdapter(context));
-//        tables.add(comuniTableAdapter = new ComuniTableAdapter(context));
-//        tables.add(coloriTableAdapter = new ColoriTableAdapter(context));
-//        tables.add(giorniTableAdapter = new GiorniTableAdapter(context));
-//        tables.add(isolaEcologicaTableAdapter = new IsolaEcologicaTableAdapter(context));
-//        tables.add(materialiTableAdapter = new MaterialiTableAdapter(context));
-//        tables.add(preferitiTableAdapter = new PreferitiTableAdapter(context));
-//        tables.add(prodottiTableAdapter = new ProdottiTableAdapter(context));
-//        tables.add(raccoltaTableAdapter = new RaccoltaTableAdapter(context));
-//        tables.add(tipologiaProdottiTableAdapter = new TipologiaProdottiTableAdapter(context));
-//        tables.add(tipologiaRaccoltaTableAdapter = new TipologiaRaccoltaTableAdapter(context));
-
-
-        /* aggiornamento di tutte le tabelle */
-
-
-//        for (TableAdapter t : tables) {
-//            try {
-//                t.updateFromServer(null, null);
-//            } catch (DaoException e) {
-//                Message4Debug.log(e.toString());
-//            } catch (InterruptedException e) {
-//                Message4Debug.log(e.toString());
-//            }
-//        }
-
-
         /* DAOFactory */
-        daoFactory = DaoFactory.getInstance(context);
+        daoFactory = DaoFactory_def.getInstance(context);
 
         /* Factories */
         entities = new ArrayList<>();
         entities.add((collectionDao = daoFactory.getCollectionDao()));
         entities.add((collectionTypeDao = daoFactory.getCollectionTypeDao()));
-        entities.add((colorsDao = daoFactory.getColorsDao()));
+        entities.add((colorDao = daoFactory.getColorDao()));
         entities.add((comuneDao = daoFactory.getComuneDao()));
         entities.add((isolaEcologicaDao = daoFactory.getIsolaEcologicaDao()));
-        entities.add((materialsDao = daoFactory.getMaterialsDao()));
-        entities.add((productsDao = daoFactory.getProductsDao()));
+        entities.add((materialDao = daoFactory.getMaterialDao()));
+        entities.add((productDao = daoFactory.getProductDao()));
         entities.add((productTypeDao = daoFactory.getProtuctTypeDao()));
         entities.add((provinciaDao = daoFactory.getProvinciaDao()));
         entities.add((regioneDao = daoFactory.getRegioneDao()));
+        entities.add((dayDao = daoFactory.getDayDao()));
+
 
     }
 
@@ -190,13 +163,32 @@ public class DbFragment extends Fragment {
                     }
                     break;
                 case R.id.btn_regioni:
-
+                    try {
+                        Long a = System.currentTimeMillis();
+                        DaoFactory_def daoFactorynew = DaoFactory_def.getInstance(context);
+                        com.ufos.cyw16.cleanyourworld.model_new.Regione regione5 = daoFactorynew.getRegioneDao().findById(12);
+                        regione5.getName();
+                        Message4Debug.log("fine in: " + (System.currentTimeMillis() - a) + " msec");
+                    } catch (DaoException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case R.id.btn_typeProd:
-
+                    DaoFactory_def daoFactory_def = DaoFactory_def.getInstance(context);
+                    try {
+                        List<Collection> collections = daoFactory_def.getCollectionDao().getCollectionsByIdComune(1865);
+                        collections.get(0).getIdCollection();
+                    } catch (DaoException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case R.id.btn_comuni:
-
+                    try {
+                        Product product = DaoFactory_def.getInstance(context).getProductDao().findById(1);
+                        Message4Debug.log(product.getName() + " " + product.getEAN() + " ");
+                    } catch (DaoException e) {
+                        e.printStackTrace();
+                    }
                     break;
             }
         }
