@@ -23,6 +23,7 @@ import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Collection;
+import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionTypeDao;
@@ -183,13 +184,12 @@ public class DbFragment extends Fragment {
                     break;
                 case R.id.btn_comuni:
                     try {
-                        List<Collection> collections = DaoFactory_def.getInstance(context).getCollectionDao().getCollectionByDayOfWeek(1865, 2);
-                        for (Collection c : collections) {
-                            Message4Debug.log(c.getMaterial().getName());
-                        }
+                        List<ProductType> productTypes = DaoFactory_def.getInstance(getContext()).getProtuctTypeDao().findAll();
+                        productTypes.get(0);
                     } catch (DaoException e) {
                         e.printStackTrace();
                     }
+
                     break;
             }
         }

@@ -13,11 +13,8 @@ import android.view.ViewGroup;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.ProductSearchAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
-import com.ufos.cyw16.cleanyourworld.fragment.SearchFragment;
-import com.ufos.cyw16.cleanyourworld.model_new.Product;
 import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
-import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,15 +63,15 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
         recyclerView = (RecyclerView) v.findViewById(R.id.product_search_recycler_view);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-/*        try {
+        productTypes = null;
+        try {
             productTypes = DaoFactory_def.getInstance(getContext()).getProtuctTypeDao().findAll();
 
         } catch (DaoException e) {
             e.printStackTrace();
-        }*/
+        }
 
-        ProductType productType1 = new ProductType();
+        /*ProductType productType1 = new ProductType();
         productType1.setName("penna");
 
         ProductType productType2 = new ProductType();
@@ -82,7 +79,7 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
 
         productTypes = new ArrayList<>();
         productTypes.add(productType1);
-        productTypes.add(productType2);
+        productTypes.add(productType2);*/
 
         adapter = new ProductSearchAdapter(productTypes);
         recyclerView.setAdapter(adapter);
