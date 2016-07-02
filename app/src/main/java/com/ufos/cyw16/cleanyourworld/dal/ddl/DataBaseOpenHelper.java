@@ -15,9 +15,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by simone_mancini on 20/06/16.
+ * The type Data base open helper.
  */
-
 // class that helps to create a new database TEDxTV16.db if it doesn't exist, loads it if it's already created
 // and lets you read and write on that database
 public class DataBaseOpenHelper extends SQLiteOpenHelper {
@@ -85,7 +84,12 @@ public class DataBaseOpenHelper extends SQLiteOpenHelper {
             "\t`id_color`\tINTEGER NOT NULL,\n" +
             "\t`id_collectionType`\tINTEGER NOT NULL,\n)";
 
-    // constructor. it needs the context of the activity to create
+    /**
+     * Instantiates a new Data base open helper.
+     *
+     * @param context the context
+     */
+// constructor. it needs the context of the activity to create
     public DataBaseOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }

@@ -33,7 +33,8 @@ public class DayTrashInfo {
     }
 
     public int getColorOfTheDay() {
-        int color = Color.parseColor(colorOfTheDay);
+//        int color = Color.parseColor(colorOfTheDay);
+        int color = Color.parseColor("#ff0000");
         return color;
     }
 
