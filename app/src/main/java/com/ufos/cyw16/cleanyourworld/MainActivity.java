@@ -109,21 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         updateServer();
 
-        // FIXME: 02/07/16 [DAO] togliere i tablesAdapter ed utilizzare le dao
-        RaccoltaTableAdapter raccoltaTableAdapter = new RaccoltaTableAdapter(getBaseContext());
-        ColoriTableAdapter coloriTableAdapter = new ColoriTableAdapter(getBaseContext());
-        MaterialiTableAdapter materialiTableAdapter = new MaterialiTableAdapter(getBaseContext());
-        TipologiaRaccoltaTableAdapter tipologiaRaccoltaTableAdapter = new TipologiaRaccoltaTableAdapter(getBaseContext());
-        try {
-            raccoltaTableAdapter.updateFromServer(null, null);
-            coloriTableAdapter.updateFromServer(null,null);
-            materialiTableAdapter.updateFromServer(null,null);
-            tipologiaRaccoltaTableAdapter.updateFromServer(null,null);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+
 
         parent = (RelativeLayout) findViewById(R.id.parentView);
 
