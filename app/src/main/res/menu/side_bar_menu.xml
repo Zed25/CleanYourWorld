@@ -37,8 +37,12 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
-                    android:id="@+id/calendar"
-                    android:title="@string/calSection"
+                    android:id="@+id/calendarMonthView"
+                    android:title="@string/calMonthSection"
+                    android:icon="@drawable/ic_calendar_tab_24dp"/>
+                <item
+                    android:id="@+id/calendarWeekView"
+                    android:title="@string/calWeekSection"
                     android:icon="@drawable/ic_calendar_tab_24dp"/>
             </group>
         </menu>

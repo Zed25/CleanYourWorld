@@ -1,11 +1,18 @@
 /*
  * Created by UFOS from simone_mancini
  * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.fragment.CalendarWeekViewFragment
+ * Last modified: 02/07/16 16.07
+ */
+
+/*
+ * Created by UFOS from simone_mancini
+ * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.fragment.subfragment.CalendarWeekViewSubFragment
  * Last modified: 01/07/16 9.52
  */
 
-package com.ufos.cyw16.cleanyourworld.fragment.subfragment;
+package com.ufos.cyw16.cleanyourworld.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -42,7 +49,7 @@ import java.util.Locale;
 /**
  * Created by simone_mancini on 01/07/16.
  */
-public class CalendarWeekViewSubFragment extends Fragment {
+public class CalendarWeekViewFragment extends Fragment {
 
     private CalendarView calendarView;
 
@@ -60,10 +67,10 @@ public class CalendarWeekViewSubFragment extends Fragment {
      class that if any of them is uninitialized or equals to null, for any reason, it elaborate them**/
     public static CalendarWeekAdapter calendarWeekAdapter;
     public static List<DayTrashInfo> dayTrashInfoList;
-    public static CalendarWeekViewSubFragment calendarWeekViewSubFragmentInstance;
+    public static CalendarWeekViewFragment calendarWeekViewFragmentInstance;
     public static int[] dayChoosen;
 
-    public CalendarWeekViewSubFragment() {
+    public CalendarWeekViewFragment() {
         // Required empty public constructor
     }
 
@@ -78,8 +85,8 @@ public class CalendarWeekViewSubFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         //if calendarFragmentInstance is equals to null initialize it
-        if (calendarWeekViewSubFragmentInstance == null){
-            setCalendarWeekViewSubFragmentInstance(this);
+        if (calendarWeekViewFragmentInstance == null){
+            setCalendarWeekViewFragmentInstance(this);
         }
 
         //initialize calendar fragment's view
@@ -341,7 +348,7 @@ public class CalendarWeekViewSubFragment extends Fragment {
     }
 
     public static void setCalendarWeekAdapter(CalendarWeekAdapter calendarWeekAdapter) {
-        CalendarWeekViewSubFragment.calendarWeekAdapter = calendarWeekAdapter;
+        CalendarWeekViewFragment.calendarWeekAdapter = calendarWeekAdapter;
     }
 
     public static List<DayTrashInfo> getDayTrashInfoList() {
@@ -349,15 +356,15 @@ public class CalendarWeekViewSubFragment extends Fragment {
     }
 
     public static void setDayTrashInfoList(List<DayTrashInfo> dayTrashInfoList) {
-        CalendarWeekViewSubFragment.dayTrashInfoList = dayTrashInfoList;
+        CalendarWeekViewFragment.dayTrashInfoList = dayTrashInfoList;
     }
 
-    public static CalendarWeekViewSubFragment getCalendarWeekViewSubFragmentInstance() {
-        return calendarWeekViewSubFragmentInstance;
+    public static CalendarWeekViewFragment getCalendarWeekViewFragmentInstance() {
+        return calendarWeekViewFragmentInstance;
     }
 
-    public static void setCalendarWeekViewSubFragmentInstance(CalendarWeekViewSubFragment calendarWeekViewSubFragmentInstance) {
-        CalendarWeekViewSubFragment.calendarWeekViewSubFragmentInstance = calendarWeekViewSubFragmentInstance;
+    public static void setCalendarWeekViewFragmentInstance(CalendarWeekViewFragment calendarWeekViewFragmentInstance) {
+        CalendarWeekViewFragment.calendarWeekViewFragmentInstance = calendarWeekViewFragmentInstance;
     }
 
     public static int[] getDayChoosen() {
@@ -365,7 +372,7 @@ public class CalendarWeekViewSubFragment extends Fragment {
     }
 
     public static void setDayChoosen(int[] dayChoosen) {
-        CalendarWeekViewSubFragment.dayChoosen = dayChoosen;
+        CalendarWeekViewFragment.dayChoosen = dayChoosen;
     }
 
     /**this class manages the date picker
@@ -408,8 +415,8 @@ public class CalendarWeekViewSubFragment extends Fragment {
             setDayChoosen(date);
 
             //if the static attributes of CalendarView class are not null generateWeekDayTrashList()
-            if (getDayTrashInfoList() != null && getDayChoosen() != null && getCalendarWeekAdapter() != null && getCalendarWeekViewSubFragmentInstance() != null) {
-                getCalendarWeekViewSubFragmentInstance().generateWeekDayTrashList(getDayTrashInfoList(), getDayChoosen());
+            if (getDayTrashInfoList() != null && getDayChoosen() != null && getCalendarWeekAdapter() != null && getCalendarWeekViewFragmentInstance() != null) {
+                getCalendarWeekViewFragmentInstance().generateWeekDayTrashList(getDayTrashInfoList(), getDayChoosen());
             }
 
 

@@ -41,6 +41,8 @@ import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.MaterialiTableAdapter
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RaccoltaTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaRaccoltaTableAdapter;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
+import com.ufos.cyw16.cleanyourworld.fragment.CalendarMonthViewFragment;
+import com.ufos.cyw16.cleanyourworld.fragment.CalendarWeekViewFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.BarCodeSearchSubFragment;
@@ -312,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void createFragment() {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.fragmentContent, new CalendarFragment(), "fragment_screen");
+        ft.replace(R.id.fragmentContent, new CalendarMonthViewFragment(), "fragment_screen");
         ft.commit();
 
     }
@@ -348,8 +350,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(getBaseContext(), GeolocalizationActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.calendar:
-                ft.replace(R.id.fragmentContent, new CalendarFragment(), "fragment_screen");
+            case R.id.calendarMonthView:
+                ft.replace(R.id.fragmentContent, new CalendarMonthViewFragment(), "fragment_screen");
+                ft.commit();
+                break;
+            case R.id.calendarWeekView:
+                ft.replace(R.id.fragmentContent, new CalendarWeekViewFragment(), "fragment_screen");
                 ft.commit();
                 break;
             case R.id.settings:

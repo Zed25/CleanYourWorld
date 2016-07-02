@@ -1,41 +1,26 @@
 package com.ufos.cyw16.cleanyourworld.fragment;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.CalendarViewType;
-import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
-import com.ufos.cyw16.cleanyourworld.adapter.CalendarWeekAdapter;
-import com.ufos.cyw16.cleanyourworld.fragment.subfragment.CalendarMonthViewSubFragment;
-import com.ufos.cyw16.cleanyourworld.fragment.subfragment.CalendarWeekViewSubFragment;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by simone_mancini on 11/05/16.
@@ -112,8 +97,8 @@ public class CalendarFragment extends Fragment{
         Message4Debug.log("Inizializzo la View Pager");
 
         viewPagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-        viewPagerAdapter.addFragment(new CalendarMonthViewSubFragment(), "MontView");
-        viewPagerAdapter.addFragment(new CalendarWeekViewSubFragment(), "WeekView");
+        viewPagerAdapter.addFragment(new CalendarMonthViewFragment(), "MontView");
+        viewPagerAdapter.addFragment(new CalendarWeekViewFragment(), "WeekView");
 
         Message4Debug.log("Setto l'adapter");
         viewPager.setAdapter(viewPagerAdapter);

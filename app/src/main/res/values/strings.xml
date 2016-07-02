@@ -14,7 +14,9 @@
     <string name="srcScan">Scan code</string>
     <string name="glcSection">Around you</string>
     <string name="glcFind">Garbage Islands</string>
-    <string name="calSection">Calendar</string>
+    <string name="calSection">Calendar View\'s</string>
+    <string name="calWeekSection">Calendar week\'s view</string>
+    <string name="calMonthSection">Calendar month\'s view</string>
     <string name="sttSection">Settings</string>
     <string name="strProblem">A problem as occurred</string>
 </resources>
