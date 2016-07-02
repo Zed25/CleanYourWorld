@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -31,6 +32,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
 
     private GoogleApiClient client;
+    private GoogleMap myGoogleMap;
 
     //TODO: insert toolbar
 
@@ -84,15 +86,10 @@ public class GeolocalizationActivity extends FragmentActivity implements
     @Override
     public void onMapReady(final GoogleMap googleMap) {
 
+        myGoogleMap = googleMap;
+
         //TODO: if gps !isActive() marker on COMUNE, else on current location (PROBLEM: LatLng???)
         //TODO: garb islands around (filtered) green markers
-
-
-        //Default start
-        LatLng sydney = new LatLng(-33.867, 151.206);
-        googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 15));
-        googleMap.addMarker(new MarkerOptions().position(sydney).title("You are here!"));
 
         //Autocomplete fragment declaration
         PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
@@ -107,6 +104,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 LatLng selectedPlace = place.getLatLng();
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(selectedPlace, 15));
                 googleMap.addMarker(new MarkerOptions().position(selectedPlace).title(place.getAddress().toString()));
+                placeSelectedTask(selectedPlace, 2000, "recycling");
             }
 
             @Override
@@ -115,9 +113,9 @@ public class GeolocalizationActivity extends FragmentActivity implements
             }
         });
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        //Default start
+        LatLng currentLocation = new LatLng(-33.867, 151.206);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -127,5 +125,36 @@ public class GeolocalizationActivity extends FragmentActivity implements
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
+        googleMap.setMyLocationEnabled(true);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
+        googleMap.addMarker(new MarkerOptions().position(currentLocation).title("You are here!"));
+        placeSelectedTask(currentLocation, 2000, "recycling");
+
+    }
+
+    public void placeSelectedTask(final LatLng latLng, int radius, String keyword){
+        new PlaceSelectedTask(latLng, radius, keyword){
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                setQuery();
+            }
+
+            @Override
+            protected void onProgressUpdate(Object... values) {
+                super.onProgressUpdate(values);
+
+                Integer progress = (Integer) values[0];
+
+                PlaceSelectedItem placeSelectedItem = (PlaceSelectedItem) values[1];
+                myGoogleMap.addMarker(new MarkerOptions().position(placeSelectedItem.getLatLng()));
+            }
+        }.execute();
     }
 }
