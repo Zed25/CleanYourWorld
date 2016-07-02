@@ -50,6 +50,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+
         //adding Google API's
         client = new GoogleApiClient
                 .Builder(this)
@@ -104,6 +105,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 LatLng selectedPlace = place.getLatLng();
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(selectedPlace, 15));
                 googleMap.addMarker(new MarkerOptions().position(selectedPlace).title(place.getAddress().toString()));
+                //TODO: oltre al titolo, le informazioni.
                 placeSelectedTask(selectedPlace, 2000, "recycling");
             }
 
