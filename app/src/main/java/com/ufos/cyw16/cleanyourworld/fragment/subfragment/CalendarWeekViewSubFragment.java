@@ -24,17 +24,13 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.CalendarViewType;
-import com.ufos.cyw16.cleanyourworld.DAO.MaterialiDAO;
 import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarWeekAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Collection;
-import com.ufos.cyw16.cleanyourworld.model_new.Material;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
-import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ComuneDao;
-import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
@@ -208,8 +204,7 @@ public class CalendarWeekViewSubFragment extends Fragment {
         //MaterialiDAO materialiDAO = new MaterialiDAO(getContext());
         //Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
         CollectionDao collectionDao = DaoFactory_def.getInstance(getContext()).getCollectionDao();
-        List<Collection> collectionList;
-        collectionList = new ArrayList<>();
+        List<Collection> collectionList = null;
         try {
             collectionList = collectionDao.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
         } catch (DaoException e) {
@@ -240,6 +235,7 @@ public class CalendarWeekViewSubFragment extends Fragment {
         System.out.println("TRASH : " +trash + "TRASH COLOR :" + trashColor);
         dayTrashInfo.setThrash(trash);
         dayTrashInfo.setColorOfTheDay(trashColor);
+
         return dayTrashInfo;
     }
 
