@@ -28,11 +28,14 @@ import com.ufos.cyw16.cleanyourworld.DAO.MaterialiDAO;
 import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarWeekAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Collection;
 import com.ufos.cyw16.cleanyourworld.model_new.Material;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ComuneDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao;
+import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -195,7 +198,7 @@ public class CalendarWeekViewSubFragment extends Fragment {
         return dateInformations;
     }
 
-    private DayTrashInfo createCardStructure(GregorianCalendar calendar) {
+    private DayTrashInfo createCardStructure(GregorianCalendar calendar){
         DayTrashInfo dayTrashInfo = new DayTrashInfo();
         String dayDate = computeDateString(calendar);
         dayTrashInfo.setDate(dayDate);
@@ -204,23 +207,33 @@ public class CalendarWeekViewSubFragment extends Fragment {
         // FIXME: 02/07/16 [DAO] sostituire le DAO ed implementare getCollectionByDayOfWeek(..) in CollectionDao
         //MaterialiDAO materialiDAO = new MaterialiDAO(getContext());
         //Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
-        CollectionDao.CollectionDaoSQLite collectionDao = new CollectionDao.CollectionDaoSQLite(getContext());
-        Collection collection = collectionDao.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
+        CollectionDao collectionDao = DaoFactory_def.getInstance(getContext()).getCollectionDao();
+        List<Collection> collectionList;
+        collectionList = new ArrayList<>();
+        try {
+            collectionList = collectionDao.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
+        } catch (DaoException e) {
+            Message4Debug.log("Problems in collectionDao.getCollectionByDayOfWeek()");
+        }
         String trash = "", trashColor = "";
         System.out.println("CREATE CARD QUERY DAY OF WEEK = " + calendar.get(Calendar.DAY_OF_WEEK));
 
-        // no trash that day
-        if (collection.getMaterial() == null){
-        //if (true) { // FIXME: 01/07/16
-            trash = "Nulla";
-            trashColor = "#29d96a";
+        if(collectionList != null) {
+            for (int i = 0; i < collectionList.size(); i++) {
+                Collection collection = collectionList.get(i);
+                // no trash that day
+                if (collection.getMaterial() == null) {
+                    //if (true) { // FIXME: 01/07/16
+                    trash = "Nulla";
+                    trashColor = "#29d96a";
+                } else {
+                    trash += collection.getMaterial().getName() + "\n";
+                    trashColor = collection.getColor().getColorCode();
+                }
+            }
         }else{
-            //for(int i = 0; i < collection.getMaterials().size(); i++) {
-            //    trash += collection.getMaterials().get(i).getName() + "\n";
-                // use only one color to display even if there are multiple materials
-            //    trashColor = collection.getColor().get(0).getColorCode();
-            trash = collection.getMaterial().getName();
-            trashColor = collection.getColor().getColorCode();
+                trash = "Nulla";
+                trashColor = "#29d96a";
         }
 
 
