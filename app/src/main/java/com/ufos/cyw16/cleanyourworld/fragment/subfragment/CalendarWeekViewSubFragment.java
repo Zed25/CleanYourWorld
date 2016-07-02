@@ -25,10 +25,14 @@ import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.CalendarViewType;
 import com.ufos.cyw16.cleanyourworld.DAO.MaterialiDAO;
-import com.ufos.cyw16.cleanyourworld.Models.Collection;
 import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarWeekAdapter;
+import com.ufos.cyw16.cleanyourworld.model_new.Collection;
+import com.ufos.cyw16.cleanyourworld.model_new.Material;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -198,23 +202,27 @@ public class CalendarWeekViewSubFragment extends Fragment {
         String dayName = selectDay(calendar);
         dayTrashInfo.setDay(dayName);
         // FIXME: 02/07/16 [DAO] sostituire le DAO ed implementare getCollectionByDayOfWeek(..) in CollectionDao
-        MaterialiDAO materialiDAO = new MaterialiDAO(getContext());
-        Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
+        //MaterialiDAO materialiDAO = new MaterialiDAO(getContext());
+        //Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
+        CollectionDao.CollectionDaoSQLite collectionDao = new CollectionDao.CollectionDaoSQLite(getContext());
+        Collection collection = collectionDao.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
         String trash = "", trashColor = "";
         System.out.println("CREATE CARD QUERY DAY OF WEEK = " + calendar.get(Calendar.DAY_OF_WEEK));
 
         // no trash that day
-//        if (collection.getMaterials().size() == 0){
-        if (true) { // FIXME: 01/07/16
+        if (collection.getMaterial() == null){
+        //if (true) { // FIXME: 01/07/16
             trash = "Nulla";
             trashColor = "#29d96a";
         }else{
-            for(int i = 0; i < collection.getMaterials().size(); i++) {
-                trash += collection.getMaterials().get(i).getName() + "\n";
+            //for(int i = 0; i < collection.getMaterials().size(); i++) {
+            //    trash += collection.getMaterials().get(i).getName() + "\n";
                 // use only one color to display even if there are multiple materials
-                trashColor = collection.getColor().get(0).getColorCode();
-            }
+            //    trashColor = collection.getColor().get(0).getColorCode();
+            trash = collection.getMaterial().getName();
+            trashColor = collection.getColor().getColorCode();
         }
+
 
         System.out.println("TRASH : " +trash + "TRASH COLOR :" + trashColor);
         dayTrashInfo.setThrash(trash);
