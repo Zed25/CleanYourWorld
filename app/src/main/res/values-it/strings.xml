@@ -25,4 +25,6 @@
     <string name="strWednesday">Mercoledì</string>
     <string name="sttSection">Impostazioni</string>
     <string name="strProblem">Un problema è occorso</string>
+    <string name="calMonthSection">Vista mensile</string>
+    <string name="calWeekSection">Vista settimanale</string>
 </resources>

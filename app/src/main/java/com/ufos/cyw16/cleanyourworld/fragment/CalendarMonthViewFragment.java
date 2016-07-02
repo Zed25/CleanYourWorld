@@ -1,11 +1,18 @@
 /*
  * Created by UFOS from simone_mancini
  * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.fragment.CalendarMonthViewFragment
+ * Last modified: 02/07/16 16.07
+ */
+
+/*
+ * Created by UFOS from simone_mancini
+ * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.fragment.subfragment.CalendarMonthViewSubFragment
  * Last modified: 01/07/16 9.53
  */
 
-package com.ufos.cyw16.cleanyourworld.fragment.subfragment;
+package com.ufos.cyw16.cleanyourworld.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,7 +40,7 @@ import java.util.List;
 /**
  * Created by simone_mancini on 01/07/16.
  */
-public class CalendarMonthViewSubFragment extends Fragment {
+public class CalendarMonthViewFragment extends Fragment {
 
     private CalendarView calendarView;
 
@@ -53,7 +60,7 @@ public class CalendarMonthViewSubFragment extends Fragment {
 
     private int[] dayChoosen;
 
-    public CalendarMonthViewSubFragment() {
+    public CalendarMonthViewFragment() {
         // Required empty public constructor
     }
 
