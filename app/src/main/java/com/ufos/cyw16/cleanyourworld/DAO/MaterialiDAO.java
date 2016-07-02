@@ -147,7 +147,6 @@ public class MaterialiDAO {
                 colorCur.close();
 
 
-
                 /* inner query to find collection type */
                 Cursor collTypeCur = database.rawQuery("SELECT * from tipologiaRaccolta WHERE _id = ?",new String[]{String.valueOf(collType_id)});
                 if(collTypeCur.moveToFirst()){
