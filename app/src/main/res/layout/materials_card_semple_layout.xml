@@ -33,6 +33,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/tvMaterialAndColor"
             android:layout_weight="0.3"
             android:textColor="#ffffff"
             android:minHeight="250dp"
@@ -52,6 +53,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/tvDay"
                 android:text="Day"
                 android:gravity="center"
                 android:textAlignment="gravity"
@@ -62,6 +64,7 @@
             <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/ibtnToMateriaListView"
                 android:layout_weight="0.85"
                 android:background="@drawable/ic_more_vert_black_24dp"/>
         </LinearLayout>

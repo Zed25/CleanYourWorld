@@ -27,12 +27,12 @@ import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.CalendarViewType;
 import com.ufos.cyw16.cleanyourworld.DAO.MaterialiDAO;
-import com.ufos.cyw16.cleanyourworld.Models.Collection;
 import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarMonthAdapter;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarWeekAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.model_new.Collection;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
@@ -187,7 +187,7 @@ public class CalendarMonthViewFragment extends Fragment {
         //MaterialiDAO materialiDAO = new MaterialiDAO(getContext());
         //Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
         CollectionDao collectionDao = DaoFactory_def.getInstance(getContext()).getCollectionDao();
-        List<com.ufos.cyw16.cleanyourworld.model_new.Collection> collectionList = null;
+        List<Collection> collectionList = null;
         try {
             collectionList = collectionDao.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
         } catch (DaoException e) {
@@ -198,7 +198,7 @@ public class CalendarMonthViewFragment extends Fragment {
 
         if(collectionList != null) {
             for (int i = 0; i < collectionList.size(); i++) {
-                com.ufos.cyw16.cleanyourworld.model_new.Collection collection = collectionList.get(i);
+                Collection collection = collectionList.get(i);
                 // no trash that day
                 if (collection.getMaterial() == null) {
                     //if (true) { // FIXME: 01/07/16
