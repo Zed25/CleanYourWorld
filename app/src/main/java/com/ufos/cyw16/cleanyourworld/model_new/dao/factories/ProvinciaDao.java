@@ -2,6 +2,13 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao
+ * Last modified: 03/07/16 18.29
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao
  * Last modified: 30/06/16 11.57
  */
 
@@ -26,11 +33,29 @@ import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The interface Provincia dao.
+ */
 public interface ProvinciaDao extends EntityDao<Provincia> {
+    /**
+     * Gets by id region.
+     *
+     * @param id the id
+     * @return the by id region
+     * @throws DaoException the dao exception
+     */
     List<Provincia> getByIdRegion(int id) throws DaoException;
 
+    /**
+     * The type Provincia daosq lite.
+     */
     class ProvinciaDAOSQLite extends EntityDaoSQLite<Provincia> implements ProvinciaDao {
 
+        /**
+         * Instantiates a new Provincia daosq lite.
+         *
+         * @param context the context
+         */
         public ProvinciaDAOSQLite(Context context) {
             super(context, "province");
         }

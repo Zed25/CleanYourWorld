@@ -3,6 +3,13 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.fragment.DbFragment
+ * Last modified: 03/07/16 20.14
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.fragment.DbFragment
  * Last modified: 26/06/16 1.55
  */
 
@@ -23,7 +30,8 @@ import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Collection;
-import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
+import com.ufos.cyw16.cleanyourworld.model_new.Comune;
+import com.ufos.cyw16.cleanyourworld.model_new.Material;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionTypeDao;
@@ -183,9 +191,21 @@ public class DbFragment extends Fragment {
                     }
                     break;
                 case R.id.btn_comuni:
+                    MaterialDao materialDao = daoFactory.getMaterialDao();
                     try {
-                        List<ProductType> productTypes = DaoFactory_def.getInstance(getContext()).getProtuctTypeDao().findAll();
-                        productTypes.get(0);
+                        List<Material> materials = materialDao.getMaterialsFromIdComune(1865);
+                        for (Material m : materials) {
+                            System.out.println(m.getName());
+                        }
+                    } catch (DaoException e) {
+                        e.printStackTrace();
+                    }
+                    ComuneDao comuneDao = daoFactory.getComuneDao();
+                    try {
+                        List<Comune> comunes = comuneDao.getComuniThatProvideCollection();
+                        for (Comune c : comunes) {
+                            System.out.println(c.getName());
+                        }
                     } catch (DaoException e) {
                         e.printStackTrace();
                     }

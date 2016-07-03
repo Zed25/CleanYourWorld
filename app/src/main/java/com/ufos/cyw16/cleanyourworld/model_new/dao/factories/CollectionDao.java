@@ -2,21 +2,7 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao
- * Last modified: 30/06/16 11.57
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.CollectionDao
- * Last modified: 30/06/16 10.34
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.CollectionDao
- * Last modified: 26/06/16 1.55
+ * Last modified: 03/07/16 18.49
  */
 
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
@@ -33,13 +19,41 @@ import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The interface Collection dao.
+ * This interface and her inheritance class allow you to create a CollectionDao object
+ */
 public interface CollectionDao extends EntityDao<Collection> {
+    /**
+     * Gets collection by day of week.
+     *
+     * @param comuneID  the comune id
+     * @param dayOfWeek the day of week
+     * @return the collection by day of week
+     * @throws DaoException the dao exception
+     */
     List<Collection> getCollectionByDayOfWeek(int comuneID, int dayOfWeek) throws DaoException;
 
+    /**
+     * Gets collections by id comune.
+     *
+     * @param id the id
+     * @return the collections by id comune
+     * @throws DaoException the dao exception
+     */
     List<Collection> getCollectionsByIdComune(int id) throws DaoException;
 
+    /**
+     * The type CollectionDaoSQLite.
+     * This class implements the instruction of the CollectionDao and inherits all method of EntityDaoSQLite
+     */
     class CollectionDaoSQLite extends EntityDaoSQLite<Collection> implements CollectionDao {
 
+        /**
+         * Instantiates a new CollectionDaoSQLite
+         *
+         * @param context the context
+         */
         public CollectionDaoSQLite(Context context) {
             super(context, "raccolta");
         }

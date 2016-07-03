@@ -1,3 +1,10 @@
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter_NEW
+ * Last modified: 03/07/16 18.27
+ */
+
 package com.ufos.cyw16.cleanyourworld.dal.dml;
 
 import android.content.ContentValues;
@@ -187,7 +194,7 @@ public class TableAdapter_NEW {
 
 
     /**
-     * Updates the table of the internal database frome the remote database
+     * Updates the table of the internal database from the remote database
      * This method is multi thread, it connects with the server
      * and simultaneously enters the data in the table
      *
@@ -206,7 +213,7 @@ public class TableAdapter_NEW {
         final String finalQuery = query;
         Message4Debug.log(query);
 
-        /* queue shared between the operation of the server reading and the insertion */
+        /* queue shared between the thread of the server reading and the insertion */
         BlockingQueue<String[][]> queue = new ArrayBlockingQueue(11);
 
         /* Thread of the insertion */

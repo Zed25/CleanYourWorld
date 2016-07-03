@@ -1,15 +1,8 @@
 /*
  * Created by UFOS from urania
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ColorsDao
- * Last modified: 30/06/16 11.57
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.ColorsDao
- * Last modified: 26/06/16 1.55
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ColorDao
+ * Last modified: 03/07/16 18.50
  */
 
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
@@ -20,9 +13,22 @@ import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
 import com.ufos.cyw16.cleanyourworld.model_new.Color;
 
+/**
+ * The interface Color dao.
+ * This interface and her inheritance class allow you to create a ColorDao object
+ */
 public interface ColorDao extends EntityDao<Color> {
+    /**
+     * The type ColorsDaoSQLite.
+     * This class implements the instruction of the ColorDao and inherits all method of EntityDaoSQLite
+     */
     class ColorsDaoSQLite extends EntityDaoSQLite<Color> implements ColorDao {
 
+        /**
+         * Instantiates a new Colors dao sq lite.
+         *
+         * @param context the context
+         */
         public ColorsDaoSQLite(Context context) {
             super(context, "colori");
         }

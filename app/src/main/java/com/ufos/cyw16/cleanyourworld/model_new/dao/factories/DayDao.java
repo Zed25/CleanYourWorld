@@ -2,28 +2,7 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.DayDao
- * Last modified: 30/06/16 12.15
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao
- * Last modified: 30/06/16 11.57
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.CollectionDao
- * Last modified: 30/06/16 10.34
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.CollectionDao
- * Last modified: 26/06/16 1.55
+ * Last modified: 03/07/16 19.30
  */
 
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
@@ -34,9 +13,22 @@ import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
 import com.ufos.cyw16.cleanyourworld.model_new.Day;
 
+/**
+ * The interface DayDao.
+ * This interface and her inheritance class allow you to create a DayDao object.
+ */
 public interface DayDao extends EntityDao<Day> {
+    /**
+     * The type DayDaoSQLite.
+     * This class implements the instruction of the DayDao and inherits all method of EntityDaoSQLite
+     */
     class DayDaoSQLite extends EntityDaoSQLite<Day> implements DayDao {
 
+        /**
+         * Instantiates a new DayDaoSQLite.
+         *
+         * @param context the context
+         */
         public DayDaoSQLite(Context context) {
             super(context, "giorni");
         }

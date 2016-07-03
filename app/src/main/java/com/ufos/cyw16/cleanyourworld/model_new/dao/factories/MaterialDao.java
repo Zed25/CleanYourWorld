@@ -1,3 +1,10 @@
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao
+ * Last modified: 03/07/16 20.01
+ */
+
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
 
 import android.content.Context;
@@ -5,16 +12,39 @@ import android.content.Context;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.model_new.Collection;
 import com.ufos.cyw16.cleanyourworld.model_new.Material;
 import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The interface Material dao.
+ * This interface and her inheritance class allow you to create a MaterialDao object
+ */
 public interface MaterialDao extends EntityDao<Material> {
+    /**
+     * Gets materials from id comune.
+     *
+     * @param id the id
+     * @return the materials from id comune
+     */
+    List<Material> getMaterialsFromIdComune(int id) throws DaoException;
+
+    /**
+     * The type Materials dao sq lite.
+     * This class implements the instruction of the ComuneDao and inherits all method of EntityDaoSQLite
+     */
     class MaterialsDaoSQLite extends EntityDaoSQLite<Material> implements MaterialDao {
 
+        /**
+         * Instantiates a new Materials dao sq lite.
+         *
+         * @param context the context
+         */
         public MaterialsDaoSQLite(Context context) {
             super(context, "materiali");
         }
@@ -24,10 +54,8 @@ public interface MaterialDao extends EntityDao<Material> {
             Material material = new Material();
             material.setIdMaterial(Integer.parseInt(args[0]));
             material.setName(args[1]);
-            // TODO: 01/07/16 how do i get the ProductType list avoiding the loop? [Risolto - non cancellare]
             /*
              * Implementazione della RELAZIONE DI AGGREGAZIONE:
-             * devo passargli me stesso
              */
             List<ProductType> productTypes = null;
             try {
@@ -37,6 +65,24 @@ public interface MaterialDao extends EntityDao<Material> {
             }
             material.setProdutctTypes(productTypes);
             return material;
+        }
+
+        @Override
+        public List<Material> getMaterialsFromIdComune(int id) throws DaoException {
+
+            List<Collection> collections = DaoFactory_def.getInstance(getContext()).getCollectionDao().getCollectionsByIdComune(id);
+            if (collections == null)
+                throw new DaoException("This Comune does not separate trash");
+            List<Material> materials = new ArrayList<>();
+            List<Integer> ids = new ArrayList<>();
+            for (Collection c : collections) {
+                Material material = c.getMaterial();
+                if (!ids.contains(material.getIdMaterial())) {
+                    ids.add(material.getIdMaterial());
+                    materials.add(material);
+                }
+            }
+            return materials;
         }
     }
 }

@@ -2,6 +2,13 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao
+ * Last modified: 03/07/16 18.29
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao
  * Last modified: 30/06/16 11.57
  */
 
@@ -27,13 +34,39 @@ import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The interface Product type dao.
+ */
 public interface ProductTypeDao extends EntityDao<ProductType> {
+    /**
+     * Gets products by id material.
+     *
+     * @param id the id
+     * @return the products by id material
+     * @throws DaoException the dao exception
+     */
     List<ProductType> getProductsByIdMaterial(int id) throws DaoException;
 
+    /**
+     * Gets products by id material.
+     *
+     * @param id       the id
+     * @param material the material
+     * @return the products by id material
+     * @throws DaoException the dao exception
+     */
     List<ProductType> getProductsByIdMaterial(int id, Material material) throws DaoException;
 
+    /**
+     * The type Product type dao sq lite.
+     */
     class ProductTypeDaoSQLite extends EntityDaoSQLite<ProductType> implements ProductTypeDao {
 
+        /**
+         * Instantiates a new Product type dao sq lite.
+         *
+         * @param context the context
+         */
         public ProductTypeDaoSQLite(Context context) {
             super(context, "tipologiaProdotti");
         }
@@ -64,6 +97,13 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
         }
 
 
+        /**
+         * Instance entity product type.
+         *
+         * @param args     the args
+         * @param material the material
+         * @return the product type
+         */
         protected ProductType instanceEntity(String[] args, Material material) {
             /*
              * costruttore utilizzato per la relazione di aggregazione

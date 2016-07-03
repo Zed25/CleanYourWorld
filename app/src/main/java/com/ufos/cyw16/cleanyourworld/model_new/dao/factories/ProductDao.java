@@ -1,6 +1,13 @@
 /*
  * Created by UFOS from urania
  * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductDao
+ * Last modified: 03/07/16 18.29
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductsDao
  * Last modified: 30/06/16 11.57
  */
@@ -27,13 +34,38 @@ import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The interface Product dao.
+ */
 public interface ProductDao extends EntityDao<Product> {
+    /**
+     * Gets produts by id product type.
+     *
+     * @param id the id
+     * @return the produts by id product type
+     */
     List<Product> getProdutsByIdProductType(int id);
 
+    /**
+     * Gets produts by id product type.
+     *
+     * @param id          the id
+     * @param productType the product type
+     * @return the produts by id product type
+     * @throws DaoException the dao exception
+     */
     List<Product> getProdutsByIdProductType(int id, ProductType productType) throws DaoException;
 
+    /**
+     * The type Products dao sq lite.
+     */
     class ProductsDaoSQLite extends EntityDaoSQLite<Product> implements ProductDao {
 
+        /**
+         * Instantiates a new Products dao sq lite.
+         *
+         * @param context the context
+         */
         public ProductsDaoSQLite(Context context) {
             super(context, "prodotti");
         }
@@ -52,6 +84,13 @@ public interface ProductDao extends EntityDao<Product> {
             return product;
         }
 
+        /**
+         * Instance entity product.
+         *
+         * @param args        the args
+         * @param productType the product type
+         * @return the product
+         */
         protected Product instanceEntity(String[] args, ProductType productType) {
             /*
              * costruttore utilizzato per la relazione di aggregazione

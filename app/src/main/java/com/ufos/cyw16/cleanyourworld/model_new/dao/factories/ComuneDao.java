@@ -2,6 +2,13 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ComuneDao
+ * Last modified: 03/07/16 20.33
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ComuneDao
  * Last modified: 30/06/16 11.57
  */
 
@@ -26,13 +33,39 @@ import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The interface ComuneDao.
+ * This interface and her inheritance class allow you to create a ComuneDao object
+ */
 public interface ComuneDao extends EntityDao<Comune> {
+    /**
+     * Gets by id provincia.
+     *
+     * @param id the id
+     * @return the by id provincia
+     * @throws DaoException the dao exception
+     */
     List<Comune> getByIdProvincia(int id) throws DaoException;
 
+    /**
+     * Gets comuni that provide collection.
+     *
+     * @return the comuni that provide collection
+     * @throws DaoException the dao exception
+     */
     List<Comune> getComuniThatProvideCollection() throws DaoException;
 
+    /**
+     * The type ComuneDaoSQLite.
+     * This class implements the instruction of the ComuneDao and inherits all method of EntityDaoSQLite
+     */
     class ComuneDaoSQLite extends EntityDaoSQLite<Comune> implements ComuneDao {
 
+        /**
+         * Instantiates a new ComuneDaoSQLite.
+         *
+         * @param context the context
+         */
         public ComuneDaoSQLite(Context context) {
             super(context, "comuni");
         }
@@ -47,7 +80,11 @@ public interface ComuneDao extends EntityDao<Comune> {
             } catch (DaoException e) {
                 Message4Debug.log(e.getMessage());
             }
-            // FIXME: 01/07/16 get collection [Risolto - non cancellare]
+            try {
+                comune.setCollections(DaoFactory_def.getInstance(getContext()).getCollectionDao().getCollectionsByIdComune(Integer.parseInt(args[0])));
+            } catch (DaoException e) {
+                Message4Debug.log(e.getMessage());
+            }
             return comune;
         }
 
@@ -63,13 +100,14 @@ public interface ComuneDao extends EntityDao<Comune> {
 
         @Override
         public List<Comune> getComuniThatProvideCollection() throws DaoException {
-            List<Comune> comuni = findAll();
+            List<Comune> comuneList = DaoFactory_def.getInstance(getContext()).getComuneDao().findAll();
             List<Comune> result = new ArrayList<>();
-            for (Comune c : comuni) {
-                if (c.getCollections() != null) ;
-                result.add(c);
+            for (Comune c : comuneList) {
+                if (c.getCollections() != null) {
+                    result.add(c);
+                }
             }
-            return null;
+            return result;
         }
     }
 }
