@@ -1,4 +1,11 @@
-package com.ufos.cyw16.cleanyourworld.fragment.subfragment;
+/*
+ * Created by UFOS from simone_mancini
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.fragment.MaterialsSearchFragment
+ * Last modified: 03/07/16 12.06
+ */
+
+package com.ufos.cyw16.cleanyourworld.fragment;
 
 
 import android.os.Bundle;
@@ -12,7 +19,7 @@ import com.ufos.cyw16.cleanyourworld.R;
 /**
  * Created by simone_mancini on 19/05/16.
  */
-public class MaterialsSearchSubFragment extends Fragment {
+public class MaterialsSearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

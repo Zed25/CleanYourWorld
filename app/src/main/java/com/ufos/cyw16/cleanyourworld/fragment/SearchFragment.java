@@ -1,28 +1,23 @@
 package com.ufos.cyw16.cleanyourworld.fragment;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.ButtonBarLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.google.zxing.integration.android.IntentIntegrator;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Sasha on 11/05/16.
  */
+
+@Deprecated
 public class SearchFragment extends Fragment {
 
     private ButtonBarLayout buttonBarLayout;
@@ -88,7 +83,6 @@ public class SearchFragment extends Fragment {
 
     //    adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
     //    adapter.addFragment(new BarCodeSearchSubFragment(), "BarCode" );
-    //    adapter.addFragment(new MaterialsSearchSubFragment(), "Material" );
     //    adapter.addFragment(new ProductsSearchSubFragment(), "Products");
 
     //    viewPager.setAdapter(adapter);
@@ -137,7 +131,7 @@ public class SearchFragment extends Fragment {
                     ft.commit();
                     break;
                 case R.id.btnMaterials:
-                    ft.replace(R.id.showFragment, new MaterialsSearchSubFragment(), "fragment_screen");
+                    ft.replace(R.id.showFragment, new MaterialsSearchFragment(), "fragment_screen");
                     ft.commit();
                     break;
                 case R.id.btnProducts:
