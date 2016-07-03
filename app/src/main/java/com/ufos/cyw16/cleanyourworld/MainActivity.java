@@ -35,12 +35,7 @@ import android.widget.RelativeLayout;
 
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
-import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ColoriTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
-import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.MaterialiTableAdapter;
-import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RaccoltaTableAdapter;
-import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.TipologiaRaccoltaTableAdapter;
-import com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarMonthViewFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarWeekViewFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
@@ -77,9 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FrameLayout mainFrame;
     private FrameLayout loadFrame;
     private FrameLayout configFrame;
-
-    //private ViewPagerAdapter viewPagerAdapter;
-    //private ViewPager viewPager;
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -121,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolbar.setNavigationIcon(R.drawable.ic_menu_24dp); // set menu icon
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
         mainFrame = (FrameLayout) findViewById(R.id.mainFrame);
         loadFrame = (FrameLayout) findViewById(R.id.loadFrame);
@@ -166,17 +157,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     R.string.app_name, // nav drawer open - description for accessibility
                     R.string.app_name // nav drawer close - description for accessibility
             );
-            //{
-            //    public void onDrawerClosed(View view) {
-                    // calling onPrepareOptionsMenu() to showToast action bar icons
-            //        invalidateOptionsMenu();
-            //    }
 
-            //    public void onDrawerOpened(View drawerView) {
-                    // calling onPrepareOptionsMenu() to hide action bar icons
-                    //invalidateOptionsMenu();
-            //    }
-            //};
             drawerLayout.addDrawerListener(drawerToggle);
             drawerToggle.syncState();
 
@@ -291,19 +272,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-
-    // Defines the number of tabs by setting appropriate fragment and tab name
-    //private void setupViewPager(ViewPager viewPager) {
-    //    Message4Debug.log("MainActivity.setupViewPager()");
-
-    //    viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-    //    viewPagerAdapter.addFragment(new CalendarFragment(), "Calendar");
-        //startActivity(new Intent(this, GeolocalizationActivity.class));
-        //adapter.addFragment(new SearchFragment(), "Search");
-        //adapter.addFragment(new DbFragment(), "Database");
-    //    viewPager.setAdapter(viewPagerAdapter);
-    //}
-
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -371,65 +339,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    // set tab icons (calendar, geolocalization and research) to fragments to improve user interface
-    //private void setupTabIcons(TabLayout tabLayout) {
-
-        // set calendar fragment icon
-    //    ImageView tabCalendar = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-    //    tabCalendar.setImageResource(R.drawable.ic_calendar_tab_24dp);
-    //    tabLayout.getTabAt(0).setCustomView(tabCalendar);
-
-        // set research fragment icon
-    //    ImageView tabSearch = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-    //    tabSearch.setImageResource(R.drawable.ic_search_tab_24dp);
-    //    tabLayout.getTabAt(1).setCustomView(tabSearch);
-
-        // set database fragment icon
-    //    ImageView tabDb = (ImageView) LayoutInflater.from(this).inflate(R.layout.custom_tab, null);
-    //    tabSearch.setImageResource(R.drawable.ic_search_tab_24dp);
-    //    tabLayout.getTabAt(2).setCustomView(tabDb);
-    //}
-
-    // Custom adapter class provides fragments required for the view pager
-    //class ViewPagerAdapter extends FragmentPagerAdapter {
-    //    private final List<Fragment> mFragmentList = new ArrayList<>();
-    //    private final List<String> mFragmentTitleList = new ArrayList<>();
-
-    //    public ViewPagerAdapter(FragmentManager manager) {
-    //        super(manager);
-    //    }
-
-    //    @Override
-    //    public Fragment getItem(int position) {
-    //        return mFragmentList.get(position);
-    //    }
-
-    //    @Override
-    //    public int getCount() {
-    //        return mFragmentList.size();
-    //    }
-
-    //    public void addFragment(Fragment fragment, String title) {
-    //        mFragmentList.add(fragment);
-    //        mFragmentTitleList.add(title);
-    //    }
-
-    //    public boolean clearFragment(){
-    //        mFragmentList.clear();
-    //        mFragmentTitleList.clear();
-    //        if(mFragmentList.size() == 0 && mFragmentTitleList.size() == 0){
-    //            return true;
-    //        }
-    //        return false;
-    //    }
-
-    //    @Override
-    //    public CharSequence getPageTitle(int position) {
-    //        return mFragmentTitleList.get(position);
-    //    }
-    //}
-
-
 }
 
