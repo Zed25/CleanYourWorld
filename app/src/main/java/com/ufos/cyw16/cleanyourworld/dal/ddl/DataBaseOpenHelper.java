@@ -1,13 +1,3 @@
-/*
- * Created by Umberto Ferracci from simone_mancini and published on 20/06/16 17.58
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.DataBaseOpenHelper
- * File name: DataBaseOpenHelper.java
- * Class name: DataBaseOpenHelper
- * Last modified: 20/06/16 17.58
- */
-
 package com.ufos.cyw16.cleanyourworld.dal.ddl;
 
 import android.content.Context;
@@ -19,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 // class that helps to create a new database TEDxTV16.db if it doesn't exist, loads it if it's already created
 // and lets you read and write on that database
+@Deprecated
 public class DataBaseOpenHelper extends SQLiteOpenHelper {
 
     // database version. helps to upgrade to new version

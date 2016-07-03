@@ -1,11 +1,3 @@
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter_NEW
- * Last modified: 26/06/16 1.55
- */
-
 package com.ufos.cyw16.cleanyourworld.dal.dml;
 
 import android.content.ContentValues;
@@ -32,25 +24,18 @@ import java.util.concurrent.BlockingQueue;
 
 /**
  * The type Table adapter.
+ * This class allow you to communicate with the database through the CYWOpenHelper.
+ * It implements standard methods of the CRUD functions and methods for connection to the server
  */
 public class TableAdapter_NEW {
     private CYWOpenHelper openHelper;
-
-    public String getTableName() {
-        return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
-    }
-
     private String tableName;
     private Table table;
     private String url = "http://www.ubuntumby.altervista.org/cyw16/?androidApp=true";
     private String csvSeparator = ",";
 
     /**
-     * Instantiates a new Table adapter.
+     * Instantiates a new TableAdapter.
      *
      * @param context   the context
      * @param tableName the table name
@@ -62,7 +47,7 @@ public class TableAdapter_NEW {
     }
 
     /**
-     * Gets count.
+     * Gets the number of rows in the table
      *
      * @return the count
      */
@@ -75,7 +60,7 @@ public class TableAdapter_NEW {
     }
 
     /**
-     * Insert long.
+     * Inserts data into the table of the database
      *
      * @param key   the key
      * @param value the value
@@ -99,7 +84,7 @@ public class TableAdapter_NEW {
 
 
     /**
-     * Update int.
+     * Updates the row in the table of the database
      *
      * @param key          the key
      * @param newValues    the new values
@@ -128,7 +113,7 @@ public class TableAdapter_NEW {
 
 
     /**
-     * Delete int.
+     * Deletes the row from the table of the database
      *
      * @param whereClauses the where clauses
      * @param whereArgs    the where args
@@ -155,7 +140,7 @@ public class TableAdapter_NEW {
     }
 
     /**
-     * Delete all rows int.
+     * Delete all rows from the table of the database
      *
      * @return the int
      * @throws DaoException the dao exception
@@ -173,7 +158,7 @@ public class TableAdapter_NEW {
 
 
     /**
-     * Gets data.
+     * Gets the rows from the table
      *
      * @param selectionClauses the selection clauses
      * @param selectionArgs    the selection args
@@ -183,7 +168,8 @@ public class TableAdapter_NEW {
      */
     public List<String[]> getData(String[] selectionClauses, String[] selectionArgs, String orderBy) throws DaoException {
         SQLiteDatabase db = openHelper.getWritableDatabase();
-        Cursor cursor = db.query(table.getName(), null, whereClauseElaborate(selectionClauses, true), selectionArgs, null, null, orderBy);
+        String whereclasues = whereClauseElaborate(selectionClauses, true);
+        Cursor cursor = db.query(table.getName(), null, whereclasues, selectionArgs, null, null, orderBy);
         List<String[]> rows = new ArrayList<>();
         while (cursor.moveToNext()) {
             int columns = cursor.getColumnNames().length;
@@ -195,13 +181,15 @@ public class TableAdapter_NEW {
         }
         cursor.close();
         if (rows.size() < 1)
-            throw new DaoException("nessun elemento");
+            throw new DaoException("There aren't elements in table " + tableName + " where <" + whereclasues + ">");
         return rows;
     }
 
 
     /**
-     * Update from server.
+     * Updates the table of the internal database frome the remote database
+     * This method is multi thread, it connects with the server
+     * and simultaneously enters the data in the table
      *
      * @param keys   the keys
      * @param values the values
@@ -217,8 +205,11 @@ public class TableAdapter_NEW {
             }
         final String finalQuery = query;
         Message4Debug.log(query);
+
+        /* queue shared between the operation of the server reading and the insertion */
         BlockingQueue<String[][]> queue = new ArrayBlockingQueue(11);
 
+        /* Thread of the insertion */
         class RunnableDb implements Runnable {
             private final BlockingQueue<String[][]> queue;
             private SQLiteDatabase db;
@@ -252,6 +243,7 @@ public class TableAdapter_NEW {
             }
         }
 
+        /* Thread of the server reading */
         class RunnableServer implements Runnable {
             private final BlockingQueue<String[][]> queue;
 
@@ -281,6 +273,7 @@ public class TableAdapter_NEW {
                 }
             }
         }
+        /* Run of the thread */
         Thread threadServer = new Thread(new RunnableServer(queue));
         Thread threadDb = new Thread(new RunnableDb(queue));
         long start = System.currentTimeMillis();
@@ -293,7 +286,9 @@ public class TableAdapter_NEW {
     }
 
     /**
-     * Content values casted content values.
+     * ContentValuesCasted.
+     * This method creates the ContentValues by two arrays of string.
+     * It casts the string taking of the table column type
      *
      * @param key    the key
      * @param values the values
@@ -318,7 +313,7 @@ public class TableAdapter_NEW {
                     contentValues.put(key[i], values[i]);
                     break;
                 default:
-                    throw new DaoException("Cast of typeCode: " + columnType + ", for " + key[i] + " = " + values[i] + " is not supported");
+                    throw new DaoException("Castig of typeCode: " + columnType + ", for " + key[i] + " = " + values[i] + " is not supported");
             }
         }
         return contentValues;
@@ -328,6 +323,7 @@ public class TableAdapter_NEW {
 
     /**
      * Where clause elaborate string.
+     * This method creates the where clasuse by two arrays of string.
      *
      * @param whereClauses the where clauses
      * @param isNullable   the is nullable
@@ -349,6 +345,7 @@ public class TableAdapter_NEW {
 
     /**
      * Where clause elaborate string.
+     * This method creates the where clasuse by two arrays of string.
      *
      * @param whereClauses the where clauses
      * @return the string
@@ -365,7 +362,25 @@ public class TableAdapter_NEW {
      */
     public void sendToServer() throws DaoException {
         String query = url + "&operation=secureInsert&table=" + tableName;
-        /// TODO: 09/06/16
+        // TODO: 03/07/16
+    }
+
+    /**
+     * Gets table name.
+     *
+     * @return the table name
+     */
+    public String getTableName() {
+        return tableName;
+    }
+
+    /**
+     * Sets table name.
+     *
+     * @param tableName the table name
+     */
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 }
 

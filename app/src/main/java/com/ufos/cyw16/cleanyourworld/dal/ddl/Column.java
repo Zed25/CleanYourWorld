@@ -1,27 +1,9 @@
-/*
- * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.Column
- * File name: Column.java
- * Class name: Column
- * Last modified: 09/06/16 16.39
- */
-
-/*
- * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.Column
- * File name: Column.java
- * Class name: Column
- * Last modified: 04/06/16 20.15
- */
-
 package com.ufos.cyw16.cleanyourworld.dal.ddl;
 
 /**
  * The type Column.
+ * This class allow the creation Column object.
+ * its an aggregation of Table object
  */
 public class Column {
 

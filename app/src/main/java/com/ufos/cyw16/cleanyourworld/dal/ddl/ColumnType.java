@@ -1,39 +1,11 @@
-/*
- * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.ColumnType
- * File name: ColumnType.java
- * Class name: ColumnType
- * Last modified: 09/06/16 18.11
- */
-
-/*
- * Created by Umberto Ferracci from urania and published on 09/06/16 12.16
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.ColumnType
- * File name: ColumnType.java
- * Class name: ColumnType
- * Last modified: 09/06/16 11.39
- */
-
-/*
- * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.ColumnType
- * File name: ColumnType.java
- * Class name: ColumnType
- * Last modified: 04/06/16 20.15
- */
-
 package com.ufos.cyw16.cleanyourworld.dal.ddl;
 
 import java.util.HashMap;
 
 /**
  * The type Column type.
+ * This class allows you to calculate the type of column
+ * useful for the data casting.
  */
 public class ColumnType {
     public static final int FIELD_TYPE_NULL = 0;

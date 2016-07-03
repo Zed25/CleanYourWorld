@@ -29,6 +29,8 @@ import java.util.List;
 public interface ComuneDao extends EntityDao<Comune> {
     List<Comune> getByIdProvincia(int id) throws DaoException;
 
+    List<Comune> getComuniThatProvideCollection() throws DaoException;
+
     class ComuneDaoSQLite extends EntityDaoSQLite<Comune> implements ComuneDao {
 
         public ComuneDaoSQLite(Context context) {
@@ -57,6 +59,17 @@ public interface ComuneDao extends EntityDao<Comune> {
                 comuni.add(instanceEntity(s));
             }
             return comuni;
+        }
+
+        @Override
+        public List<Comune> getComuniThatProvideCollection() throws DaoException {
+            List<Comune> comuni = findAll();
+            List<Comune> result = new ArrayList<>();
+            for (Comune c : comuni) {
+                if (c.getCollections() != null) ;
+                result.add(c);
+            }
+            return null;
         }
     }
 }

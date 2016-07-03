@@ -14,6 +14,15 @@ public class Comune {
     private int idComune;
     private String name;
     private IsolaEcologica isolaEcologica;
+
+    public List<Collection> getCollections() {
+        return collections;
+    }
+
+    public void setCollections(List<Collection> collections) {
+        this.collections = collections;
+    }
+
     private List<Collection> collections;
 
     public Comune() {

@@ -1,23 +1,3 @@
-/*
- * Created by Umberto Ferracci from urania and published on 09/06/16 18.13
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.Table
- * File name: Table.java
- * Class name: Table
- * Last modified: 09/06/16 16.43
- */
-
-/*
- * Created by Umberto Ferracci from urania and published on 04/06/16 20.27
- * email:   umberto.ferracci@gmail.com
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.dal.ddl.Table
- * File name: Table.java
- * Class name: Table
- * Last modified: 04/06/16 20.15
- */
-
 package com.ufos.cyw16.cleanyourworld.dal.ddl;
 
 
@@ -25,6 +5,8 @@ import java.util.HashMap;
 
 /**
  * The type Table.
+ * This class allows the creation object Table
+ * useful for the creation of the database
  */
 public class Table {
 

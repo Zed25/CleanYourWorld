@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * The type Cyw open helper.
+ * The type CYWOpenHelper.
+ * This class creates, updates and deletes database tables
+ * implements SQLiteOpenHelper
+ * This class is a Singleton class.
  */
 public class CYWOpenHelper extends SQLiteOpenHelper {
     private final static int db_version = 1;
@@ -22,7 +25,9 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
 
 
     /**
-     * Instantiates a new Cyw open helper.
+     * Instantiates a new CYWOpenHelper.
+     * Creates the objects Table
+     * and generates tablesHasMap for each Table
      *
      * @param context the context
      */
@@ -31,7 +36,7 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
         tables = new ArrayList<Table>();
         tableHashMap = new HashMap<String, Table>();
 
-        /* inserimento tabello in tables */
+        /* creates all database tables an adds all */
         tables.add(new Table("regioni", new Column[]{
                 new Column("_id", "INTEGER", "PRIMARY KEY"),
                 new Column("regione", "TEXT")
@@ -96,7 +101,7 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
         }));
 
 
-        /* HashMap delle tabelle */
+        /* HashMap of tables */
         for (Table t : tables) {
             tableHashMap.put(t.getName(), t);
         }
@@ -104,6 +109,7 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
 
     /**
      * Gets instance.
+     * CYWOpenHelper is a Singleton class
      *
      * @param context the context
      * @return the instance
@@ -122,7 +128,7 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
                 createTable(db, t);
             }
         } catch (SQLException e) {
-            Message4Debug.log(e.toString() + "\n" + e.getMessage());
+            Message4Debug.log(e.getMessage() + "\n" + e.toString());
         }
     }
 
@@ -134,12 +140,29 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
                 createTable(db, t);
             }
         } catch (SQLException e) {
-            Message4Debug.log(e.toString() + "\n" + e.getMessage());
+            Message4Debug.log(e.getMessage() + "\n" + e.toString());
         }
     }
 
     /**
+     * Drop table.
+     * This method drop the table from database.
+     *
+     * @param db    the db
+     * @param table the table
+     * @throws SQLException the sql exception
+     */
+    private void dropTable(SQLiteDatabase db, Table table) throws SQLException {
+        String qry = "DROP TABLE IF EXISTS" + table.getName() + ";";
+        db.execSQL(qry);
+
+    }
+
+    /**
      * Create table.
+     * This method creates all tables of the database
+     * it takes all columns of the table and generates SQL query, in example:
+     * "CREATE TABLE 'tableName' (column1 typeColumn1 extraConditionColumn1, column2 typeColumn2 extraconditionColumn2, ...)"
      *
      * @param db    the db
      * @param table the table
@@ -154,20 +177,6 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
                     ",";
         }
         qry = qry.substring(0, qry.length() - 1) + ");";
-        Message4Debug.log(qry);
-        db.execSQL(qry);
-
-    }
-
-    /**
-     * Drop table.
-     *
-     * @param db    the db
-     * @param table the table
-     * @throws SQLException the sql exception
-     */
-    private void dropTable(SQLiteDatabase db, Table table) throws SQLException {
-        String qry = "DROP TABLE IF EXISTS" + table.getName() + ";";
         db.execSQL(qry);
 
     }
