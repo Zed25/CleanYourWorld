@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by UFOS from simone_mancini
+  ~ Project: CleanYourWorld
+  ~ Package: /home/simone_mancini/AndroisStudioProjects/CleanYourWorld/app/src/main/res/layout/materials_card_semple_layout.xml
+  ~ Last modified: 03/07/16 13.05
+  -->
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:id="@+id/cvMaterial"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="10dp"
+    android:minHeight="300dp"
+    android:layout_margin="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:textColor="#ffffff"
+            android:minHeight="250dp"
+            android:text="Nulla"
+            android:textSize="50sp"
+            android:gravity="center"
+            android:textAlignment="gravity"
+            android:background="@color/colorAccent"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="50dp"
+            android:layout_weight="0.6"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Today"
+                android:gravity="start|center_vertical"
+                android:textAlignment="gravity"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Date"
+                android:layout_gravity=""
+                android:gravity="end|center_vertical"
+                android:textAlignment="gravity"
+                android:textColor="#000000"
+                android:textSize="20dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.CardView>
