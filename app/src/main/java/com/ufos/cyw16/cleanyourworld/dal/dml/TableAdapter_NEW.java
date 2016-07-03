@@ -193,6 +193,7 @@ public class TableAdapter_NEW {
             }
             rows.add(row);
         }
+        cursor.close();
         if (rows.size() < 1)
             throw new DaoException("nessun elemento");
         return rows;
