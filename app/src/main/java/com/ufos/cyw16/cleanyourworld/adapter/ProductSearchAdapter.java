@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.R;
+import com.ufos.cyw16.cleanyourworld.config.MaterialTypeEnum;
 import com.ufos.cyw16.cleanyourworld.model_new.Product;
 import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
 
@@ -45,7 +46,96 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         ProductType selectedProd = productTypes.get(position);
         holder.textView.setText(selectedProd.getName());
 
+        int matID = selectedProd.getMaterial().getIdMaterial();
 
+        holder.textView.setTextColor(Color.parseColor(getColorByMaterilID(matID)));
+
+        setMaterialIcon(holder.imageView,matID);
+
+
+
+
+    }
+
+    private void setMaterialIcon(ImageView imageView, int matID) {
+        switch (matID){
+            case 1:
+                imageView.setImageResource(R.drawable.glass);
+                break;
+            case 2:
+                imageView.setImageResource(R.drawable.paper);
+                break;
+            case 3:
+                imageView.setImageResource(R.drawable.plastics);
+                break;
+            //metals
+            case 5:
+                imageView.setImageResource(R.drawable.metals);
+                break;
+            //non recycling
+            case 6:
+                imageView.setImageResource(R.drawable.no_recycle);
+                break;
+            //electronics
+            case 8:
+                imageView.setImageResource(R.drawable.electronics);
+                break;
+            //batteries
+            case 9:
+                imageView.setImageResource(R.drawable.batteries);
+                break;
+            //household
+            case 10:
+                imageView.setImageResource(R.drawable.household);
+                break;
+            //oil
+            case 11:
+                imageView.setImageResource(R.drawable.oil);
+                break;
+            //garden
+            case 12:
+                imageView.setImageResource(R.drawable.garden);
+                break;
+            //clothes
+            case 13:
+                imageView.setImageResource(R.drawable.clothes);
+                break;
+            //toner
+            case 14:
+                imageView.setImageResource(R.drawable.toner);
+                break;
+            //medicinals
+            case 15:
+                imageView.setImageResource(R.drawable.drugs);
+                break;
+            default:
+                imageView.setImageResource(R.drawable.recycle);
+                break;
+
+        }
+    }
+
+    private String getColorByMaterilID(int idMaterial) {
+
+        switch (idMaterial){
+            //Glass
+            case 1:
+                return "#4caf50";
+            //Paper
+            case 2:
+                return "#2196f3";
+            //Plastic
+            case 3:
+                return "#ffeb3b";
+            //organic
+            case 4:
+                return "#795548";
+            //nonrecycling
+            case 6:
+                return "#9e9e9e";
+            default:
+                return "#000000";
+        }
     }
 
     @Override
