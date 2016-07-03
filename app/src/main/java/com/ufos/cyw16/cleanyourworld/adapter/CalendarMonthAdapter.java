@@ -1,11 +1,8 @@
 /*
- * Created by Umberto Ferracci from simone_mancini and published on 27/06/16 16.16
- * email:   umberto.ferracci@gmail.com
+ * Created by UFOS from simone_mancini
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.adapter.CalendarWeekViewAdapter
- * File name: CalendarWeekViewAdapter.java
- * Class name: CalendarWeekViewAdapter
- * Last modified: 27/06/16 16.16
+ * Package: com.ufos.cyw16.cleanyourworld.adapter.CalendarMonthAdapter
+ * Last modified: 03/07/16 18.02
  */
 
 package com.ufos.cyw16.cleanyourworld.adapter;
@@ -22,12 +19,12 @@ import com.ufos.cyw16.cleanyourworld.R;
 import java.util.List;
 
 /**
- * Created by simone_mancini on 27/06/16.
+ * Created by simone_mancini on 03/07/16.
  */
-public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapter.CalendarWeekHolder> {
+public class CalendarMonthAdapter extends RecyclerView.Adapter<CalendarMonthAdapter.CalendarMonthHolder> {
     private List<DayTrashInfo> lvDayTrashInfo;
 
-    public CalendarWeekAdapter(List<DayTrashInfo> lvDayTrashInfo) {
+    public CalendarMonthAdapter(List<DayTrashInfo> lvDayTrashInfo) {
         this.lvDayTrashInfo = lvDayTrashInfo;
     }
 
@@ -37,37 +34,36 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapte
     }
 
     @Override
-    public void onBindViewHolder(CalendarWeekHolder calendarWeekHolder, int i) {
+    public void onBindViewHolder(CalendarMonthHolder calendarWeekHolder, int i) {
 
         DayTrashInfo dayTrashInfo = lvDayTrashInfo.get(i);
         calendarWeekHolder.tvCardViewDate.setText(dayTrashInfo.getDate());
         calendarWeekHolder.tvCardViewDay.setText(dayTrashInfo.getDay());
         calendarWeekHolder.tvCardViewTrash.setText(dayTrashInfo.getThrash());
-        calendarWeekHolder.tvCardViewTrash.setBackgroundColor(dayTrashInfo.getColorOfTheDay());
-        }
+        calendarWeekHolder.tvColorOfTheDay.setBackgroundColor(dayTrashInfo.getColorOfTheDay());
+    }
 
     @Override
-    public CalendarWeekHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public CalendarMonthHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.calendar_week_card_view_sample_layout, viewGroup, false);
+                inflate(R.layout.calendar_month_card_view_sample_layout, viewGroup, false);
 
-        return new CalendarWeekHolder(itemView);
+        return new CalendarMonthHolder(itemView);
     }
 
 
 
-    public static class CalendarWeekHolder extends RecyclerView.ViewHolder{
+    public static class CalendarMonthHolder extends RecyclerView.ViewHolder{
 
         protected TextView tvCardViewDay, tvCardViewDate, tvCardViewTrash, tvColorOfTheDay;
 
-        public CalendarWeekHolder(View v) {
+        public CalendarMonthHolder(View v) {
             super(v);
             tvCardViewDate =  (TextView) v.findViewById(R.id.tvCardViewDate);
             tvCardViewDay = (TextView)  v.findViewById(R.id.tvCardViewDay);
             tvCardViewTrash = (TextView)  v.findViewById(R.id.tvCardViewTrash);
-            //tvColorOfTheDay = (TextView) v.findViewById(R.id.tvColorOfTheDay);
+            tvColorOfTheDay = (TextView) v.findViewById(R.id.tvColorOfTheDay);
         }
     }
 }
-

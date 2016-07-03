@@ -30,7 +30,12 @@ import com.ufos.cyw16.cleanyourworld.DAO.MaterialiDAO;
 import com.ufos.cyw16.cleanyourworld.Models.Collection;
 import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
+import com.ufos.cyw16.cleanyourworld.adapter.CalendarMonthAdapter;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarWeekAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
+import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,7 +59,7 @@ public class CalendarMonthViewFragment extends Fragment {
 
     private RecyclerView rvWeekList;
 
-    private CalendarWeekAdapter calendarWeekAdapter;
+    private CalendarMonthAdapter calendarMonthAdapter;
 
     private List<DayTrashInfo> dayTrashInfoList;
 
@@ -138,10 +143,10 @@ public class CalendarMonthViewFragment extends Fragment {
         //}
         //create and set the adapter for the recycler view
         //if(calendarWeekAdapter == null) {
-            calendarWeekAdapter = new CalendarWeekAdapter(dayTrashInfoList);
+            calendarMonthAdapter = new CalendarMonthAdapter(dayTrashInfoList);
         //}
 
-        rvWeekList.setAdapter(calendarWeekAdapter);
+        rvWeekList.setAdapter(calendarMonthAdapter);
     }
 
     private void generateDayTrashCard(List<DayTrashInfo> list, int[] date) {
@@ -156,7 +161,7 @@ public class CalendarMonthViewFragment extends Fragment {
 
         //if calendarWeekAdapter isn't equals to null notyfy data set changed and rebuild recycler view
         //if(calendarWeekAdapter != null) {
-            calendarWeekAdapter.notifyDataSetChanged();
+            calendarMonthAdapter.notifyDataSetChanged();
         //}
     }
 
@@ -179,19 +184,41 @@ public class CalendarMonthViewFragment extends Fragment {
         String dayName = selectDay(calendar);
         dayTrashInfo.setDay(dayName);
         // FIXME: 02/07/16 [DAO] sostituire le DAO ed implementare getCollectionByDayOfWeek(..) in CollectionDao
-        MaterialiDAO materialiDAO = new MaterialiDAO(getContext());
-        Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, Calendar.DAY_OF_WEEK);
-        String trash, trashColor;
-//        if (collection.getMaterials().size() == 0){
-        if (true) { // FIXME: 01/07/16
+        //MaterialiDAO materialiDAO = new MaterialiDAO(getContext());
+        //Collection collection = materialiDAO.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
+        CollectionDao collectionDao = DaoFactory_def.getInstance(getContext()).getCollectionDao();
+        List<com.ufos.cyw16.cleanyourworld.model_new.Collection> collectionList = null;
+        try {
+            collectionList = collectionDao.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
+        } catch (DaoException e) {
+            Message4Debug.log("Problems in collectionDao.getCollectionByDayOfWeek()");
+        }
+        String trash = "", trashColor = "";
+        System.out.println("CREATE CARD QUERY DAY OF WEEK = " + calendar.get(Calendar.DAY_OF_WEEK));
+
+        if(collectionList != null) {
+            for (int i = 0; i < collectionList.size(); i++) {
+                com.ufos.cyw16.cleanyourworld.model_new.Collection collection = collectionList.get(i);
+                // no trash that day
+                if (collection.getMaterial() == null) {
+                    //if (true) { // FIXME: 01/07/16
+                    trash = "Nulla";
+                    trashColor = "#29d96a";
+                } else {
+                    trash += collection.getMaterial().getName() + "\n";
+                    trashColor = collection.getColor().getColorCode();
+                }
+            }
+        }else{
             trash = "Nulla";
             trashColor = "#29d96a";
-        }else{
-            trash = collection.getMaterials().get(0).getName();
-            trashColor = collection.getColor().get(0).getColorCode();
         }
+
+
+        System.out.println("TRASH : " +trash + "TRASH COLOR :" + trashColor);
         dayTrashInfo.setThrash(trash);
         dayTrashInfo.setColorOfTheDay(trashColor);
+
         return dayTrashInfo;
     }
 
@@ -297,12 +324,12 @@ public class CalendarMonthViewFragment extends Fragment {
         this.rvWeekList = rvWeekList;
     }
 
-    public CalendarWeekAdapter getCalendarWeekAdapter() {
-        return calendarWeekAdapter;
+    public CalendarMonthAdapter getCalendarMonthAdapter() {
+        return calendarMonthAdapter;
     }
 
-    public void setCalendarWeekAdapter(CalendarWeekAdapter calendarWeekAdapter) {
-        this.calendarWeekAdapter = calendarWeekAdapter;
+    public void setCalendarMonthAdapter(CalendarMonthAdapter calendarMonthAdapter) {
+        this.calendarMonthAdapter = calendarMonthAdapter;
     }
 
     public List<DayTrashInfo> getDayTrashInfoList() {

@@ -22,6 +22,14 @@
         android:orientation="vertical"
         android:weightSum="1">
 
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/lvMaterialsOfCollection"
+            android:layout_weight="0.3"
+            android:background="@color/colorAccent"
+            android:visibility="gone"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -33,6 +41,7 @@
             android:gravity="center"
             android:textAlignment="gravity"
             android:background="@color/colorAccent"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -43,25 +52,19 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Today"
-                android:gravity="start|center_vertical"
+                android:text="Day"
+                android:gravity="center"
                 android:textAlignment="gravity"
                 android:textColor="#000000"
-                android:textSize="20dp"
-                android:layout_weight="1" />
+                android:textSize="25dp"
+                android:layout_weight="0.15" />
 
-            <TextView
+            <ImageButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Date"
-                android:layout_gravity=""
-                android:gravity="end|center_vertical"
-                android:textAlignment="gravity"
-                android:textColor="#000000"
-                android:textSize="20dp"
-                android:layout_weight="1" />
+                android:layout_weight="0.85"
+                android:background="@drawable/ic_more_vert_black_24dp"/>
         </LinearLayout>
-
     </LinearLayout>
 
 
