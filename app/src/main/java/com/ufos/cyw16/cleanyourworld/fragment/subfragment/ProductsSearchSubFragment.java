@@ -1,14 +1,21 @@
 package com.ufos.cyw16.cleanyourworld.fragment.subfragment;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.media.tv.TvContract;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.os.AsyncTaskCompat;
+import android.support.v7.util.AsyncListUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.ProductSearchAdapter;
@@ -26,9 +33,13 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
 
     private SearchView searchView;
     private RecyclerView recyclerView;
+    private ProgressBar progressBar;
 
     private List<ProductType> productTypes;
     private ProductSearchAdapter adapter;
+
+    private int animationDuration;
+    private boolean firstTime = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +59,7 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
     public void onResume() {
         super.onResume();
         searchView.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -56,37 +68,83 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.products_search_subfragment, container, false); //inflate layout
 
+        animationDuration = getResources().getInteger(
+                android.R.integer.config_longAnimTime);
+
         searchView = (SearchView) getActivity().findViewById(R.id.search_view);
         searchView.setVisibility(View.VISIBLE);
         searchView.setOnQueryTextListener(this);
 
+        progressBar = (ProgressBar) v.findViewById(R.id.progress_products);
+
         recyclerView = (RecyclerView) v.findViewById(R.id.product_search_recycler_view);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        productTypes = null;
-        try {
-            productTypes = DaoFactory_def.getInstance(getContext()).getProtuctTypeDao().findAll();
 
-        } catch (DaoException e) {
-            e.printStackTrace();
-        }
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
 
-        /*ProductType productType1 = new ProductType();
-        productType1.setName("penna");
 
-        ProductType productType2 = new ProductType();
-        productType2.setName("quaderno");
-
-        productTypes = new ArrayList<>();
-        productTypes.add(productType1);
-        productTypes.add(productType2);*/
-
-        adapter = new ProductSearchAdapter(productTypes);
-        recyclerView.setAdapter(adapter);
-
+        new LoadFromDB().execute();
 
         //createFragment(v); //set ViewPager and TabLayout
         return v;
+    }
+
+    private class LoadFromDB extends AsyncTask<Void,Void,Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                productTypes = DaoFactory_def.getInstance(getContext()).getProtuctTypeDao().findAll();
+
+            } catch (DaoException e) {
+                e.printStackTrace();
+            }
+
+            adapter = new ProductSearchAdapter(productTypes);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            recyclerView.setAdapter(adapter);
+
+            crossfade();
+
+        }
+    }
+
+    private void crossfade() {
+
+
+
+        // Set the content view to 0% opacity but visible, so that it is visible
+        // (but fully transparent) during the animation.
+        recyclerView.setAlpha(0f);
+        recyclerView.setVisibility(View.VISIBLE);
+
+        // Animate the content view to 100% opacity, and clear any animation
+        // listener set on the view.
+        recyclerView.animate()
+                .alpha(1f)
+                .setDuration(animationDuration)
+                .setListener(null);
+
+        // Animate the loading view to 0% opacity. After the animation ends,
+        // set its visibility to GONE as an optimization step (it won't
+        // participate in layout passes, etc.)
+        progressBar.animate()
+                .alpha(0f)
+                .setDuration(animationDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        //progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
     }
 
 
