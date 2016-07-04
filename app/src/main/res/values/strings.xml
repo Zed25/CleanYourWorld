@@ -18,6 +18,7 @@
     <string name="calWeekSection">Calendar week\'s view</string>
     <string name="calMonthSection">Calendar month\'s view</string>
     <string name="sttSection">Settings</string>
+    <string name="sttComune">Settings</string>
     <string name="strProblem">A problem as occurred</string>
-    <string name="strNoRecycle">No recycling in this comune</string>
+    <string name="strNoRecycle">No recycling in this city</string>
 </resources>

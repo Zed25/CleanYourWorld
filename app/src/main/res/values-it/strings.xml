@@ -27,4 +27,6 @@
     <string name="strProblem">Un problema è occorso</string>
     <string name="calMonthSection">Vista mensile</string>
     <string name="calWeekSection">Vista settimanale</string>
+    <string name="sttComune">Cambia il tuo comune</string>
+    <string name="strNoRecycle">Raccolta differenziata non disponibile in questo comune</string>
 </resources>
