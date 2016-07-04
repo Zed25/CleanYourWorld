@@ -7,6 +7,7 @@
 
 package com.ufos.cyw16.cleanyourworld.model_new;
 
+
 import java.util.List;
 
 /**
@@ -18,6 +19,8 @@ public class Material {
     private String name;
     private int idMaterial;
     private List<ProductType> produtctTypes;
+    private List<Day> days;
+    private Color color;
 
     /**
      * Instantiates a new Material.
@@ -79,5 +82,19 @@ public class Material {
         this.produtctTypes = produtctTypes;
     }
 
+    public List<Day> getDays() {
+        return days;
+    }
 
+    public void setDays(List<Day> days) {
+        this.days = days;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color colors) {
+        this.color = colors;
+    }
 }

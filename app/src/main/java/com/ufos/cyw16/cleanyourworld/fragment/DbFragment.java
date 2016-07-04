@@ -31,6 +31,7 @@ import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Collection;
 import com.ufos.cyw16.cleanyourworld.model_new.Comune;
+import com.ufos.cyw16.cleanyourworld.model_new.Day;
 import com.ufos.cyw16.cleanyourworld.model_new.Material;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
@@ -196,19 +197,23 @@ public class DbFragment extends Fragment {
                         List<Material> materials = materialDao.getMaterialsFromIdComune(1865);
                         for (Material m : materials) {
                             System.out.println(m.getName());
+                            for(Day d : m.getDays()){
+                                System.out.println(d.getName());
+                            }
                         }
                     } catch (DaoException e) {
                         e.printStackTrace();
                     }
-                    ComuneDao comuneDao = daoFactory.getComuneDao();
+                   /* ComuneDao comuneDao = daoFactory.getComuneDao();
                     try {
                         List<Comune> comunes = comuneDao.getComuniThatProvideCollection();
                         for (Comune c : comunes) {
                             System.out.println(c.getName());
+
                         }
                     } catch (DaoException e) {
                         e.printStackTrace();
-                    }
+                    }*/
 
                     break;
             }

@@ -8,23 +8,38 @@
 package com.ufos.cyw16.cleanyourworld.fragment;
 
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.Models.MaterialTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarMonthAdapter;
 import com.ufos.cyw16.cleanyourworld.adapter.MaterialRecyclerViewAdapter;
+import com.ufos.cyw16.cleanyourworld.config.ConfigStep;
+import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.model_new.Collection;
+import com.ufos.cyw16.cleanyourworld.model_new.Day;
 import com.ufos.cyw16.cleanyourworld.model_new.Material;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao;
+import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -37,6 +52,11 @@ public class MaterialsSearchFragment extends Fragment {
     private MaterialRecyclerViewAdapter materialRecyclerViewAdapter;
 
     private List<MaterialTrashInfo> materialTrashInfoList;
+
+    private MaterialSearchAsyncTask materialSearchAsyncTask;
+
+    private ProgressDialog waitingDialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,23 +76,29 @@ public class MaterialsSearchFragment extends Fragment {
 
         initializerecyclerView(v);
 
-        computeMaterialCards(materialTrashInfoList, 1865);
+        materialSearchAsyncTask = new MaterialSearchAsyncTask();
+
+        materialSearchAsyncTask.execute(1865);
+
+        openWaitingDialog();
 
     }
 
-    private void computeMaterialCards(List<MaterialTrashInfo> materialTrashInfoList, int comuneID) {
-
-        List<Material> materials = null;
-
-        MaterialDao materialDao = DaoFactory_def.getInstance(getContext()).getMaterialDao();
-
+    private void openWaitingDialog() {
+        waitingDialog = new ProgressDialog(getContext(), R.style.MyAlertDialogStyle);
+        waitingDialog.setIndeterminate(true);
+        waitingDialog.setMessage("I'm computing material's cards");
+        waitingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        waitingDialog.show();
     }
 
 
-    /**initialize Recycler View
-     *
-     * Called in either in week view or in month view **/
-    private void initializerecyclerView(View v){
+    /**
+     * initialize Recycler View
+     * <p>
+     * Called in either in week view or in month view
+     **/
+    private void initializerecyclerView(View v) {
         recyclerView = (RecyclerView) v.findViewById(R.id.rvMaterials);
 
 
@@ -83,7 +109,7 @@ public class MaterialsSearchFragment extends Fragment {
 
         //create the layout manager to insert into the recycler view
         //linear layout manager is similar to layout manager for the list view
-        LinearLayoutManager linearLayoutManager= new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         //set the layout manager in recycler view
@@ -92,5 +118,88 @@ public class MaterialsSearchFragment extends Fragment {
         //create and set the adapter for the recycler view
         materialRecyclerViewAdapter = new MaterialRecyclerViewAdapter(materialTrashInfoList);
         recyclerView.setAdapter(materialRecyclerViewAdapter);
+    }
+
+    private class MaterialSearchAsyncTask extends AsyncTask<Integer, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Integer... ints) {
+
+            computeMaterialCards(materialTrashInfoList, ints[0]);
+
+            return null;
+        }
+
+        private void computeMaterialCards(List<MaterialTrashInfo> materialTrashInfoList, int comuneID) {
+            materialTrashInfoList.clear();
+            List<Material> materials = null;
+
+            MaterialDao materialDao = DaoFactory_def.getInstance(getContext()).getMaterialDao();
+
+            try {
+                materials = materialDao.getMaterialsFromIdComune(comuneID);
+
+            } catch (DaoException e) {
+                Message4Debug.log(e.getMessage());
+            }
+
+            if (materials != null) {
+                for (Material m : materials) {
+                    MaterialTrashInfo materialTrashInfo;
+                    materialTrashInfo = computeCardStructure(m);
+
+                    if(materialTrashInfo != null) {
+                        materialTrashInfoList.add(materialTrashInfo);
+                    }else {
+                        Toast.makeText(getContext(), getResources().getString(R.string.strNoRecycle) + ": " + m.getName(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        }
+
+        private MaterialTrashInfo computeCardStructure(Material material) {
+
+            MaterialTrashInfo materialTrashInfo = new MaterialTrashInfo();
+            String dayName = selectDay(material.getDays());
+            materialTrashInfo.setDay(dayName);
+            String trashName = material.getName();
+            String trashColor = material.getColor().getColorCode();
+
+            materialTrashInfo.setThrash(trashName);
+            materialTrashInfo.setColorOfTheTrash(trashColor);
+
+            return materialTrashInfo;
+        }
+
+        private String selectDay(List<Day> days) {
+            String str = "";
+            if(days.size() == 1){
+                str += days.get(0).getName();
+            }else {
+                for (int i = 0; i < days.size() - 1; i++) {
+                    str += days.get(i).getName();
+                    str += "/";
+                }
+                str += days.get(days.size() - 1).getName();
+            }
+            return str;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+            if (materialRecyclerViewAdapter != null) {
+                materialRecyclerViewAdapter.notifyDataSetChanged();
+            } else {
+                Message4Debug.log("materialRecyclerAdapter == null");
+            }
+
+            if(waitingDialog != null){
+                waitingDialog.dismiss();
+            }else{
+                Message4Debug.log("waitingDialog == null");
+            }
+        }
     }
 }
