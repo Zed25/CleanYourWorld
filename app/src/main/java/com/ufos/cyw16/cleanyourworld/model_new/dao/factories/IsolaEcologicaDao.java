@@ -2,21 +2,7 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.IsolaEcologicaDao
- * Last modified: 03/07/16 18.29
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.IsolaEcologicaDao
- * Last modified: 30/06/16 11.57
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.IsolaEcologicaDao
- * Last modified: 26/06/16 1.55
+ * Last modified: 04/07/16 8.55
  */
 
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
@@ -32,7 +18,8 @@ import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 import java.util.List;
 
 /**
- * The interface Isola ecologica dao.
+ * The interface IsolaEcologicaDao.
+ * This interface and her inheritance class allow you to create a IsolaEcologicaDao object
  */
 public interface IsolaEcologicaDao extends EntityDao<IsolaEcologica> {
     /**
@@ -45,12 +32,13 @@ public interface IsolaEcologicaDao extends EntityDao<IsolaEcologica> {
     IsolaEcologica getByIdComune(int id) throws DaoException;
 
     /**
-     * The type Isola ecologica dao sq lite.
+     * The type IsolaEcologicaDaoSQLite.
+     * This class implements the instruction of the IsolaEcologicaDao and inherits all method of EntityDaoSQLite
      */
     class IsolaEcologicaDaoSQLite extends EntityDaoSQLite<IsolaEcologica> implements IsolaEcologicaDao {
 
         /**
-         * Instantiates a new Isola ecologica dao sq lite.
+         * Instantiates a new IsolaEcologicaDaoSQLite.
          *
          * @param context the context
          */

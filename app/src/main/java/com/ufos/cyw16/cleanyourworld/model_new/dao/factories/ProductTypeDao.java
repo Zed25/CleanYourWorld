@@ -2,21 +2,7 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao
- * Last modified: 03/07/16 18.29
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao
- * Last modified: 30/06/16 11.57
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProductTypeDao
- * Last modified: 26/06/16 1.55
+ * Last modified: 04/07/16 8.51
  */
 
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
@@ -35,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The interface Product type dao.
+ * The interface ProductTypeDao.
+ * This interface and her inheritance class allow you to create a ProductTypeDao object
  */
 public interface ProductTypeDao extends EntityDao<ProductType> {
     /**
@@ -59,11 +46,12 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
 
     /**
      * The type Product type dao sq lite.
+     * This class implements the instruction of the ProductTypeDao and inherits all method of EntityDaoSQLite
      */
     class ProductTypeDaoSQLite extends EntityDaoSQLite<ProductType> implements ProductTypeDao {
 
         /**
-         * Instantiates a new Product type dao sq lite.
+         * Instantiates a new ProductTypeDaoSQLite.
          *
          * @param context the context
          */
@@ -73,9 +61,7 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
 
         @Override
         protected ProductType instanceEntity(String[] args) {
-            /*
-             * costruttore utilizzato per la relazione di composizione
-             */
+            /* RELAZIONE DI COMPOSIZIONE */
             ProductType productType = null;
             try {
                 productType = instanceEntity(args, DaoFactory_def.getInstance(getContext()).getMaterialDao().findById(Integer.parseInt(args[2])));
@@ -85,18 +71,6 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
             return productType;
         }
 
-        @Override
-        public List<ProductType> getProductsByIdMaterial(int id) throws DaoException {
-            /*
-             * RELAZIONE DI COMPOSIZIONE:
-             * interrogo il database
-             * instanzio il primo costruttore
-             * il tipo Material si estrae dal database
-             */
-            return null;
-        }
-
-
         /**
          * Instance entity product type.
          *
@@ -105,9 +79,7 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
          * @return the product type
          */
         protected ProductType instanceEntity(String[] args, Material material) {
-            /*
-             * costruttore utilizzato per la relazione di aggregazione
-             */
+            /* RELAZIONE DI AGGREGAZIONE */
             ProductType productType = new ProductType();
             productType.setIdProductType(Integer.parseInt(args[0]));
             productType.setName(args[1]);
@@ -120,13 +92,15 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
             return productType;
         }
 
+        @Override
+        public List<ProductType> getProductsByIdMaterial(int id) throws DaoException {
+            /* implementazione RELAZIONE DI COMPOSIZIONE */
+            // FIXME: 04/07/16
+            return null;
+        }
+
         public List<ProductType> getProductsByIdMaterial(int id, Material material) throws DaoException {
-            /*
-             * RELAZIONE DI AGGREGAZIONE:
-             * non interrogo il database ma
-             * instanzio il secondo costruttore
-             * passandogli il Material da inserire nell'oggetto;
-             */
+            /* implementazione RELAZIONE DI AGGREGAZIONE */
             List<String[]> resultQuery = getTableAdapter().getData(new String[]{"materiali_id"}, new String[]{String.valueOf(id)}, null);
             List<ProductType> products = new ArrayList<>();
             for (String[] s : resultQuery) {

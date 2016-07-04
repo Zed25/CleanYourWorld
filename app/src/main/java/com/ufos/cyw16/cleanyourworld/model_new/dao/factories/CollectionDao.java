@@ -2,7 +2,7 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao
- * Last modified: 03/07/16 18.49
+ * Last modified: 04/07/16 8.58
  */
 
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The interface Collection dao.
+ * The interface CollectionDao.
  * This interface and her inheritance class allow you to create a CollectionDao object
  */
 public interface CollectionDao extends EntityDao<Collection> {

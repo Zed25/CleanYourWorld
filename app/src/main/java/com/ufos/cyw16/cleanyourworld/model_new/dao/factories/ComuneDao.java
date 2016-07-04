@@ -2,21 +2,7 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ComuneDao
- * Last modified: 03/07/16 20.33
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ComuneDao
- * Last modified: 30/06/16 11.57
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.ComuneDao
- * Last modified: 26/06/16 1.55
+ * Last modified: 04/07/16 8.42
  */
 
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
@@ -100,6 +86,7 @@ public interface ComuneDao extends EntityDao<Comune> {
 
         @Override
         public List<Comune> getComuniThatProvideCollection() throws DaoException {
+            // FIXME: 04/07/16 interrogare lo schema raccolta!
             List<Comune> comuneList = DaoFactory_def.getInstance(getContext()).getComuneDao().findAll();
             List<Comune> result = new ArrayList<>();
             for (Comune c : comuneList) {

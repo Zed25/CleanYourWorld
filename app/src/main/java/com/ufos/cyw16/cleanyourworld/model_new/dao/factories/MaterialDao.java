@@ -2,7 +2,7 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao
- * Last modified: 03/07/16 20.01
+ * Last modified: 04/07/16 8.56
  */
 
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The interface Material dao.
+ * The interface MaterialDao.
  * This interface and her inheritance class allow you to create a MaterialDao object
  */
 public interface MaterialDao extends EntityDao<Material> {
@@ -35,13 +35,13 @@ public interface MaterialDao extends EntityDao<Material> {
     List<Material> getMaterialsFromIdComune(int id) throws DaoException;
 
     /**
-     * The type Materials dao sq lite.
-     * This class implements the instruction of the ComuneDao and inherits all method of EntityDaoSQLite
+     * The type MaterialsDaoSQLite.
+     * This class implements the instruction of the MaterialDao and inherits all method of EntityDaoSQLite
      */
     class MaterialsDaoSQLite extends EntityDaoSQLite<Material> implements MaterialDao {
 
         /**
-         * Instantiates a new Materials dao sq lite.
+         * Instantiates a new MaterialsDaoSQLite.
          *
          * @param context the context
          */

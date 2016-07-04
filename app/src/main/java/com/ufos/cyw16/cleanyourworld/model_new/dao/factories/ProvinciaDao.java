@@ -2,21 +2,7 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao
- * Last modified: 03/07/16 18.29
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao
- * Last modified: 30/06/16 11.57
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProvinciaDao
- * Last modified: 26/06/16 1.55
+ * Last modified: 04/07/16 8.59
  */
 
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
@@ -34,7 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The interface Provincia dao.
+ * The interface ProvinciaDao.
+ * This interface and her inheritance class allow you to create a ProvinciaDao object
  */
 public interface ProvinciaDao extends EntityDao<Provincia> {
     /**
@@ -47,16 +34,17 @@ public interface ProvinciaDao extends EntityDao<Provincia> {
     List<Provincia> getByIdRegion(int id) throws DaoException;
 
     /**
-     * The type Provincia daosq lite.
+     * The type ProvinciaDaoSQLite.
+     * This class implements the instruction of the ProvinciaDao and inherits all method of EntityDaoSQLite
      */
-    class ProvinciaDAOSQLite extends EntityDaoSQLite<Provincia> implements ProvinciaDao {
+    class ProvinciaDaoSQLite extends EntityDaoSQLite<Provincia> implements ProvinciaDao {
 
         /**
-         * Instantiates a new Provincia daosq lite.
+         * Instantiates a new ProvinciaDAOSQLite.
          *
          * @param context the context
          */
-        public ProvinciaDAOSQLite(Context context) {
+        public ProvinciaDaoSQLite(Context context) {
             super(context, "province");
         }
 
@@ -77,12 +65,7 @@ public interface ProvinciaDao extends EntityDao<Provincia> {
         public List<Provincia> getByIdRegion(int id) throws DaoException {
             List<String[]> list = getTableAdapter().getData(new String[]{"regioni_id"}, new String[]{String.valueOf(id)}, null);
             List<Provincia> provinces = new ArrayList<>();
-            DaoFactory_def daoFactoryDef = DaoFactory_def.getInstance(getContext());
             for (String[] s : list) {
-//                Provincia p = new Provincia();
-//                p.setIdProvincia(Integer.parseInt(s[0]));
-//                p.setName(s[1]);
-//                p.setComuni(daoFactory.getComuneDao().getByIdProvincia(Integer.parseInt(s[0])));
                 provinces.add(instanceEntity(s));
             }
             return provinces;

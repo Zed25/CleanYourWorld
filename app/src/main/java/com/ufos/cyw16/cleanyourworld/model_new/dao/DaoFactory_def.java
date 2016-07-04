@@ -2,6 +2,13 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def
+ * Last modified: 04/07/16 8.59
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def
  * Last modified: 03/07/16 18.41
  */
 
@@ -138,7 +145,7 @@ public class DaoFactory_def {
      * @return the provincia dao
      */
     public ProvinciaDao getProvinciaDao() {
-        return new ProvinciaDao.ProvinciaDAOSQLite(context);
+        return new ProvinciaDao.ProvinciaDaoSQLite(context);
     }
 
     /**

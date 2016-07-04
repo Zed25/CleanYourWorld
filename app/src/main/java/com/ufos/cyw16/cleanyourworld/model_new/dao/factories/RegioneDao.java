@@ -2,21 +2,7 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.RegioneDao
- * Last modified: 03/07/16 18.29
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.RegioneDao
- * Last modified: 30/06/16 11.57
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.RegioneDao
- * Last modified: 26/06/16 1.55
+ * Last modified: 04/07/16 8.58
  */
 
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
@@ -31,17 +17,19 @@ import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 /**
- * The interface Regione dao.
+ * The interface RegioneDao.
+ * This interface and her inheritance class allow you to create a RegioneDao object
  */
 public interface RegioneDao extends EntityDao<Regione> {
     /**
      * The type Regione dao sq lite.
+     * This class implements the instruction of the RegioneDao and inherits all method of EntityDaoSQLite
      */
     class RegioneDaoSQLite extends EntityDaoSQLite<Regione> implements RegioneDao {
 
 
         /**
-         * Instantiates a new Regione dao sq lite.
+         * Instantiates a new RegioneDaoSQLite.
          *
          * @param context the context
          */

@@ -2,21 +2,7 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductDao
- * Last modified: 03/07/16 18.29
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductsDao
- * Last modified: 30/06/16 11.57
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProductsDao
- * Last modified: 26/06/16 1.55
+ * Last modified: 04/07/16 8.57
  */
 
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
@@ -35,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The interface Product dao.
+ * The interface ProductDao.
+ * This interface and her inheritance class allow you to create a ProductDao object
  */
 public interface ProductDao extends EntityDao<Product> {
     /**
@@ -57,12 +44,13 @@ public interface ProductDao extends EntityDao<Product> {
     List<Product> getProdutsByIdProductType(int id, ProductType productType) throws DaoException;
 
     /**
-     * The type Products dao sq lite.
+     * The type ProductsDaoSQLite.
+     * This class implements the instruction of the ProductDao and inherits all method of EntityDaoSQLite
      */
     class ProductsDaoSQLite extends EntityDaoSQLite<Product> implements ProductDao {
 
         /**
-         * Instantiates a new Products dao sq lite.
+         * Instantiates a new ProductsDaoSQLite.
          *
          * @param context the context
          */
@@ -72,9 +60,7 @@ public interface ProductDao extends EntityDao<Product> {
 
         @Override
         protected Product instanceEntity(String[] args) {
-            /*
-             * costruttore utilizzato per la relazione di composizione
-             */
+            /* RELAZIONE DI COMPOSIZIONE */
             Product product = null;
             try {
                 product = instanceEntity(args, DaoFactory_def.getInstance(getContext()).getProtuctTypeDao().findById(Integer.parseInt(args[4])));
@@ -92,9 +78,7 @@ public interface ProductDao extends EntityDao<Product> {
          * @return the product
          */
         protected Product instanceEntity(String[] args, ProductType productType) {
-            /*
-             * costruttore utilizzato per la relazione di aggregazione
-             */
+            /* RELAZIONE DI AGGREGAZIONE */
             Product product = new Product();
             product.setIdProduct(Integer.parseInt(args[0]));
             product.setName(args[1]);
@@ -107,12 +91,7 @@ public interface ProductDao extends EntityDao<Product> {
 
         @Override
         public List<Product> getProdutsByIdProductType(int id) {
-            /*
-             * RELAZIONE DI COMPOSIZIONE:
-             * interrogo il database
-             * instanzio il primo costruttore
-             * il tipo ProductType si estrae dal database
-             */
+            /* implementazione RELAZIONE DI COMPOSIZIONE */
             List<Product> products = null;
             try {
                 products = getProdutsByIdProductType(id, DaoFactory_def.getInstance(getContext()).getProtuctTypeDao().findById(id));
@@ -124,12 +103,7 @@ public interface ProductDao extends EntityDao<Product> {
 
         @Override
         public List<Product> getProdutsByIdProductType(int id, ProductType productType) throws DaoException {
-            /*
-             * RELAZIONE DI AGGREGAZIONE:
-             * non interrogo il database per ottenere ProductType ma
-             * instanzio il secondo costruttore
-             * passandogli il ProductType da inserire nell'oggetto;
-             */
+            /* implementazione RELAZIONE DI AGGREGAZIONE */
             List<String[]> resultQuery = getTableAdapter().getData(new String[]{"tipologiaProdotti_id"}, new String[]{String.valueOf(id)}, null);
             List<Product> products = new ArrayList<>();
             for (String[] s : resultQuery) {

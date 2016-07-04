@@ -2,7 +2,7 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ColorDao
- * Last modified: 03/07/16 18.50
+ * Last modified: 04/07/16 8.58
  */
 
 package com.ufos.cyw16.cleanyourworld.model_new.dao.factories;
@@ -14,7 +14,7 @@ import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
 import com.ufos.cyw16.cleanyourworld.model_new.Color;
 
 /**
- * The interface Color dao.
+ * The interface ColorDao.
  * This interface and her inheritance class allow you to create a ColorDao object
  */
 public interface ColorDao extends EntityDao<Color> {
@@ -25,7 +25,7 @@ public interface ColorDao extends EntityDao<Color> {
     class ColorsDaoSQLite extends EntityDaoSQLite<Color> implements ColorDao {
 
         /**
-         * Instantiates a new Colors dao sq lite.
+         * Instantiates a new ColorsDaoSQLite.
          *
          * @param context the context
          */
