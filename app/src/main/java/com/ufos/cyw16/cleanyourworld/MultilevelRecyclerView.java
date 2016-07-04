@@ -17,21 +17,21 @@ import android.view.View;
 /**
  * Created by simone_mancini on 04/07/16.
  */
-public class InnerRecyclerView extends RecyclerView implements View.OnTouchListener {
+public class MultilevelRecyclerView extends RecyclerView implements View.OnTouchListener {
 
-    private boolean enableTouchIntercept = false;
+    private boolean enableTouchIntercept = true;
 
-    private RecyclerView parentRecyclerView;
+    private MultilevelRecyclerView parentRecyclerView;
 
-    public InnerRecyclerView(Context context) {
+    public MultilevelRecyclerView(Context context) {
         super(context);
     }
 
-    public InnerRecyclerView(Context context, @Nullable AttributeSet attrs) {
+    public MultilevelRecyclerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public InnerRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
+    public MultilevelRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -49,11 +49,11 @@ public class InnerRecyclerView extends RecyclerView implements View.OnTouchListe
         if (parentRecyclerView != null) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 // Disable intercepting touch to allow children to scroll
-                setEnableTouchIntercept(true);
+                parentRecyclerView.setEnableTouchIntercept(false);
             } else if (event.getAction() == MotionEvent.ACTION_UP ||
                     event.getAction() == MotionEvent.ACTION_CANCEL) {
                 // Re-enable after children handles touch
-                setEnableTouchIntercept(false);
+                parentRecyclerView.setEnableTouchIntercept(true);
             }
         }
 
@@ -72,7 +72,7 @@ public class InnerRecyclerView extends RecyclerView implements View.OnTouchListe
         return parentRecyclerView;
     }
 
-    public void setParentRecyclerView(RecyclerView parentRecyclerView) {
+    public void setParentRecyclerView(MultilevelRecyclerView parentRecyclerView) {
         this.parentRecyclerView = parentRecyclerView;
     }
 }

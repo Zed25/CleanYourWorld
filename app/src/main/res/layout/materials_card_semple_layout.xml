@@ -30,7 +30,7 @@
             android:layout_weight="0.3"
             android:orientation="vertical">
 
-        <com.ufos.cyw16.cleanyourworld.InnerRecyclerView
+        <com.ufos.cyw16.cleanyourworld.MultilevelRecyclerView
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:id="@+id/rvProductsOfMaterial"

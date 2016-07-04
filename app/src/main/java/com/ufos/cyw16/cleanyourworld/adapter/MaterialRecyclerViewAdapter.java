@@ -8,25 +8,19 @@
 package com.ufos.cyw16.cleanyourworld.adapter;
 
 import android.content.Context;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.CustomLinearLayoutManager;
-import com.ufos.cyw16.cleanyourworld.InnerRecyclerView;
+import com.ufos.cyw16.cleanyourworld.MultilevelRecyclerView;
 import com.ufos.cyw16.cleanyourworld.Models.MaterialTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
-import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,9 +29,9 @@ import java.util.List;
 public class MaterialRecyclerViewAdapter extends RecyclerView.Adapter<MaterialRecyclerViewAdapter.MaterialRecyclerViewHolder> {
     private List<MaterialTrashInfo> lvMaterilTrashInfo;
     private Context context;
-    private RecyclerView parentRecyclerView;
+    private MultilevelRecyclerView parentRecyclerView;
 
-    public MaterialRecyclerViewAdapter(Context context, List<MaterialTrashInfo> lvMaterilTrashInfo, RecyclerView parentRecyclerView) {
+    public MaterialRecyclerViewAdapter(Context context, List<MaterialTrashInfo> lvMaterilTrashInfo, MultilevelRecyclerView parentRecyclerView) {
         this.lvMaterilTrashInfo = lvMaterilTrashInfo;
         this.context = context;
         this.parentRecyclerView = parentRecyclerView;
@@ -76,17 +70,17 @@ public class MaterialRecyclerViewAdapter extends RecyclerView.Adapter<MaterialRe
     public static class MaterialRecyclerViewHolder extends RecyclerView.ViewHolder{
 
         protected TextView tvMaterialAndColor, tvDay;
-        protected InnerRecyclerView rvProductsOfMaterial;
+        protected MultilevelRecyclerView rvProductsOfMaterial;
         protected ImageButton ibtnToMaterialListView;
         protected Context context;
-        protected RecyclerView parentRecyclerView;
+        protected MultilevelRecyclerView parentRecyclerView;
 
-        public MaterialRecyclerViewHolder(Context context, View v, RecyclerView parentRecyclerView) {
+        public MaterialRecyclerViewHolder(Context context, View v, MultilevelRecyclerView parentRecyclerView) {
             super(v);
             tvMaterialAndColor = (TextView) v.findViewById(R.id.tvMaterialAndColor);
             tvDay = (TextView) v.findViewById(R.id.tvDay);
             ibtnToMaterialListView = (ImageButton) v.findViewById(R.id.ibtnToMateriaListView);
-            rvProductsOfMaterial = (InnerRecyclerView) v.findViewById(R.id.rvProductsOfMaterial);
+            rvProductsOfMaterial = (MultilevelRecyclerView) v.findViewById(R.id.rvProductsOfMaterial);
 
             //set RecyclerView's size fixed
             rvProductsOfMaterial.setHasFixedSize(true);

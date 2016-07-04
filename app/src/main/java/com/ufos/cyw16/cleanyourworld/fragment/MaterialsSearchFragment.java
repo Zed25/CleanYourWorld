@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.ufos.cyw16.cleanyourworld.CustomLinearLayoutManager;
 import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.Models.MaterialTrashInfo;
+import com.ufos.cyw16.cleanyourworld.MultilevelRecyclerView;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarMonthAdapter;
 import com.ufos.cyw16.cleanyourworld.adapter.MaterialRecyclerViewAdapter;
@@ -54,7 +55,7 @@ import java.util.List;
  */
 public class MaterialsSearchFragment extends Fragment {
 
-    private RecyclerView recyclerView;
+    private MultilevelRecyclerView recyclerView;
 
     private MaterialRecyclerViewAdapter materialRecyclerViewAdapter;
 
@@ -114,7 +115,7 @@ public class MaterialsSearchFragment extends Fragment {
     private void initializerecyclerView(View v) {
 
         detectorCompat = new GestureDetectorCompat(getActivity(), new GestureDetector.SimpleOnGestureListener());
-        recyclerView = (RecyclerView) v.findViewById(R.id.rvMaterials);
+        recyclerView = (MultilevelRecyclerView) v.findViewById(R.id.rvMaterials);
 
 
         materialTrashInfoList = new ArrayList<>();
