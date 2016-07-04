@@ -12,6 +12,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -20,6 +21,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.CustomLinearLayoutManager;
+import com.ufos.cyw16.cleanyourworld.InnerRecyclerView;
 import com.ufos.cyw16.cleanyourworld.Models.MaterialTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
@@ -33,10 +35,12 @@ import java.util.List;
 public class MaterialRecyclerViewAdapter extends RecyclerView.Adapter<MaterialRecyclerViewAdapter.MaterialRecyclerViewHolder> {
     private List<MaterialTrashInfo> lvMaterilTrashInfo;
     private Context context;
+    private RecyclerView parentRecyclerView;
 
-    public MaterialRecyclerViewAdapter(Context context, List<MaterialTrashInfo> lvMaterilTrashInfo) {
+    public MaterialRecyclerViewAdapter(Context context, List<MaterialTrashInfo> lvMaterilTrashInfo, RecyclerView parentRecyclerView) {
         this.lvMaterilTrashInfo = lvMaterilTrashInfo;
         this.context = context;
+        this.parentRecyclerView = parentRecyclerView;
     }
 
     @Override
@@ -54,6 +58,8 @@ public class MaterialRecyclerViewAdapter extends RecyclerView.Adapter<MaterialRe
 
         ProductOfMaterialRecyclerViewAdapter productOfMaterialRecyclerViewAdapter = new ProductOfMaterialRecyclerViewAdapter(materialTrashInfo.getProductTypes());
         materialRecyclerViewHolder.rvProductsOfMaterial.setAdapter(productOfMaterialRecyclerViewAdapter);
+
+
     }
 
     @Override
@@ -62,7 +68,7 @@ public class MaterialRecyclerViewAdapter extends RecyclerView.Adapter<MaterialRe
                 from(viewGroup.getContext()).
                 inflate(R.layout.materials_card_semple_layout, viewGroup, false);
 
-        return new MaterialRecyclerViewHolder(context, itemView);
+        return new MaterialRecyclerViewHolder(context, itemView, parentRecyclerView);
     }
 
 
@@ -70,20 +76,17 @@ public class MaterialRecyclerViewAdapter extends RecyclerView.Adapter<MaterialRe
     public static class MaterialRecyclerViewHolder extends RecyclerView.ViewHolder{
 
         protected TextView tvMaterialAndColor, tvDay;
-        protected RecyclerView rvProductsOfMaterial;
-        protected CoordinatorLayout svProducTypes;
-        //protected ScrollView svProducTypes;
+        protected InnerRecyclerView rvProductsOfMaterial;
         protected ImageButton ibtnToMaterialListView;
         protected Context context;
+        protected RecyclerView parentRecyclerView;
 
-        public MaterialRecyclerViewHolder(Context context, View v) {
+        public MaterialRecyclerViewHolder(Context context, View v, RecyclerView parentRecyclerView) {
             super(v);
             tvMaterialAndColor = (TextView) v.findViewById(R.id.tvMaterialAndColor);
             tvDay = (TextView) v.findViewById(R.id.tvDay);
             ibtnToMaterialListView = (ImageButton) v.findViewById(R.id.ibtnToMateriaListView);
-            rvProductsOfMaterial = (RecyclerView) v.findViewById(R.id.rvProductsOfMaterial);
-            svProducTypes = (CoordinatorLayout) v.findViewById(R.id.svProductTypes);
-            //svProducTypes = (ScrollView) v.findViewById(R.id.svProductTypes);
+            rvProductsOfMaterial = (InnerRecyclerView) v.findViewById(R.id.rvProductsOfMaterial);
 
             //set RecyclerView's size fixed
             rvProductsOfMaterial.setHasFixedSize(true);
@@ -96,15 +99,17 @@ public class MaterialRecyclerViewAdapter extends RecyclerView.Adapter<MaterialRe
             //set the layout manager in recycler view
             rvProductsOfMaterial.setLayoutManager(linearLayoutManager);
 
+            rvProductsOfMaterial.setParentRecyclerView(parentRecyclerView);
+
 
             ibtnToMaterialListView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if(tvMaterialAndColor.getVisibility() == View.VISIBLE){
                         tvMaterialAndColor.setVisibility(View.GONE);
-                        svProducTypes.setVisibility(View.VISIBLE);
+                        rvProductsOfMaterial.setVisibility(View.VISIBLE);
                     }else {
-                        svProducTypes.setVisibility(View.GONE);
+                        rvProductsOfMaterial.setVisibility(View.GONE);
                         tvMaterialAndColor.setVisibility(View.VISIBLE);
                     }
                 }

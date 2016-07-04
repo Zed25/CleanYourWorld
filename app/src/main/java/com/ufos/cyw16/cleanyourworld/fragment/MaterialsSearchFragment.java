@@ -14,10 +14,13 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -61,6 +64,12 @@ public class MaterialsSearchFragment extends Fragment {
 
     private ProgressDialog waitingDialog;
 
+    private GestureDetectorCompat detectorCompat;
+
+    private LinearLayoutManager linearLayoutManager;
+
+    private boolean scrollVertical = true;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +112,8 @@ public class MaterialsSearchFragment extends Fragment {
      * Called in either in week view or in month view
      **/
     private void initializerecyclerView(View v) {
+
+        detectorCompat = new GestureDetectorCompat(getActivity(), new GestureDetector.SimpleOnGestureListener());
         recyclerView = (RecyclerView) v.findViewById(R.id.rvMaterials);
 
 
@@ -113,11 +124,14 @@ public class MaterialsSearchFragment extends Fragment {
 
         //create the layout manager to insert into the recycler view
         //linear layout manager is similar to layout manager for the list view
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         //set the layout manager in recycler view
         recyclerView.setLayoutManager(linearLayoutManager);
+
+
+
     }
 
     private class MaterialSearchAsyncTask extends AsyncTask<Integer, Void, Void> {
@@ -200,8 +214,7 @@ public class MaterialsSearchFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
 
-
-            materialRecyclerViewAdapter = new MaterialRecyclerViewAdapter(getContext(), materialTrashInfoList);
+            materialRecyclerViewAdapter = new MaterialRecyclerViewAdapter(getContext(), materialTrashInfoList, recyclerView);
             recyclerView.setAdapter(materialRecyclerViewAdapter);
 
             if(waitingDialog != null){
