@@ -17,11 +17,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SwitchCompat;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,9 +34,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ufos.cyw16.cleanyourworld.Models.Comune;
-import com.ufos.cyw16.cleanyourworld.Models.Provincia;
-import com.ufos.cyw16.cleanyourworld.Models.Regione;
+import com.ufos.cyw16.cleanyourworld.model_new.Comune;
+import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
+import com.ufos.cyw16.cleanyourworld.model_new.Provincia;
+import com.ufos.cyw16.cleanyourworld.model_new.Regione;
 import com.ufos.cyw16.cleanyourworld.config.ConfigAdapter;
 import com.ufos.cyw16.cleanyourworld.config.ConfigAdapterDataProvider;
 import com.ufos.cyw16.cleanyourworld.config.ConfigStep;
@@ -41,33 +45,48 @@ import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ProvinceTableAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ComuneDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.RegioneDao;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ConfigurationActivity extends AppCompatActivity {
+public class ConfigurationActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private RecyclerView recyclerView;
     private Button btnContinue;
     private Button btnBack;
     private TextView chooseTV;
     private ImageView mapIV;
+    private ImageView trashIV;
+    private SwitchCompat switchRecycle;
 
     ConfigAdapter adapter;
     private ConfigStep step;
     private ArrayList<ConfigAdapterDataProvider> data;
 
+    private SearchView searchView;
+
     /* Animation */
     private ProgressBar progressBar;
     private int animationDuration;
 
-    // FIXME: 02/07/16 [DAO - MODELS] togliere i tablesAdapter e mettere le DAO
-    private RegioniTableAdapter regioni;
-    private ProvinceTableAdapter province;
-    private ComuniTableAdapter comuni;
+
+    private RegioneDao regioneDao;
+    private ProvinciaDao provinciaDao;
+    private ComuneDao comuneDao;
 
     /* chosen regione,provincia and comune; used later to save in shared prefs */
-    private Regione regioneChosen = new Regione(0,"tmp");
-    private Provincia provinciaChosen = new Provincia("tmp",0,0);
-    private Comune comuneChosen = new Comune("tmp",0,0);
+    private Regione regioneChosen = new Regione();
+    private Provincia provinciaChosen = new Provincia();
+    private Comune comuneChosen = new Comune();
+
+    private List<Regione> regioni_al = null;
+    private List<Provincia> province_al = null;
+    private List<Comune> comuni_al = null;
+
+    LoadFromDB asyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +99,13 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         chooseTV = (TextView) findViewById(R.id.chooseTV);
         mapIV = (ImageView) findViewById(R.id.mapIV);
+        trashIV = (ImageView) findViewById(R.id.trashIV);
+
+        switchRecycle = (SwitchCompat) findViewById(R.id.switchRecycle);
 
         progressBar = (ProgressBar) findViewById(R.id.progress);
+
+        searchView = (SearchView) findViewById(R.id.search_config);
 
         // start and configure recycler view
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -91,17 +115,31 @@ public class ConfigurationActivity extends AppCompatActivity {
         btnContinue.setEnabled(false);
         btnBack.setVisibility(View.INVISIBLE);
 
+        // set switch and trash Image View invisibile; set visible only when you are choosing
+        // a comune
+        trashIV.setVisibility(View.INVISIBLE);
+        switchRecycle.setVisibility(View.INVISIBLE);
+
+        // add a listener to search view
+        // the class itself is the listener because implements interface
+        searchView.setOnQueryTextListener(this);
+
 
         step = ConfigStep.REGIONE; // first step
         data = new ArrayList<>();
 
-        updateDBFromServer();
+        //updateDBFromServer();
 
-        startStep(data);
+        asyncTask = new LoadFromDB();
+        asyncTask.execute();
 
-        for(ConfigAdapterDataProvider tmp : data){
-            System.out.println("DATA : " + tmp.getName());
-        }
+        //startStep(data);
+
+        /* set adapter and layout manager for recycler view */
+        adapter = new ConfigAdapter(data);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
 
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,11 +172,7 @@ public class ConfigurationActivity extends AppCompatActivity {
             }
         });
 
-        /* set adapter and layout manager for recycler view */
-        adapter = new ConfigAdapter(data);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+
 
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
             @Override
@@ -162,22 +196,58 @@ public class ConfigurationActivity extends AppCompatActivity {
         }));
     }
 
+    private class LoadFromDB extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            startLoadingAnimation();
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            startStep(data);
+
+            crossfade();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            updateDBFromServer();
+
+            return null;
+
+        }
+    }
+
     private void updateDBFromServer() {
         /* downloads all regioni,province,comuni from server and inserts into local DB */
-        // FIXME: 02/07/16 [DAO] Mettere le DAO
-        regioni = new RegioniTableAdapter(getApplicationContext());
-        province = new ProvinceTableAdapter(getApplicationContext());
-        comuni = new ComuniTableAdapter(getApplicationContext());
+        regioneDao = DaoFactory_def.getInstance(getApplicationContext()).getRegioneDao();
+        provinciaDao = DaoFactory_def.getInstance(getApplicationContext()).getProvinciaDao();
+        comuneDao = DaoFactory_def.getInstance(getApplicationContext()).getComuneDao();
+
+
         try {
-            regioni.updateFromServer(null,null);
-            province.updateFromServer(null,null );
-            comuni.updateFromServer(null,null);
+            regioneDao.updateFromServer(null,null);
+            provinciaDao.updateFromServer(null,null);
+            comuneDao.updateFromServer(null,null);
+
+            regioni_al = regioneDao.findAll();
+            province_al = provinciaDao.findAll();
+            comuni_al = comuneDao.findAll();
 
         } catch (DaoException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+
 
 
     }
@@ -190,8 +260,6 @@ public class ConfigurationActivity extends AppCompatActivity {
     }
 
     private void crossfade() {
-
-
 
         // Set the content view to 0% opacity but visible, so that it is visible
         // (but fully transparent) during the animation.
@@ -220,26 +288,22 @@ public class ConfigurationActivity extends AppCompatActivity {
     }
 
     private void setChosenLocation(ConfigAdapterDataProvider provider) {
-        // FIXME: 02/07/16 [MODELS] Sostituire con nuovi model
         switch (step){
             case REGIONE:
 
                 break;
             case PROVINCIA:
-                regioneChosen.setId(provider.getId());
+                regioneChosen.setIdRegione_int(provider.getId());
                 regioneChosen.setName(provider.getName());
-
                 break;
             case COMUNE:
-                provinciaChosen.setId(provider.getId());
+                provinciaChosen.setIdProvincia(provider.getId());
                 provinciaChosen.setName(provider.getName());
-                provinciaChosen.setIdRegione(regioneChosen.getId());
 
                 break;
             case END:
                 comuneChosen.setName(provider.getName());
-                comuneChosen.setId(provider.getId());
-                comuneChosen.setIdProvincia(provinciaChosen.getId());
+                comuneChosen.setIdComune(provider.getId());
                 break;
         }
     }
@@ -250,7 +314,7 @@ public class ConfigurationActivity extends AppCompatActivity {
             showRecapDialog();
         }
 
-        startLoadingAnimation();
+        //startLoadingAnimation();
 
         data.clear();
         fillDataArray(data);
@@ -263,7 +327,7 @@ public class ConfigurationActivity extends AppCompatActivity {
             btnBack.setVisibility(View.VISIBLE);
         }
 
-        crossfade();
+        //crossfade();
     }
 
     private void showRecapDialog() {
@@ -296,10 +360,9 @@ public class ConfigurationActivity extends AppCompatActivity {
 
         // TODO remove comments when finished
         //editor.putBoolean("firstTime",false);
-        // FIXME: 02/07/16 [MODELS] sostituire con nuovi model
-        editor.putInt("regione_id",regioneChosen.getId());
-        editor.putInt("provincia_id",provinciaChosen.getId());
-        editor.putInt("comune_id",comuneChosen.getId());
+        editor.putInt("regione_id",regioneChosen.getIdRegione_int());
+        editor.putInt("provincia_id",provinciaChosen.getIdProvincia());
+        editor.putInt("comune_id",comuneChosen.getIdComune());
 
         editor.apply();
     }
@@ -309,25 +372,28 @@ public class ConfigurationActivity extends AppCompatActivity {
         Intent main = new Intent(getApplicationContext(),MainActivity.class);
         //when the new activity starts, this one calls finish so you can't return to it with the back button
         main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        //create a bundle and fill with a boolean needed in main activity
+        //to verify that configuration has been successfully made
         Bundle b = new Bundle();
         b.putBoolean("configDone",true);
         main.putExtras(b);
         startActivity(main);
+        //kill activity
         finish();
     }
 
     private void changeChooseTV() {
 
+        // depending on the config step you are in, the text view changes
         switch (step){
             case REGIONE:
-
+                // do nothing, it's already set by default
                 break;
             case PROVINCIA:
                 chooseTV.setText("Choose Your Regione");
                 break;
             case COMUNE:
                 chooseTV.setText("Choose Your Province");
-
                 break;
             case END:
                 chooseTV.setText("Choose your Comune");
@@ -338,22 +404,22 @@ public class ConfigurationActivity extends AppCompatActivity {
 
     /* fills data array depending on the step of the configuration you are in */
     private void fillDataArray(ArrayList<ConfigAdapterDataProvider> data) {
-        // FIXME: 02/07/16 [DAO - MODELS] controllare i nuovi models e le chiamate ai tablesAdapter
+
         switch (step){
             case REGIONE:
-
-                // TODO change return type of .getData()
-                ArrayList<ArrayList<String>> regioni_al = new ArrayList<>();
+                //get all regione from local DB
+                /*List<Regione> regioni_al = null;
                 try {
-                    /* returns all data from local db (previously updated from server)*/
-                    regioni_al = regioni.getData(null,null,null);
+                    regioni_al = regioneDao.findAll();
                 } catch (DaoException e) {
                     e.printStackTrace();
-                }
+                }*/
 
-                convertToDataProvider(ConfigStep.REGIONE,data,regioni_al);
+                //converts List of Regione to a class needed to fill recycler view
+                convertToDataProviderRegione(data,regioni_al);
 
                 if(adapter != null){
+                    //notify the adapter that data has changes
                     adapter.notifyDataSetChanged();
                 }
                 /* changes next step of config */
@@ -361,56 +427,101 @@ public class ConfigurationActivity extends AppCompatActivity {
                 break;
 
             case PROVINCIA:
-
-                ArrayList<ArrayList<String>> province_al = new ArrayList<>();
-                /* SELECT * FROM province WHERE regioni_id = (id of previously chosen regione) */
-                String[] selection = {"regioni_id"};
-                String[] values = {String.valueOf(regioneChosen.getId())};
+                // get all Provincia from local DB
+                /*List<Provincia> province_al = null;
                 try {
-                    province_al = province.getData(selection,values,null);
+                    province_al = provinciaDao.getByIdRegion(regioneChosen.getIdRegione_int());
                 } catch (DaoException e) {
                     e.printStackTrace();
-                }
+                }*/
 
-                convertToDataProvider(ConfigStep.PROVINCIA,data,province_al);
+                // converts List of Provincia to a class needed by recycler view
+                convertToDataProviderProvincia(data,province_al);
 
+                // notify change has been made to array
                 adapter.notifyDataSetChanged();
+                // update state of config
                 step = ConfigStep.COMUNE;
                 break;
 
             case COMUNE:
-
-                ArrayList<ArrayList<String>> comuni_al = new ArrayList<>();
-                /* SELECT * from comuni WHERE province_id = (id of previously chosen province)*/
-                String[] select_comuni = {"province_id"};
-                String[] values_comuni = {String.valueOf(provinciaChosen.getId())};
-
+                // get all Comune from local DB
+                /*List<Comune> comuni_al = null;
                 try {
-                    comuni_al = comuni.getData(select_comuni,values_comuni,null);
+                    comuni_al = comuneDao.getByIdProvincia(provinciaChosen.getIdProvincia());
                 } catch (DaoException e) {
                     e.printStackTrace();
-                }
+                }*/
 
-                convertToDataProvider(ConfigStep.COMUNE,data,comuni_al);
+                convertToDataProviderComune(data,comuni_al);
                 adapter.notifyDataSetChanged();
+
+                enableSwitch();
 
                 step = ConfigStep.END;
                 break;
         }
     }
 
-    private void convertToDataProvider(ConfigStep step, ArrayList<ConfigAdapterDataProvider> data, ArrayList<ArrayList<String>> db_data) {
+    private void enableSwitch() {
+        switchRecycle.setVisibility(View.VISIBLE);
+        trashIV.setVisibility(View.VISIBLE);
+    }
 
-        int i;
-
-        for (i = 0; i < db_data.size(); i++){
+    private void convertToDataProviderComune(ArrayList<ConfigAdapterDataProvider> data, List<Comune> comuni_al) {
+        for(Comune r : comuni_al){
             ConfigAdapterDataProvider tmp = new ConfigAdapterDataProvider();
-            tmp.setName(db_data.get(i).get(1));
-            tmp.setId(Integer.valueOf(db_data.get(i).get(0)));
+            tmp.setId(r.getIdComune());
+            tmp.setName(r.getName());
             data.add(tmp);
-            System.out.println(tmp.getName() + tmp.getId());
         }
+    }
 
+    private void convertToDataProviderProvincia(ArrayList<ConfigAdapterDataProvider> data, List<Provincia> province_al) {
+        for(Provincia r : province_al){
+            ConfigAdapterDataProvider tmp = new ConfigAdapterDataProvider();
+            tmp.setId(r.getIdProvincia());
+            tmp.setName(r.getName());
+            data.add(tmp);
+        }
+    }
+
+    private void convertToDataProviderRegione(ArrayList<ConfigAdapterDataProvider> data, List<Regione> regioni_al) {
+
+        for(Regione r : regioni_al){
+            ConfigAdapterDataProvider tmp = new ConfigAdapterDataProvider();
+            tmp.setId(r.getIdRegione_int());
+            tmp.setName(r.getName());
+            data.add(tmp);
+        }
+    }
+
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<ConfigAdapterDataProvider> filteredModelList = filter(data, newText);
+        adapter.animateTo(filteredModelList);
+        //adapter.notifyDataSetChanged();
+        recyclerView.scrollToPosition(0);
+        return true;
+    }
+
+    private List<ConfigAdapterDataProvider> filter(List<ConfigAdapterDataProvider> models, String query) {
+        query = query.toLowerCase();
+
+        final List<ConfigAdapterDataProvider> filteredModelList = new ArrayList<>();
+        for (ConfigAdapterDataProvider model : models) {
+            final String text = model.getName().toLowerCase();
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 
 
@@ -419,6 +530,7 @@ public class ConfigurationActivity extends AppCompatActivity {
         private GestureDetector gestureDetector;
         private ClickListener clickListener;
 
+        //adds a listener for every row in recycler view
         public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {

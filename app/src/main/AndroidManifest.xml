@@ -35,7 +35,8 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".ConfigurationActivity" />
+        <activity android:name=".ConfigurationActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".fragment.GeolocalizationActivity" >
 
         </activity>

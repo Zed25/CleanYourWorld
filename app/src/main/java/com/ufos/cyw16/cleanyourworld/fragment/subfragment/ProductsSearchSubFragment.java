@@ -58,6 +58,7 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
     @Override
     public void onResume() {
         super.onResume();
+        // when resumes, makes search bar visible
         searchView.setVisibility(View.VISIBLE);
 
     }
@@ -68,9 +69,11 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.products_search_subfragment, container, false); //inflate layout
 
+        //get short animation duration from resources
         animationDuration = getResources().getInteger(
                 android.R.integer.config_longAnimTime);
 
+        // load all views
         searchView = (SearchView) getActivity().findViewById(R.id.search_view);
         searchView.setVisibility(View.VISIBLE);
         searchView.setOnQueryTextListener(this);
@@ -81,13 +84,14 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        //make progress bar visible
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
 
 
+        //start asynk task to load product types from db and not block the main UI thread
         new LoadFromDB().execute();
 
-        //createFragment(v); //set ViewPager and TabLayout
         return v;
     }
 
@@ -118,7 +122,6 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
     }
 
     private void crossfade() {
-
 
 
         // Set the content view to 0% opacity but visible, so that it is visible
