@@ -189,14 +189,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Message4Debug.log("inizio aggiornamento del database interno...");
         long start = System.currentTimeMillis();
         for (EntityDao entity : entities) {
-            try {
+            //TODO remove comment
+            /*try {
                 Message4Debug.log(entity.getClass().getSimpleName());
                 entity.updateFromServer(null, null);
             } catch (DaoException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
         Message4Debug.log("aggiornamento completato in: " + (System.currentTimeMillis() - start));
     }

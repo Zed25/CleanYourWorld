@@ -182,7 +182,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                 * used in SQL queries (to display only related information);
                 * */
                 ConfigAdapterDataProvider provider = data.get(position);
-                setChosenLocation(provider);
+                setChosenLocation(provider,position);
                 Toast.makeText(getApplicationContext(),"You chose "+ provider.getName(),Toast.LENGTH_SHORT).show();
 
                 btnContinue.setEnabled(true);
@@ -238,8 +238,8 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
             comuneDao.updateFromServer(null,null);
 
             regioni_al = regioneDao.findAll();
-            province_al = provinciaDao.findAll();
-            comuni_al = comuneDao.findAll();
+            //province_al = provinciaDao.findAll();
+            //comuni_al = comuneDao.findAll();
 
         } catch (DaoException e) {
             e.printStackTrace();
@@ -287,23 +287,28 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                 });
     }
 
-    private void setChosenLocation(ConfigAdapterDataProvider provider) {
+    private void setChosenLocation(ConfigAdapterDataProvider provider,int position) {
         switch (step){
             case REGIONE:
 
                 break;
             case PROVINCIA:
-                regioneChosen.setIdRegione_int(provider.getId());
-                regioneChosen.setName(provider.getName());
+                regioneChosen = regioni_al.get(position);
+                //regioneChosen.setIdRegione_int(provider.getId());
+                //regioneChosen.setName(provider.getName());
+                province_al = regioneChosen.getProvince();
                 break;
             case COMUNE:
-                provinciaChosen.setIdProvincia(provider.getId());
-                provinciaChosen.setName(provider.getName());
-
+                provinciaChosen = province_al.get(position);
+                //provinciaChosen.setIdProvincia(province_al.get(position).getIdProvincia());
+                //provinciaChosen.setName(province_al.get(position).getName());
+                comuni_al = provinciaChosen.getComuni();
                 break;
             case END:
-                comuneChosen.setName(provider.getName());
-                comuneChosen.setIdComune(provider.getId());
+
+                comuneChosen = comuni_al.get(position);
+                //comuneChosen.setName(comuni_al.get(position).getName());
+                //comuneChosen.setIdComune(comuni_al.get(position).getIdComune());
                 break;
         }
     }
@@ -433,8 +438,9 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                     province_al = provinciaDao.getByIdRegion(regioneChosen.getIdRegione_int());
                 } catch (DaoException e) {
                     e.printStackTrace();
-                }*/
-
+                }
+*/
+                //province_al = regioneChosen.getProvince();
                 // converts List of Provincia to a class needed by recycler view
                 convertToDataProviderProvincia(data,province_al);
 
@@ -452,6 +458,8 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                 } catch (DaoException e) {
                     e.printStackTrace();
                 }*/
+
+                //comuni_al = provinciaChosen.getComuni();
 
                 convertToDataProviderComune(data,comuni_al);
                 adapter.notifyDataSetChanged();

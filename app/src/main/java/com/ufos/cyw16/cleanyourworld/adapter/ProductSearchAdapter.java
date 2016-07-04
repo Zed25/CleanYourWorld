@@ -16,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.R;
-import com.ufos.cyw16.cleanyourworld.config.MaterialTypeEnum;
-import com.ufos.cyw16.cleanyourworld.model_new.Product;
 import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
 
 import java.util.ArrayList;
