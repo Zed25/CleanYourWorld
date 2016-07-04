@@ -2,6 +2,13 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao
+ * Last modified: 04/07/16 11.02
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao
  * Last modified: 04/07/16 8.51
  */
 
@@ -49,7 +56,7 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
      * This class implements the instruction of the ProductTypeDao and inherits all method of EntityDaoSQLite
      */
     class ProductTypeDaoSQLite extends EntityDaoSQLite<ProductType> implements ProductTypeDao {
-
+        private static int count = 0;
         /**
          * Instantiates a new ProductTypeDaoSQLite.
          *
@@ -61,6 +68,7 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
 
         @Override
         protected ProductType instanceEntity(String[] args) {
+            Message4Debug.log("instanza numero: " + (++count));
             /* RELAZIONE DI COMPOSIZIONE */
             ProductType productType = null;
             try {
@@ -69,6 +77,7 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
                 Message4Debug.log(e.getMessage());
             }
             return productType;
+
         }
 
         /**

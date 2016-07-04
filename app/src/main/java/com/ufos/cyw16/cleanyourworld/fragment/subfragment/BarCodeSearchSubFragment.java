@@ -1,4 +1,11 @@
 /*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.fragment.subfragment.BarCodeSearchSubFragment
+ * Last modified: 04/07/16 13.54
+ */
+
+/*
  * Created by Umberto Ferracci from urania on 04/06/16 18.06
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -84,6 +91,7 @@ public class BarCodeSearchSubFragment extends Fragment{
 
                 }
             }
+            scan();
         }
     }
 
