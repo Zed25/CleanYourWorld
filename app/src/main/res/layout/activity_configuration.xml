@@ -116,8 +116,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/trashIV"
             android:layout_toEndOf="@+id/switchRecycle"
-            android:background="@drawable/trash"
             android:layout_alignBottom="@+id/search_config"
             android:layout_alignTop="@+id/search_config" />
+        <!--android:background="@drawable/trash"-->
 
 </RelativeLayout>

@@ -32,9 +32,12 @@ import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Collection;
 import com.ufos.cyw16.cleanyourworld.model_new.Day;
 import com.ufos.cyw16.cleanyourworld.model_new.Material;
+import com.ufos.cyw16.cleanyourworld.model_new.Product;
+import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
@@ -114,10 +117,6 @@ public class MaterialsSearchFragment extends Fragment {
 
         //set the layout manager in recycler view
         recyclerView.setLayoutManager(linearLayoutManager);
-
-        //create and set the adapter for the recycler view
-        materialRecyclerViewAdapter = new MaterialRecyclerViewAdapter(materialTrashInfoList);
-        recyclerView.setAdapter(materialRecyclerViewAdapter);
     }
 
     private class MaterialSearchAsyncTask extends AsyncTask<Integer, Void, Void> {
@@ -158,7 +157,7 @@ public class MaterialsSearchFragment extends Fragment {
             }
         }
 
-        private MaterialTrashInfo computeCardStructure(Material material) {
+        private MaterialTrashInfo computeCardStructure(Material material){
 
             MaterialTrashInfo materialTrashInfo = new MaterialTrashInfo();
             String dayName = selectDay(material.getDays());
@@ -168,6 +167,17 @@ public class MaterialsSearchFragment extends Fragment {
 
             materialTrashInfo.setThrash(trashName);
             materialTrashInfo.setColorOfTheTrash(trashColor);
+
+            ProductTypeDao productTypeDao = DaoFactory_def.getInstance(getContext()).getProtuctTypeDao();
+            /*List<ProductType> productTypes = null;
+
+            try {
+                productTypes = productTypeDao.getProductsByIdMaterial(material.getIdMaterial());
+            } catch (DaoException e) {
+                Message4Debug.log("problem in productTypeDao.getProductsByIdMaterial()");
+            }
+            if(productTypes != null){*/
+                materialTrashInfo.setProductTypes(material.getProdutctTypes());
 
             return materialTrashInfo;
         }
@@ -189,11 +199,9 @@ public class MaterialsSearchFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
 
-            if (materialRecyclerViewAdapter != null) {
-                materialRecyclerViewAdapter.notifyDataSetChanged();
-            } else {
-                Message4Debug.log("materialRecyclerAdapter == null");
-            }
+
+            materialRecyclerViewAdapter = new MaterialRecyclerViewAdapter(getContext(), materialTrashInfoList);
+            recyclerView.setAdapter(materialRecyclerViewAdapter);
 
             if(waitingDialog != null){
                 waitingDialog.dismiss();
