@@ -25,9 +25,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 
-/**
- * Created by Sasha on 02/07/16.
- */
 public class PlaceSelectedParser {
 
     /**
@@ -109,35 +106,25 @@ public class PlaceSelectedParser {
         PlaceSelectedItem placeSelectedItem = new PlaceSelectedItem();
         if (element.getNodeName().equals(RESULT)) {
             NodeList result = element.getChildNodes();
-            vDebug("\t|_figli in result:");
             for (int i = 0; i < result.getLength(); i++) {
                 Node child = result.item(i);
                 if (child.getNodeName().equals(GEOMETRY)) {
                     String[] strings = child.getTextContent().trim().split("\n");
                     String lat = strings[0].trim();
                     String lng = strings[1].trim();
-                    vDebug("\t\t|_lat: " + lat);
-                    vDebug("\t\t|_lng: " + lng);
                     placeSelectedItem.setLatLng(new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)));
 
                 } else if (child.getNodeName().equals(REFERENCE)) {
-                    vDebug("\t\t|_reference: " + child.getTextContent());
                     placeSelectedItem.setReference(child.getTextContent().trim());
                 } else if (child.getNodeName().equals(ID)) {
-                    vDebug("\t\t|_id: " + child.getTextContent());
                     placeSelectedItem.setId(child.getTextContent().trim());
                 } else if (child.getNodeName().equals(PLACE_ID)) {
-                    vDebug("\t\t|_placeId: " + child.getTextContent());
                     placeSelectedItem.setPlace_id(child.getTextContent().trim());
                 }
             }
 
         }
         return placeSelectedItem;
-    }
-
-    static void vDebug(String debugString) {
-        Log.v("RadarPlaceSearchParser", debugString + "\n");
     }
 
     static void eDebug(String debugString) {

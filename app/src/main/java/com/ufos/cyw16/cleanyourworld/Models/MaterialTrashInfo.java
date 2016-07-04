@@ -9,11 +9,17 @@ package com.ufos.cyw16.cleanyourworld.Models;
 
 import android.graphics.Color;
 
+import com.ufos.cyw16.cleanyourworld.model_new.Product;
+import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
+
+import java.util.List;
+
 /**
  * Created by simone_mancini on 03/07/16.
  */
 public class MaterialTrashInfo {
     protected String day, thrash, colorOfTheTrash;
+    protected List<ProductType> productTypes;
 
     public String getDay() {
         return day;
@@ -33,11 +39,18 @@ public class MaterialTrashInfo {
 
     public int getColorOfTheTrash() {
         int color = Color.parseColor(colorOfTheTrash);
-//        color = Color.parseColor("#ff0000");
         return color;
     }
 
     public void setColorOfTheTrash(String colorOfTheTrash) {
         this.colorOfTheTrash = colorOfTheTrash;
+    }
+
+    public List<ProductType> getProductTypes() {
+        return productTypes;
+    }
+
+    public void setProductTypes(List<ProductType> productTypes) {
+        this.productTypes = productTypes;
     }
 }

@@ -119,7 +119,7 @@ public class CalendarMonthViewFragment extends Fragment {
      *
      * Called in either in week view or in month view **/
     private void initializerecyclerView(View v){
-        rvWeekList = (RecyclerView) v.findViewById(R.id.rvWeekList);
+        rvWeekList = (RecyclerView) v.findViewById(R.id.rvMonthList);
 
         //if dayTrashInfoList is equals to null initialized it
         //if (dayTrashInfoList == null) {

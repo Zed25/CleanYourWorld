@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.ufos.cyw16.cleanyourworld.fragment.CalendarFragment">
+    tools:context="com.ufos.cyw16.cleanyourworld.fragment.CalendarMonthViewFragment">
 
     <CalendarView
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:layout_weight="0.4" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvWeekList"
+        android:id="@+id/rvMonthList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="0.8"

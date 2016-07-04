@@ -25,9 +25,10 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/lvMaterialsOfCollection"
+            android:id="@+id/lvProductsOfMaterial"
             android:layout_weight="0.3"
             android:background="@color/colorAccent"
+            android:minHeight="250dp"
             android:visibility="gone"/>
 
         <TextView

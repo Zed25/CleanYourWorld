@@ -2,6 +2,13 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter_NEW
+ * Last modified: 04/07/16 11.18
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter_NEW
  * Last modified: 03/07/16 18.27
  */
 
@@ -187,8 +194,13 @@ public class TableAdapter_NEW {
             rows.add(row);
         }
         cursor.close();
-        if (rows.size() < 1)
-            throw new DaoException("There aren't elements in table " + tableName + " where <" + whereclasues + ">");
+        if (rows.size() < 1) {
+            String ss = "";
+            for (String s : selectionArgs) {
+                ss += s + " ";
+            }
+            throw new DaoException("There aren't elements in table " + tableName + " where <" + whereclasues + "> " + ss);
+        }
         return rows;
     }
 

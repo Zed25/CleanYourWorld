@@ -13,6 +13,8 @@ import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Collection;
+import com.ufos.cyw16.cleanyourworld.model_new.Color;
+import com.ufos.cyw16.cleanyourworld.model_new.Day;
 import com.ufos.cyw16.cleanyourworld.model_new.Material;
 import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
@@ -76,10 +78,21 @@ public interface MaterialDao extends EntityDao<Material> {
             List<Material> materials = new ArrayList<>();
             List<Integer> ids = new ArrayList<>();
             for (Collection c : collections) {
+                List<Day> days = new ArrayList<>();
                 Material material = c.getMaterial();
                 if (!ids.contains(material.getIdMaterial())) {
+                    material.setDays(days);
+                    material.getDays().add(c.getDay());
+                    material.setColor(c.getColor());
                     ids.add(material.getIdMaterial());
                     materials.add(material);
+                }else{
+                    for(Material m: materials){
+                        if(c.getMaterial().getName().equals(m.getName())){
+                            m.getDays().add(c.getDay());
+                            break;
+                        }
+                    }
                 }
             }
             return materials;

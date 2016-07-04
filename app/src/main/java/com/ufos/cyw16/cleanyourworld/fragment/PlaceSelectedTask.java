@@ -1,42 +1,38 @@
 /*
- * Created by UFOS from Sasha
+ * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.fragment.PlaceSelectedTask
- * Last modified: 7/2/16 12:07 PM
+ * Last modified: 04/07/16 15.33
  */
 
 package com.ufos.cyw16.cleanyourworld.fragment;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
 
-/**
- * Created by Sasha on 02/07/16.
- */
 public class PlaceSelectedTask extends AsyncTask<String, Object, String> {
 
-    final private String googleAPIKey = "AIzaSyDRq_v69gnAuoTnCVTXaAa6GUdIOL1bH84";
-    final private String googleLink = "https://maps.googleapis.com/maps/api/place/radarsearch/xml?";
+    private final String googleAPIKey = "AIzaSyCd4ksb7VjC1IXtfJYAnnwAKP0FIRmdznE"; /* this key is different from android key */
+    private final String googleLink = "https://maps.googleapis.com/maps/api/place/radarsearch/xml?";
+    private final int radius = 15000;
+    private final String keyword = "recycling";
     private LatLng latLng;
-    private int radius;
-    private String keyword;
     private String query;
 
 
-    public PlaceSelectedTask(LatLng latLng, int radius, String keyword) {
+    public PlaceSelectedTask(LatLng latLng) {
         this.latLng = latLng;
-        this.radius = radius;
-        this.keyword = keyword;
     }
 
 
     @Override
     protected String doInBackground(String... params) {
         PlaceSelectedParser placeSelectedParser = new PlaceSelectedParser();
+        //query parsing
         placeSelectedParser.parseXml(query);
         ArrayList<PlaceSelectedItem> placeSelectedItems = placeSelectedParser.getRadarPlaceSearchObjects();
         int sizeList = placeSelectedItems.size();
@@ -51,9 +47,7 @@ public class PlaceSelectedTask extends AsyncTask<String, Object, String> {
                 + "location=" + latLng.latitude + "," + latLng.longitude
                 + "&radius=" + radius
                 + "&type=" + keyword
-//                + "&name=" + s
                 + "&keyword=" + keyword
                 + "&key=" + googleAPIKey;
-        Log.v("link", "query: " + query);
     }
 }
