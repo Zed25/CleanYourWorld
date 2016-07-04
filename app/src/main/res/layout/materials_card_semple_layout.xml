@@ -8,6 +8,7 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:id="@+id/cvMaterial"
@@ -22,27 +23,51 @@
         android:orientation="vertical"
         android:weightSum="1">
 
-        <ListView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/lvProductsOfMaterial"
-            android:layout_weight="0.3"
-            android:background="@color/colorAccent"
             android:minHeight="250dp"
-            android:visibility="gone"/>
+            android:layout_weight="0.3"
+            android:orientation="vertical">
 
+            <android.support.design.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:id="@+id/svProductTypes"
+                android:visibility="gone">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:id="@+id/rvProductsOfMaterial"
+            android:minHeight="250dp"
+            android:maxHeight="250dp"
+            android:scrollbars="vertical"/>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    app:layout_anchor="@id/rvProductsOfMaterial"
+                    app:layout_anchorGravity="bottom|right"
+                    android:tint="@color/white"
+                    android:foreground="@drawable/ic_calendar_tab_24dp"
+                    android:cropToPadding="false"/>
+            </android.support.design.widget.CoordinatorLayout>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/tvMaterialAndColor"
-            android:layout_weight="0.3"
             android:textColor="#ffffff"
             android:minHeight="250dp"
             android:text="Nulla"
             android:textSize="50sp"
             android:gravity="center"
+            android:visibility="visible"
             android:textAlignment="gravity"
             android:background="@color/colorAccent"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

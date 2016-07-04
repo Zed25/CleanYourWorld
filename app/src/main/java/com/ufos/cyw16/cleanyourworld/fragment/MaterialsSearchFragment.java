@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.ufos.cyw16.cleanyourworld.CustomLinearLayoutManager;
 import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.Models.MaterialTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
