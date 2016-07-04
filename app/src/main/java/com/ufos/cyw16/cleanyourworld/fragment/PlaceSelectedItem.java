@@ -9,21 +9,11 @@ package com.ufos.cyw16.cleanyourworld.fragment;
 
 import com.google.android.gms.maps.model.LatLng;
 
-/**
- * Created by Sasha on 02/07/16.
- */
 public class PlaceSelectedItem {
     private String reference;
     private String id;
     private String place_id;
     private LatLng latLng;
-
-    public PlaceSelectedItem(String id, Double lat, Double lng, String place_id, String reference) {
-        this.id = id;
-        this.place_id = place_id;
-        this.reference = reference;
-        this.latLng = new LatLng(lat, lng);
-    }
 
     public PlaceSelectedItem() {
 
@@ -31,14 +21,6 @@ public class PlaceSelectedItem {
 
     public String getId() {
         return id;
-    }
-
-    public String getPlace_id() {
-        return place_id;
-    }
-
-    public String getReference() {
-        return reference;
     }
 
     public LatLng getLatLng() {

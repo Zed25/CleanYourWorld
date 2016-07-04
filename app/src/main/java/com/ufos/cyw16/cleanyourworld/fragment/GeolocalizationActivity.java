@@ -33,13 +33,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
-
-/**
- * Created by Sasha on 11/05/16.
- */
-
 public class GeolocalizationActivity extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
+
     private final int PLACE_PERMISSION = 0;
     private GoogleApiClient client;
     private GoogleMap myGoogleMap;
@@ -57,10 +53,10 @@ public class GeolocalizationActivity extends FragmentActivity implements
         setContentView(R.layout.geolocalization);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
         //Map fragment declaration
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
         //adding Google API's
         client = new GoogleApiClient
@@ -115,6 +111,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 LatLng selectedPlace = place.getLatLng();
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(selectedPlace, 13));
                 googleMap.addMarker(new MarkerOptions().position(selectedPlace).title(place.getAddress().toString()));
+                //start AsyncTask
                 placeSelectedTask(selectedPlace);
             }
 
@@ -126,6 +123,8 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
         //Default start
         LatLng currentLocation = new LatLng(-33.867, 151.206);
+
+        //API 23 permissions checks
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
@@ -133,28 +132,21 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PLACE_PERMISSION);
             }
         }
+
         googleMap.setMyLocationEnabled(true);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 13));
         googleMap.addMarker(new MarkerOptions().position(currentLocation).title("You are here!"));
+        //start AsyncTask
         placeSelectedTask(currentLocation);
 
     }
 
     public void placeSelectedTask(final LatLng latLng) {
         new PlaceSelectedTask(latLng) {
-            @Override
-            protected void onPostExecute(String s) {
-                Message4Debug.log("onPostExecute()");
-                progressBar.setVisibility(View.GONE);
-                progressBar.setIndeterminate(true);
-                super.onPostExecute(s);
-
-
-            }
 
             @Override
             protected void onPreExecute() {
-                Message4Debug.log("onPreExecute()");
+                //clear the map and set progressBar visible
                 myGoogleMap.clear();
                 progressBar.setVisibility(View.VISIBLE);
                 setQuery();
@@ -163,17 +155,25 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
             @Override
             protected void onProgressUpdate(Object... values) {
-                Message4Debug.log("onProgressUpdate()");
                 super.onProgressUpdate(values);
 
                 Integer progress = (Integer) values[0];
                 progressBar.setIndeterminate(false);
                 progressBar.setProgress(progress);
-
+                //add markers on garbage islands
                 PlaceSelectedItem placeSelectedItem = (PlaceSelectedItem) values[1];
                 myGoogleMap.addMarker(new MarkerOptions().position(placeSelectedItem.getLatLng()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_electronics)));
 
             }
+
+            @Override
+            protected void onPostExecute(String s) {
+                progressBar.setVisibility(View.GONE);
+                progressBar.setIndeterminate(true);
+                super.onPostExecute(s);
+
+            }
+
         }.execute();
     }
 }
