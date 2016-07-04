@@ -21,4 +21,5 @@
     <string name="sttComune">Settings</string>
     <string name="strProblem">A problem as occurred</string>
     <string name="strNoRecycle">No recycling in this city</string>
+    <string name="pressAgain">Press again back to close application</string>
 </resources>

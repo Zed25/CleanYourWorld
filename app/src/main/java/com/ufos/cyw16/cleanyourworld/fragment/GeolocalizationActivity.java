@@ -10,11 +10,14 @@ package com.ufos.cyw16.cleanyourworld.fragment;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,6 +36,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
+/**
+ * The type Geolocalization activity.
+ */
 public class GeolocalizationActivity extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
 
@@ -43,6 +49,9 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
     //TODO: insert toolbar
 
+    /**
+     * Instantiates a new Geolocalization activity.
+     */
     public GeolocalizationActivity() {
         // Required empty public constructor
     }
@@ -141,6 +150,11 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
     }
 
+    /**
+     * Place selected task.
+     *
+     * @param latLng the lat lng
+     */
     public void placeSelectedTask(final LatLng latLng) {
         new PlaceSelectedTask(latLng) {
 

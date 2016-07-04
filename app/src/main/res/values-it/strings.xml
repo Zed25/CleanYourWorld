@@ -29,4 +29,5 @@
     <string name="calWeekSection">Vista settimanale</string>
     <string name="sttComune">Cambia il tuo comune</string>
     <string name="strNoRecycle">Raccolta differenziata non disponibile in questo comune</string>
+    <string name="pressAgain">Premi nuovamente per chiudere l\'applicazione</string>
 </resources>

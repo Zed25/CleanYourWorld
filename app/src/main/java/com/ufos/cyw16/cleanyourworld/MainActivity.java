@@ -18,6 +18,8 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -32,6 +34,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
@@ -90,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ProvinciaDao provinciaDao;
     private RegioneDao regioneDao;
     private DayDao dayDao;
+    private int count = 0;
 
 
     //private ListView mDrawerList;
@@ -166,6 +170,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+
+        if (count == 1){
+            count += 1;
+        }
+        if (count == 2){
+            super.onBackPressed();
+        }
+        if (count == 0) {
+            final Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    count += 1;
+                    if (count == 1) {
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),
+                                        getApplicationContext().getResources().getString(R.string.pressAgain),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    try {
+                        Thread.sleep(2000, 0);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    count = 0;
+                }
+            });
+            thread.start();
+        }
+        }
     }
 
     private void updateServer() {
@@ -286,16 +331,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ft.replace(R.id.fragmentContent, new CalendarMonthViewFragment(), "fragment_screen");
         ft.commit();
 
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
