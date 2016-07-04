@@ -16,11 +16,16 @@ import com.ufos.cyw16.cleanyourworld.model_new.Regione;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The interface RegioneDao.
  * This interface and her inheritance class allow you to create a RegioneDao object
  */
 public interface RegioneDao extends EntityDao<Regione> {
+
+    List<Regione> findAllLazy() throws DaoException;
     /**
      * The type Regione dao sq lite.
      * This class implements the instruction of the RegioneDao and inherits all method of EntityDaoSQLite
@@ -48,6 +53,29 @@ public interface RegioneDao extends EntityDao<Regione> {
                 Message4Debug.log(e.getMessage());
             }
             return regione;
+        }
+
+        protected Regione instanceEntity(String[] args, boolean lazy) {
+            Regione regione = new Regione();
+            regione.setIdRegione_int(Integer.parseInt(args[0]));
+            regione.setName(args[1]);
+            try {
+                regione.setProvince(DaoFactory_def.getInstance(getContext()).getProvinciaDao().getByIdRegionLazy(Integer.parseInt(args[0])));
+            } catch (DaoException e) {
+                Message4Debug.log(e.getMessage());
+            }
+            return regione;
+        }
+
+        @Override
+        public List<Regione> findAllLazy() throws DaoException {
+            ArrayList<Regione> result = new ArrayList<>();
+            List<String[]> list = getTableAdapter().getData(null, null, null);
+            for (String[] args : list) {
+                Message4Debug.log(args.toString());
+                result.add(instanceEntity(args, true));
+            }
+            return result;
         }
     }
 }

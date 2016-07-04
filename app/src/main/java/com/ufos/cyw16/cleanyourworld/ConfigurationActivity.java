@@ -237,7 +237,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
             provinciaDao.updateFromServer(null,null);
             comuneDao.updateFromServer(null,null);
 
-            regioni_al = regioneDao.findAll();
+            regioni_al = regioneDao.findAllLazy();
             //province_al = provinciaDao.findAll();
             //comuni_al = comuneDao.findAll();
 

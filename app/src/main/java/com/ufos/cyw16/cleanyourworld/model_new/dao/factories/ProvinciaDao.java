@@ -24,6 +24,8 @@ import java.util.List;
  * This interface and her inheritance class allow you to create a ProvinciaDao object
  */
 public interface ProvinciaDao extends EntityDao<Provincia> {
+    List<Provincia> getByIdRegionLazy(int id) throws DaoException;
+
     /**
      * Gets by id region.
      *
@@ -59,6 +61,28 @@ public interface ProvinciaDao extends EntityDao<Provincia> {
                 Message4Debug.log(e.getMessage());
             }
             return provincia;
+        }
+
+        protected Provincia instanceEntity(String[] args, boolean lazy) {
+            Provincia provincia = new Provincia();
+            provincia.setIdProvincia(Integer.parseInt(args[0]));
+            provincia.setName(args[1]);
+            try {
+                provincia.setComuni(DaoFactory_def.getInstance(getContext()).getComuneDao().getByIdProvinciaLazy(Integer.parseInt(args[0])));
+            } catch (DaoException e) {
+                Message4Debug.log(e.getMessage());
+            }
+            return provincia;
+        }
+
+        @Override
+        public List<Provincia> getByIdRegionLazy(int id) throws DaoException {
+            List<String[]> list = getTableAdapter().getData(new String[]{"regioni_id"}, new String[]{String.valueOf(id)}, null);
+            List<Provincia> provinces = new ArrayList<>();
+            for (String[] s : list) {
+                provinces.add(instanceEntity(s, true));
+            }
+            return provinces;
         }
 
         @Override
