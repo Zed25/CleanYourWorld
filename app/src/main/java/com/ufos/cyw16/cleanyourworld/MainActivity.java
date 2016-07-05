@@ -51,7 +51,7 @@ import com.ufos.cyw16.cleanyourworld.fragment.CalendarWeekViewFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity;
 import com.ufos.cyw16.cleanyourworld.fragment.MaterialsSearchFragment;
-import com.ufos.cyw16.cleanyourworld.fragment.subfragment.BarCodeSearchSubFragment;
+import com.ufos.cyw16.cleanyourworld.fragment.BarCodeSearchFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.ProductsSearchSubFragment;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
@@ -345,7 +345,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentTransaction ft = fm.beginTransaction();
         switch (item.getItemId()){
             case R.id.srchScan:
-                ft.replace(R.id.fragmentContent, new BarCodeSearchSubFragment(), "fragment_screen");
+                ft.replace(R.id.fragmentContent, new BarCodeSearchFragment(), "fragment_screen");
                 ft.commit();
                 break;
             case R.id.srchProduct:
