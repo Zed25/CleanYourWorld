@@ -33,6 +33,7 @@
     <string name="choose_another_comune">No Collection Available for selected comune. Choose another one!</string>
     <string name="you_chose">You chose </string>
     <string name="strNeedCamera">You need to allow access to Camera</string>
+    <string name="strNeedCameraForFragment">You need to allow access to Camera to use this fragment: if you had check the "never show again" button go to Settings, Applications, Permissions</string>
     <string name="strCollectionDay">Collection day</string>
     <string name="strScannDate">Scann date</string>
     <string name="strMaterial">Material</string>

@@ -1,11 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/flBarCodeSearch"
+        android:visibility="visible">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvSuggest"
+        android:textColor="#000000"
+        android:text="Prova"/>
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rvBarCodeScann"/>
-</LinearLayout>
+        android:id="@+id/rvBarCodeScann"
+        android:visibility="gone"/>
+
+    </FrameLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="normal"
+        android:id="@+id/fabScannProduct"
+        android:tint="@color/colorAccent"
+        android:foreground="@drawable/ic_camera_black_24dp"
+        android:foregroundGravity="center"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        app:layout_anchor="@id/flBarCodeSearch"
+        app:layout_anchorGravity="bottom|right"
+        app:layout_behavior="com.ufos.cyw16.cleanyourworld.ScrollAwareFABBehavior"
+        android:cropToPadding="false"/>
+
+</android.support.design.widget.CoordinatorLayout>
