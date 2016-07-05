@@ -1,11 +1,4 @@
 /*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.ConfigurationActivity
- * Last modified: 05/07/16 5.12
- */
-
-/*
  * Created by Umberto Ferracci from simone_mancini and published on 20/06/16 15.47
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -36,18 +29,19 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ufos.cyw16.cleanyourworld.model_new.Comune;
+import com.ufos.cyw16.cleanyourworld.model_new.Provincia;
+import com.ufos.cyw16.cleanyourworld.model_new.Regione;
 import com.ufos.cyw16.cleanyourworld.config.ConfigAdapter;
 import com.ufos.cyw16.cleanyourworld.config.ConfigAdapterDataProvider;
 import com.ufos.cyw16.cleanyourworld.config.ConfigStep;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
-import com.ufos.cyw16.cleanyourworld.model_new.Comune;
-import com.ufos.cyw16.cleanyourworld.model_new.Provincia;
-import com.ufos.cyw16.cleanyourworld.model_new.Regione;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ComuneDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao;
@@ -57,8 +51,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigurationActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
-    ConfigAdapter adapter;
-    LoadFromDB asyncTask;
     private RecyclerView recyclerView;
     private Button btnContinue;
     private Button btnBack;
@@ -66,22 +58,35 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
     private ImageView mapIV;
     private ImageView trashIV;
     private SwitchCompat switchRecycle;
+
+    ConfigAdapter adapter;
     private ConfigStep step;
     private ArrayList<ConfigAdapterDataProvider> data;
+
     private SearchView searchView;
+
     /* Animation */
     private ProgressBar progressBar;
     private int animationDuration;
+
+
     private RegioneDao regioneDao;
     private ProvinciaDao provinciaDao;
     private ComuneDao comuneDao;
+
     /* chosen regione,provincia and comune; used later to save in shared prefs */
     private Regione regioneChosen = new Regione();
     private Provincia provinciaChosen = new Provincia();
     private Comune comuneChosen = new Comune();
+
     private List<Regione> regioni_al = null;
     private List<Provincia> province_al = null;
     private List<Comune> comuni_al = null;
+
+    LoadFromDB asyncTask;
+
+    List<ConfigAdapterDataProvider> comuniWithCollection = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +123,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         // add a listener to search view
         // the class itself is the listener because implements interface
         searchView.setOnQueryTextListener(this);
+        searchView.setVisibility(View.INVISIBLE);
 
 
         step = ConfigStep.REGIONE; // first step
@@ -136,6 +142,18 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
+        // when switch is available,filters list with comuni with available collection
+        switchRecycle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    adapter.animateTo(comuniWithCollection);
+                } else {
+                    adapter.animateTo(data);
+                }
+            }
+        });
+
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,6 +164,8 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         });
 
         btnBack.setOnClickListener(new View.OnClickListener() {
+
+            //change the step of the configuration
             @Override
             public void onClick(View v) {
                 switch (step){
@@ -173,12 +193,30 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
             @Override
             public void onClick(View view, int position) {
 
-                /* whenever an item is selected, the regioneCHosen attribute is update as to keep track of selection and later
+                /* whenever an item is selected, the regioneChosen attribute is update as to keep track of selection and later
                 * used in SQL queries (to display only related information);
                 * */
-                ConfigAdapterDataProvider provider = data.get(position);
+                ConfigAdapterDataProvider provider = adapter.getData().get(position);
                 setChosenLocation(provider,position);
-                Toast.makeText(getApplicationContext(),"You chose "+ provider.getName(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),getResources().getString(R.string.you_chose) + provider.getName(),Toast.LENGTH_SHORT).show();
+
+
+                //checks if selected comune has collection available in local db
+                TextView tv = (TextView) view.findViewById(R.id.name);
+                if(step == ConfigStep.END) {
+                    int comuniWithCollectionSize = comuniWithCollection.size();
+                    boolean hasCollection = false;
+                    for(int i = 0;i < comuniWithCollectionSize; i++){
+                        if(comuniWithCollection.get(i).getName().equals(tv.getText())){
+                            hasCollection = true;
+                        }
+                    }
+
+                    // if it doesn't , set it to null
+                    if(!hasCollection){
+                        comuneChosen = null;
+                    }
+                }
 
                 btnContinue.setEnabled(true);
 
@@ -191,6 +229,37 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         }));
     }
 
+    // private async task that gets from local db all regioni,province and comuni
+    private class LoadFromDB extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            startLoadingAnimation();
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            startStep(data);
+
+            crossfade();
+            searchView.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            updateDBFromServer();
+
+            return null;
+
+        }
+    }
+
     private void updateDBFromServer() {
         /* downloads all regioni,province,comuni from server and inserts into local DB */
         regioneDao = DaoFactory_def.getInstance(getApplicationContext()).getRegioneDao();
@@ -199,13 +268,14 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
 
 
         try {
+            //update all tables from remote db once configuration starts
             regioneDao.updateFromServer(null,null);
             provinciaDao.updateFromServer(null,null);
             comuneDao.updateFromServer(null,null);
 
-            regioni_al = regioneDao.findAllLazy();
-            //province_al = provinciaDao.findAll();
-            //comuni_al = comuneDao.findAll();
+            //get list of all regioni (includes also all province and comuni)
+            regioni_al = regioneDao.findAll();
+
 
         } catch (DaoException e) {
             e.printStackTrace();
@@ -218,10 +288,10 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
 
     }
 
+    //show indeterminate progress bar
     private void startLoadingAnimation() {
         recyclerView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-
 
     }
 
@@ -259,74 +329,110 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
 
                 break;
             case PROVINCIA:
-                regioneChosen = regioni_al.get(position);
-                //regioneChosen.setIdRegione_int(provider.getId());
-                //regioneChosen.setName(provider.getName());
-//                province_al = regioneChosen.getProvince();
-                try {
-                    province_al = provinciaDao.getByIdRegionLazy(regioneChosen.getIdRegione_int());
-                } catch (DaoException e) {
-                    e.printStackTrace();
+                int regione_id = adapter.getData().get(position).getId();
+
+                //checks which regione has selected id
+                for(Regione r : regioni_al){
+                    if(provider.getId() == r.getIdRegione_int()){
+                        regioneChosen = r;
+                        break;
+                    }
                 }
+
+                //get list of all province once you chose a regione
+                province_al = regioneChosen.getProvince();
                 break;
             case COMUNE:
-                provinciaChosen = province_al.get(position);
-                //provinciaChosen.setIdProvincia(province_al.get(position).getIdProvincia());
-                //provinciaChosen.setName(province_al.get(position).getName());
-//                comuni_al = provinciaChosen.getComuni();
-                try {
-                    comuni_al = comuneDao.getByIdProvinciaLazy(provinciaChosen.getIdProvincia());
-                } catch (DaoException e) {
-                    e.printStackTrace();
+                int provincia_id = adapter.getData().get(position).getId();
+
+                //find provincia with selected id
+                for(Provincia p : province_al){
+                    if(provider.getId() == p.getIdProvincia()){
+                        provinciaChosen = p;
+                        break;
+                    }
                 }
+
+                //get all comuni once you chose a provincia
+                comuni_al = provinciaChosen.getComuni();
                 break;
             case END:
 
-                comuneChosen = comuni_al.get(position);
-                //comuneChosen.setName(comuni_al.get(position).getName());
-                //comuneChosen.setIdComune(comuni_al.get(position).getIdComune());
+                //get selected comune
+                for(Comune c : comuni_al){
+                    if(provider.getId() == c.getIdComune()){
+                        comuneChosen = c;
+                        break;
+                    }
+                }
                 break;
         }
     }
 
     private void startStep(ArrayList<ConfigAdapterDataProvider> data) {
-
+        
         if(step == ConfigStep.END){
-            showRecapDialog();
+            //if you are at the end of configuration and you chose a comune with collection, you can continue
+            if(comuneChosen != null) {
+                showRecapDialog();
+            //else show dialog to choose another comune
+            } else {
+                showChooseAnotherComuneDialog();
+            }
         }
 
-        //startLoadingAnimation();
-
+        //empty array to later fill it
         data.clear();
         fillDataArray(data);
         changeChooseTV();
         btnContinue.setEnabled(false);
 
+        //set back button visibility depending where you are in the configuration step
         if(step == ConfigStep.PROVINCIA) {
             btnBack.setVisibility(View.INVISIBLE);
         } else {
             btnBack.setVisibility(View.VISIBLE);
         }
 
-        //crossfade();
+    }
+
+    private void showChooseAnotherComuneDialog() {
+        //show dialog to choose another comune because this one doesn't have collection in out db
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.RedAlertDialogStyle);
+        builder.setTitle(getResources().getString(R.string.not_available));
+        builder.setMessage(getResources().getString(R.string.choose_another_comune));
+        builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //do nothing
+            }
+        });
+
+        builder.show();
+
     }
 
     private void showRecapDialog() {
+        //once you chose a comune, shows position IF collection is available in our db
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogStyle);
-        builder.setTitle("Location");
-        builder.setMessage("You are in : \n" + comuneChosen.getName() + ", " + provinciaChosen.getName() + ", " + regioneChosen.getName());
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setTitle(getResources().getString(R.string.location));
+        builder.setMessage(getResources().getString(R.string.you_are_in) + "\n" + comuneChosen.getName() + ","+provinciaChosen.getName() + "," + regioneChosen.getName());
+        builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //save chosen comune to sharedPrefs
                 saveToSharedPrefs();
+                //start main activity
                 startNewActivity();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
+                //go back one step and choose another comune
                 step = ConfigStep.COMUNE;
                 startStep(data);
             }
@@ -336,6 +442,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
     }
 
     private void saveToSharedPrefs() {
+        //saves ids to later use in main activity
         SharedPreferences prefs = getSharedPreferences("comune",MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
@@ -371,74 +478,51 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                 // do nothing, it's already set by default
                 break;
             case PROVINCIA:
-                chooseTV.setText("Choose Your Regione");
+                chooseTV.setText(R.string.choose_regione);
                 break;
             case COMUNE:
-                chooseTV.setText("Choose Your Province");
+                chooseTV.setText(R.string.choose_prov);
                 break;
             case END:
-                chooseTV.setText("Choose your Comune");
+                chooseTV.setText(R.string.choose_comune);
                 break;
         }
     }
+
 
     /* fills data array depending on the step of the configuration you are in */
     private void fillDataArray(ArrayList<ConfigAdapterDataProvider> data) {
 
         switch (step){
             case REGIONE:
-                //get all regione from local DB
-                /*List<Regione> regioni_al = null;
-                try {
-                    regioni_al = regioneDao.findAll();
-                } catch (DaoException e) {
-                    e.printStackTrace();
-                }*/
-
                 //converts List of Regione to a class needed to fill recycler view
                 convertToDataProviderRegione(data,regioni_al);
 
                 if(adapter != null){
                     //notify the adapter that data has changes
-                    adapter.notifyDataSetChanged();
+                    adapter.animateTo(data);
                 }
                 /* changes next step of config */
                 step = ConfigStep.PROVINCIA;
                 break;
 
             case PROVINCIA:
-                // get all Provincia from local DB
-                /*List<Provincia> province_al = null;
-                try {
-                    province_al = provinciaDao.getByIdRegion(regioneChosen.getIdRegione_int());
-                } catch (DaoException e) {
-                    e.printStackTrace();
-                }
-*/
-                //province_al = regioneChosen.getProvince();
+
                 // converts List of Provincia to a class needed by recycler view
                 convertToDataProviderProvincia(data,province_al);
 
                 // notify change has been made to array
-                adapter.notifyDataSetChanged();
+                adapter.animateTo(data);
                 // update state of config
                 step = ConfigStep.COMUNE;
                 break;
 
             case COMUNE:
-                // get all Comune from local DB
-                /*List<Comune> comuni_al = null;
-                try {
-                    comuni_al = comuneDao.getByIdProvincia(provinciaChosen.getIdProvincia());
-                } catch (DaoException e) {
-                    e.printStackTrace();
-                }*/
-
-                //comuni_al = provinciaChosen.getComuni();
 
                 convertToDataProviderComune(data,comuni_al);
-                adapter.notifyDataSetChanged();
+                adapter.animateTo(data);
 
+                //switch used only when you need to choose a comune
                 enableSwitch();
 
                 step = ConfigStep.END;
@@ -452,15 +536,27 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
     }
 
     private void convertToDataProviderComune(ArrayList<ConfigAdapterDataProvider> data, List<Comune> comuni_al) {
+        //converts Comune class to ConfigAdapterDataProvider class used to fill recycler view
         for(Comune r : comuni_al){
             ConfigAdapterDataProvider tmp = new ConfigAdapterDataProvider();
             tmp.setId(r.getIdComune());
             tmp.setName(r.getName());
+            //if comune has collection available
+            if(r.getCollections() != null) {
+                tmp.setHasCollection(true);
+                //keep an array of comuni with collection
+                comuniWithCollection.add(tmp);
+                System.out.println(r.getIdComune());
+            } else {
+                tmp.setHasCollection(false);
+            }
             data.add(tmp);
         }
     }
 
     private void convertToDataProviderProvincia(ArrayList<ConfigAdapterDataProvider> data, List<Provincia> province_al) {
+        //converts Provincia class to ConfigAdapterDataProvider used by adapter to fill list
+        // it's the same adapter and recycler view for REGIONI,PROVINCE and COMUNI
         for(Provincia r : province_al){
             ConfigAdapterDataProvider tmp = new ConfigAdapterDataProvider();
             tmp.setId(r.getIdProvincia());
@@ -470,7 +566,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
     }
 
     private void convertToDataProviderRegione(ArrayList<ConfigAdapterDataProvider> data, List<Regione> regioni_al) {
-
+        //converts Regione class to ConfigAdapterDataProvider needed to fill list
         for(Regione r : regioni_al){
             ConfigAdapterDataProvider tmp = new ConfigAdapterDataProvider();
             tmp.setId(r.getIdRegione_int());
@@ -479,16 +575,21 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         }
     }
 
+
+    //the activity itself is the listener (implements interface)
     @Override
     public boolean onQueryTextSubmit(String query) {
+        //not used
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        //filters list by new inserted text
         final List<ConfigAdapterDataProvider> filteredModelList = filter(data, newText);
+        //shows only filtered rows
         adapter.animateTo(filteredModelList);
-        //adapter.notifyDataSetChanged();
+        //scroll to top
         recyclerView.scrollToPosition(0);
         return true;
     }
@@ -498,6 +599,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
 
         final List<ConfigAdapterDataProvider> filteredModelList = new ArrayList<>();
         for (ConfigAdapterDataProvider model : models) {
+            //fills array only with matching rows
             final String text = model.getName().toLowerCase();
             if (text.contains(query)) {
                 filteredModelList.add(model);
@@ -506,42 +608,10 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         return filteredModelList;
     }
 
-    public interface ClickListener {
-        void onClick(View view, int position);
-
-        void onLongClick(View view, int position);
-    }
-
-    private class LoadFromDB extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            startLoadingAnimation();
-
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            startStep(data);
-
-            crossfade();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            updateDBFromServer();
-
-            return null;
-
-        }
-    }
 
     public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+
+        //OnItemTouchListener for recycler view
 
         private GestureDetector gestureDetector;
         private ClickListener clickListener;
@@ -583,5 +653,12 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
         }
+    }
+
+    //Click listener interface used in recycler view on item listener
+    public interface ClickListener {
+        void onClick(View view, int position);
+
+        void onLongClick(View view, int position);
     }
 }

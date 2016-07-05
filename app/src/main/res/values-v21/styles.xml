@@ -22,6 +22,14 @@
         <item name="android:background">#4CAF50</item>
     </style>
 
+    <style name="RedAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">#FFC107</item>
+        <!-- Used for the title and text -->
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <!-- Used for the background -->
+        <item name="android:background">#F44336</item>
+    </style>
     <style name="BackButton" parent="Theme.AppCompat.Light">
         <item name="colorButtonNormal">#E91E63
         </item>

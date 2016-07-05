@@ -10,6 +10,8 @@
 
 package com.ufos.cyw16.cleanyourworld.config;
 
+import android.widget.Button;
+
 /**
  * Created by ovidiudanielbarba on 23/06/16.
  */
@@ -17,6 +19,15 @@ public class ConfigAdapterDataProvider {
 
     private int id;
     private String name;
+    private Boolean hasCollection = null;
+
+    public Boolean HasCollection() {
+        return hasCollection;
+    }
+
+    public void setHasCollection(Boolean hasCollection) {
+        this.hasCollection = hasCollection;
+    }
 
     public String getName() {
         return name;

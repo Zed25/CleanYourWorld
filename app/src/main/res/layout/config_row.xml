@@ -27,10 +27,21 @@
         android:id="@+id/name"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#2fb266" />
+        android:textColor="#2fb266"
+        android:layout_marginRight="60dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:id="@+id/config_icon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/no_recycle_icon_config"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="visible"/>
 
 
 </RelativeLayout>

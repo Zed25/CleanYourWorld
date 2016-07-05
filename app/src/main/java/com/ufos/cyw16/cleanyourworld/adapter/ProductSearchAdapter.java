@@ -29,11 +29,13 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
     private List<ProductType> productTypes;
 
     public ProductSearchAdapter(List<ProductType> productTypes) {
+        //creates new variable because it needs to filter with original array
         this.productTypes = new ArrayList<>(productTypes);
     }
 
     @Override
     public ProductSearchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //inflate layout for evey row
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_search_row,parent,false);
 
         return new ProductSearchViewHolder(view);
@@ -41,13 +43,16 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 
     @Override
     public void onBindViewHolder(ProductSearchViewHolder holder, int position) {
+        //fills every row with ProductType class
         ProductType selectedProd = productTypes.get(position);
         holder.textView.setText(selectedProd.getName());
 
         int matID = selectedProd.getMaterial().getIdMaterial();
 
+        //sets text according to material
         holder.textView.setTextColor(Color.parseColor(getColorByMaterilID(matID)));
 
+        //sets icon according to material
         setMaterialIcon(holder.imageView,matID);
 
 

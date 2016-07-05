@@ -10,10 +10,12 @@
 
 package com.ufos.cyw16.cleanyourworld.config;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.Models.Regione;
@@ -31,7 +33,7 @@ public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.MyViewHold
     private ArrayList<ConfigAdapterDataProvider> data;
 
     public ConfigAdapter(ArrayList<ConfigAdapterDataProvider> regioni) {
-        this.data = regioni;
+        this.data = new ArrayList<>(regioni);
     }
 
     @Override
@@ -42,12 +44,36 @@ public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.MyViewHold
         return viewHolder;
     }
 
+    public ArrayList<ConfigAdapterDataProvider> getData() {
+        return data;
+    }
+
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
         ConfigAdapterDataProvider element = data.get(position);
 
         holder.nameTv.setText(element.getName());
+
+        holder.nameTv.setTextColor(Color.parseColor("#4CAF50"));
+
+        holder.icon.setVisibility(View.INVISIBLE);
+
+        // if it's a comune
+        if(element.HasCollection() != null){
+            if(!element.HasCollection()){
+                holder.nameTv.setTextColor(Color.parseColor("#F44336"));
+                holder.icon.setVisibility(View.VISIBLE);
+                holder.icon.setImageResource(R.drawable.no_recycle_icon_config);
+
+            } else {
+                //holder.nameTv.setTextColor(Color.parseColor("#E91E63"));
+                holder.icon.setVisibility(View.VISIBLE);
+                holder.icon.setImageResource(R.drawable.recycle_icon_config);
+            }
+
+
+        }
 
     }
 
@@ -110,10 +136,12 @@ public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.MyViewHold
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
         public TextView nameTv;
+        public ImageView icon;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             nameTv = (TextView) itemView.findViewById(R.id.name);
+            icon = (ImageView) itemView.findViewById(R.id.config_icon);
         }
     }
 
