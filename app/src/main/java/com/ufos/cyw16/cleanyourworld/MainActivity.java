@@ -256,10 +256,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void showNoNetworkDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.YellowAlertDialogStyle);
-        builder.setTitle("No Internet Connection");
-        builder.setMessage("Open an Internet connection and try again.");
+        builder.setTitle(getString(R.string.no_internet));
+        builder.setMessage(getString(R.string.open_internet));
 
-        String positiveText = "TRY AGAIN";
+        String positiveText = getString(R.string.try_again);
         builder.setPositiveButton(positiveText,
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -274,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
 
-        String negativeText = "EXIT";
+        String negativeText = getString(R.string.exit);
         builder.setNegativeButton(negativeText, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

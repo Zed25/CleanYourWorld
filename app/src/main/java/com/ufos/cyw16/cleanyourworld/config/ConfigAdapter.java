@@ -28,16 +28,19 @@ import java.util.List;
 /**
  * Created by ovidiudanielbarba on 15/06/16.
  */
+// adapter used in configuration recycler view
 public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.MyViewHolder>{
 
     private ArrayList<ConfigAdapterDataProvider> data;
 
     public ConfigAdapter(ArrayList<ConfigAdapterDataProvider> regioni) {
+        // it needs to be new object,because it needs to filter later with the original ArrayList
         this.data = new ArrayList<>(regioni);
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        //inflates layout
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.config_row,parent,false);
 
         MyViewHolder viewHolder = new MyViewHolder(view);
@@ -55,24 +58,24 @@ public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.MyViewHold
 
         holder.nameTv.setText(element.getName());
 
+        // sets green text
         holder.nameTv.setTextColor(Color.parseColor("#4CAF50"));
 
+        // make icon invisible
         holder.icon.setVisibility(View.INVISIBLE);
 
         // if it's a comune
         if(element.HasCollection() != null){
+            holder.icon.setVisibility(View.VISIBLE);
+            // if no collection available,set RED text and RED icon
             if(!element.HasCollection()){
                 holder.nameTv.setTextColor(Color.parseColor("#F44336"));
-                holder.icon.setVisibility(View.VISIBLE);
                 holder.icon.setImageResource(R.drawable.no_recycle_icon_config);
 
             } else {
-                //holder.nameTv.setTextColor(Color.parseColor("#E91E63"));
-                holder.icon.setVisibility(View.VISIBLE);
+                // else,green icon (green text already set by default)
                 holder.icon.setImageResource(R.drawable.recycle_icon_config);
             }
-
-
         }
 
     }
@@ -83,12 +86,14 @@ public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.MyViewHold
     }
 
     public void animateTo(List<ConfigAdapterDataProvider> models) {
+        // animates removal,addition and moving of items with new List
         applyAndAnimateRemovals(models);
         applyAndAnimateAdditions(models);
         applyAndAnimateMovedItems(models);
     }
 
     private void applyAndAnimateRemovals(List<ConfigAdapterDataProvider> newModels) {
+        // if newModels doesn't contain a dataProvider, remove it
         for (int i = data.size() - 1; i >= 0; i--) {
             final ConfigAdapterDataProvider model = data.get(i);
             if (!newModels.contains(model)) {
@@ -98,6 +103,7 @@ public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.MyViewHold
     }
 
     private void applyAndAnimateAdditions(List<ConfigAdapterDataProvider> newModels) {
+        // if data doesn't include a newModel, isert it
         for (int i = 0, count = newModels.size(); i < count; i++) {
             final ConfigAdapterDataProvider model = newModels.get(i);
             if (!data.contains(model)) {
@@ -107,6 +113,7 @@ public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.MyViewHold
     }
 
     private void applyAndAnimateMovedItems(List<ConfigAdapterDataProvider> newModels) {
+        // move from a position to a new one
         for (int toPosition = newModels.size() - 1; toPosition >= 0; toPosition--) {
             final ConfigAdapterDataProvider model = newModels.get(toPosition);
             final int fromPosition = data.indexOf(model);
@@ -117,17 +124,20 @@ public class ConfigAdapter extends RecyclerView.Adapter<ConfigAdapter.MyViewHold
     }
 
     public ConfigAdapterDataProvider removeItem(int position) {
+        // remove and item from data
         final ConfigAdapterDataProvider model = data.remove(position);
         notifyItemRemoved(position);
         return model;
     }
 
     public void addItem(int position, ConfigAdapterDataProvider model) {
+        // insert an item into data
         data.add(position, model);
         notifyItemInserted(position);
     }
 
     public void moveItem(int fromPosition, int toPosition) {
+        // move in data from a position to another
         final ConfigAdapterDataProvider model = data.remove(fromPosition);
         data.add(toPosition, model);
         notifyItemMoved(fromPosition, toPosition);

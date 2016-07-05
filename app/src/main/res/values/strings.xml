@@ -38,4 +38,10 @@
     <string name="strScannDate">Scann date</string>
     <string name="strMaterial">Material</string>
     <string name="strBarcode">BarCode</string>
+    <string name="continue_">Continue</string>
+    <string name="back">Back</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="open_internet">Open an Internet connection and try again.</string>
+    <string name="try_again">TRY AGAIN</string>
+    <string name="exit">EXIT</string>
 </resources>

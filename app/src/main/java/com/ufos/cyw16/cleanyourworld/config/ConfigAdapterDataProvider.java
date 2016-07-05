@@ -17,8 +17,11 @@ import android.widget.Button;
  */
 public class ConfigAdapterDataProvider {
 
+    /* class used to fill view holder in recycler view*/
     private int id;
     private String name;
+    // initially null, not null when there is a comune to fill a row
+    // true if it has collection available in DB, false otherwise
     private Boolean hasCollection = null;
 
     public Boolean HasCollection() {

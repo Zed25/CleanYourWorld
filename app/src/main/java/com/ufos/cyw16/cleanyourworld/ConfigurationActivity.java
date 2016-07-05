@@ -17,6 +17,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -168,6 +170,8 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
             //change the step of the configuration
             @Override
             public void onClick(View v) {
+                // change step of config 1 step before
+                // when back button is pressed
                 switch (step){
                     case PROVINCIA:
                         step = ConfigStep.REGIONE;
@@ -236,6 +240,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         protected void onPreExecute() {
             super.onPreExecute();
 
+            //shows progress bar and makes recycler view invisible
             startLoadingAnimation();
 
         }
@@ -244,8 +249,11 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
+            // when async task finishes (downloads from server and loads from local DB)
+            // starts showing data to recycler view
             startStep(data);
 
+            // animate from progress bar to recycler view
             crossfade();
             searchView.setVisibility(View.VISIBLE);
         }
@@ -274,7 +282,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
             comuneDao.updateFromServer(null,null);
 
             //get list of all regioni (includes also all province and comuni)
-            regioni_al = regioneDao.findAll();
+            regioni_al = regioneDao.findAllLazy();
 
 
         } catch (DaoException e) {
@@ -660,5 +668,12 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         void onClick(View view, int position);
 
         void onLongClick(View view, int position);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

@@ -61,6 +61,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
     }
 
     private void setMaterialIcon(ImageView imageView, int matID) {
+        // sets icon according to material of product
         switch (matID){
             case 1:
                 imageView.setImageResource(R.drawable.glass);
@@ -120,6 +121,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 
     private String getColorByMaterilID(int idMaterial) {
 
+        // colors every text view according to material
         switch (idMaterial){
             //Glass
             case 1:
@@ -143,16 +145,19 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 
     @Override
     public int getItemCount() {
+        //returns size of elements to insert into list
         return productTypes.size();
     }
 
     public void animateTo(List<ProductType> models) {
+        // animates removal,addition and moving of items with new List
         applyAndAnimateRemovals(models);
         applyAndAnimateAdditions(models);
         applyAndAnimateMovedItems(models);
     }
 
     private void applyAndAnimateRemovals(List<ProductType> newModels) {
+        // if newModels doesn't contain a product, remove it
         for (int i = productTypes.size() - 1; i >= 0; i--) {
             final ProductType model = productTypes.get(i);
             if (!newModels.contains(model)) {
@@ -162,6 +167,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
     }
 
     private void applyAndAnimateAdditions(List<ProductType> newModels) {
+        // if productTypes doesn't include a newModel, isert it
         for (int i = 0, count = newModels.size(); i < count; i++) {
             final ProductType model = newModels.get(i);
             if (!productTypes.contains(model)) {
@@ -171,6 +177,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
     }
 
     private void applyAndAnimateMovedItems(List<ProductType> newModels) {
+        // move from a position to a new one
         for (int toPosition = newModels.size() - 1; toPosition >= 0; toPosition--) {
             final ProductType model = newModels.get(toPosition);
             final int fromPosition = productTypes.indexOf(model);
@@ -181,17 +188,20 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
     }
 
     public ProductType removeItem(int position) {
+        //removes an item ffrom productTypes
         final ProductType model = productTypes.remove(position);
         notifyItemRemoved(position);
         return model;
     }
 
     public void addItem(int position, ProductType model) {
+        // add an item to productTypes
         productTypes.add(position, model);
         notifyItemInserted(position);
     }
 
     public void moveItem(int fromPosition, int toPosition) {
+        //moves an item from a position to another
         final ProductType model = productTypes.remove(fromPosition);
         productTypes.add(toPosition, model);
         notifyItemMoved(fromPosition, toPosition);
@@ -200,6 +210,7 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 
     public class ProductSearchViewHolder extends RecyclerView.ViewHolder{
 
+        //view holder for every row of recycler view
         private TextView textView;
         private ImageView imageView;
 

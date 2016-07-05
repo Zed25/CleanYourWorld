@@ -43,12 +43,10 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
     private ProductSearchAdapter adapter;
 
     private int animationDuration;
-    private boolean firstTime = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 
@@ -81,14 +79,13 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
         searchView = (SearchView) getActivity().findViewById(R.id.search_view);
         searchView.setVisibility(View.VISIBLE);
         searchView.setOnQueryTextListener(this);
-
         progressBar = (ProgressBar) v.findViewById(R.id.progress_products);
-
         recyclerView = (RecyclerView) v.findViewById(R.id.product_search_recycler_view);
 
+        // set layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        //make progress bar visible
+        //make progress bar visible and recycler visible (by default loading)
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
 
@@ -131,6 +128,7 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
     private List<ProductType> filter(List<ProductType> models, String query) {
         query = query.toLowerCase();
 
+        // creates new array with filtered elements by query
         final List<ProductType> filteredModelList = new ArrayList<>();
         for (ProductType model : models) {
             final String text = model.getName().toLowerCase();
@@ -149,9 +147,12 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
     @Override
     public boolean onQueryTextChange(String newText) {
 
+        // the class itself is a listener to text change in search view
         final List<ProductType> filteredModelList = filter(productTypes, newText);
+        // animate adapter to new filtered list
         adapter.animateTo(filteredModelList);
         adapter.notifyDataSetChanged();
+        // scroll at top to show first elements
         recyclerView.scrollToPosition(0);
         return true;
 
@@ -162,12 +163,14 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
         @Override
         protected Void doInBackground(Void... params) {
             try {
+                // loads all products from local DB (downloaded before from server)
                 productTypes = DaoFactory_def.getInstance(getContext()).getProtuctTypeDao().findAllLazy();
 
             } catch (DaoException e) {
                 e.printStackTrace();
             }
 
+            // set adapter on newly created list
             adapter = new ProductSearchAdapter(productTypes);
 
             return null;
@@ -176,8 +179,10 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            // set adapter on recycler view
             recyclerView.setAdapter(adapter);
 
+            //animate from progress bar to recycler view
             crossfade();
 
         }
