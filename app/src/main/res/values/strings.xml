@@ -33,4 +33,8 @@
     <string name="choose_another_comune">No Collection Available for selected comune. Choose another one!</string>
     <string name="you_chose">You chose </string>
     <string name="strNeedCamera">You need to allow access to Camera</string>
+    <string name="strCollectionDay">Collection day</string>
+    <string name="strScannDate">Scann date</string>
+    <string name="strMaterial">Material</string>
+    <string name="strBarcode">BarCode</string>
 </resources>

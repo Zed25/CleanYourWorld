@@ -5,13 +5,103 @@
   ~ Package: /home/simone_mancini/AndroisStudioProjects/CleanYourWorld/app/src/main/res/layout/scann_card_semple_layout.xml
   ~ Last modified: 05/07/16 16.08
   -->
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cvScann"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+        android:layout_margin="5dp"
+        android:minHeight="150dp"
+        android:measureWithLargestChild="false">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></android.support.v7.widget.CardView>
+        <TextView
+            android:background="@color/colorAccent"
+            android:id="@+id/tvProductName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:text="Product Name"
+            android:textAlignment="gravity"
+            android:gravity="center"
+            android:textSize="30sp"
+            android:layout_weight="0.3"
+            android:minHeight="90dp"/>
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="0.33"
+            android:minHeight="30dp">
+            <TextView
+                android:id="@+id/tvMaterialProduct"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/strMaterial"
+                android:textColor="#000000"
+                android:paddingLeft="5dp"
+                android:gravity="left|center_vertical"
+                android:textAlignment="gravity"
+                android:layout_weight="1"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tvBarCode"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="5dp"
+                android:text="@string/strBarcode"
+                android:textColor="#000000"
+                android:gravity="right|center_vertical"
+                android:textAlignment="gravity"
+                android:paddingLeft="5dp"
+                android:layout_weight="1"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="0.33"
+            android:minHeight="30dp">
+            <TextView
+                android:id="@+id/tvCollectionDay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/strCollectionDay"
+                android:textColor="#000000"
+                android:paddingLeft="5dp"
+                android:gravity="left|center_vertical"
+                android:textAlignment="gravity"
+                android:layout_weight="1"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tvscannDate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingRight="5dp"
+                android:text="@string/strScannDate"
+                android:textColor="#000000"
+                android:gravity="right|center_vertical"
+                android:textAlignment="gravity"
+                android:paddingLeft="5dp"
+                android:layout_weight="1"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
