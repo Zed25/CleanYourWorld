@@ -81,6 +81,11 @@ public interface ComuneDao extends EntityDao<Comune> {
             Comune comune = new Comune();
             comune.setIdComune(Integer.parseInt(args[0]));
             comune.setName(args[1]);
+            try {
+                comune.setCollections(DaoFactory_def.getInstance(getContext()).getCollectionDao().getCollectionsByIdComune(Integer.parseInt(args[0])));
+            } catch (DaoException e) {
+                Message4Debug.log(e.getMessage());
+            }
             return comune;
         }
 

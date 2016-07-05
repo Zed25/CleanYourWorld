@@ -35,6 +35,15 @@ public interface CollectionDao extends EntityDao<Collection> {
     List<Collection> getCollectionByDayOfWeek(int comuneID, int dayOfWeek) throws DaoException;
 
     /**
+     * Gets collections by id comune lazy.
+     *
+     * @param id the id
+     * @return the collections by id comune
+     * @throws DaoException the dao exception
+     */
+    List<Collection> getCollectionsByIdComuneLazy(int id) throws DaoException;
+
+    /**
      * Gets collections by id comune.
      *
      * @param id the id
@@ -73,12 +82,36 @@ public interface CollectionDao extends EntityDao<Collection> {
             return collection;
         }
 
+        protected Collection instanceEntity(String[] args, boolean lazy) {
+            Collection collection = new Collection();
+            collection.setIdCollection(Integer.parseInt(args[0]));
+//            try {
+//                collection.setMaterial(DaoFactory_def.getInstance(getContext()).getMaterialDao().findById(Integer.parseInt(args[2]))); // List<Material>
+//                collection.setDay(DaoFactory_def.getInstance(getContext()).getDayDao().findById(Integer.parseInt(args[3])));
+//                collection.setColor(DaoFactory_def.getInstance(getContext()).getColorDao().findById(Integer.parseInt(args[4])));
+//                collection.setCollectionType(DaoFactory_def.getInstance(getContext()).getCollectionTypeDao().findById(Integer.parseInt(args[5])));
+//            } catch (DaoException e) {
+//                Message4Debug.log(e.getMessage());
+//            }
+            return collection;
+        }
+
         @Override
         public List<Collection> getCollectionByDayOfWeek(int comuneID, int dayOfWeek) throws DaoException {
             List<String[]> queryResult = getTableAdapter().getData(new String[]{"comuni_id", "giorni_id"}, new String[]{String.valueOf(comuneID), String.valueOf(dayOfWeek)}, null);
             List<Collection> collections = new ArrayList<>();
             for (String[] s : queryResult) {
                 collections.add(instanceEntity(s));
+            }
+            return collections;
+        }
+
+        @Override
+        public List<Collection> getCollectionsByIdComuneLazy(int id) throws DaoException {
+            List<String[]> queryResult = getTableAdapter().getData(new String[]{"comuni_id"}, new String[]{String.valueOf(id)}, null);
+            List<Collection> collections = new ArrayList<>();
+            for (String[] s : queryResult) {
+                collections.add(instanceEntity(s, true));
             }
             return collections;
         }

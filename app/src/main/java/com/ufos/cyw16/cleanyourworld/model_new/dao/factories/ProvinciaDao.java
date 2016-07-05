@@ -74,11 +74,11 @@ public interface ProvinciaDao extends EntityDao<Provincia> {
             Provincia provincia = new Provincia();
             provincia.setIdProvincia(Integer.parseInt(args[0]));
             provincia.setName(args[1]);
-//            try {
-//                provincia.setComuni(DaoFactory_def.getInstance(getContext()).getComuneDao().getByIdProvinciaLazy(Integer.parseInt(args[0])));
-//            } catch (DaoException e) {
-//                Message4Debug.log(e.getMessage());
-//            }
+            try {
+                provincia.setComuni(DaoFactory_def.getInstance(getContext()).getComuneDao().getByIdProvinciaLazy(Integer.parseInt(args[0])));
+            } catch (DaoException e) {
+                Message4Debug.log(e.getMessage());
+            }
             return provincia;
         }
 
