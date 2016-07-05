@@ -78,47 +78,6 @@ public class SearchFragment extends Fragment {
         //});
     }
 
-    // Defines the number of tabs by setting appropriate fragment and tab name
-    //private void setupViewPager(ViewPager viewPager) {
-
-    //    adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-    //    adapter.addFragment(new BarCodeSearchSubFragment(), "BarCode" );
-    //    adapter.addFragment(new ProductsSearchSubFragment(), "Products");
-
-    //    viewPager.setAdapter(adapter);
-    //}
-
-
-    // Custom adapter class provides fragments required for the view pager
-    //class ViewPagerAdapter extends FragmentPagerAdapter {
-    //    private final List<Fragment> mFragmentList = new ArrayList<>();
-    //    private final List<String> mFragmentTitleList = new ArrayList<>();
-
-    //    public ViewPagerAdapter(FragmentManager manager) {
-    //        super(manager);
-    //    }
-
-    //    @Override
-    //    public Fragment getItem(int position) {
-    //        return mFragmentList.get(position);
-    //    }
-
-    //    @Override
-    //    public int getCount() {
-    //        return mFragmentList.size();
-    //    }
-
-    //    public void addFragment(Fragment fragment, String title) {
-    //        mFragmentList.add(fragment);
-    //        mFragmentTitleList.add(title);
-    //    }
-
-    //    @Override
-    //    public CharSequence getPageTitle(int position) {
-    //        return mFragmentTitleList.get(position);
-    //    }
-    //}
-
     public class SubFragmentButtonManager implements View.OnClickListener{
 
         @Override
@@ -127,7 +86,7 @@ public class SearchFragment extends Fragment {
             FragmentTransaction ft = fm.beginTransaction();
             switch (v.getId()){
                 case R.id.btnBarCode:
-                    ft.replace(R.id.showFragment, new BarCodeSearchSubFragment(), "fragment_screen");
+                    ft.replace(R.id.showFragment, new BarCodeSearchFragment(), "fragment_screen");
                     ft.commit();
                     break;
                 case R.id.btnMaterials:

@@ -1,31 +1,27 @@
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.fragment.subfragment.BarCodeSearchSubFragment
- * Last modified: 04/07/16 13.54
- */
 
 /*
- * Created by Umberto Ferracci from urania on 04/06/16 18.06
- * email:   umberto.ferracci@gmail.com
+ * Created by UFOS from simone_mancini
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.fragment.subfragment.BarCodeSearchSubFragment
- * File name: BarCodeSearchSubFragment.java
- * Class name: BarCodeSearchSubFragment
- * Last modified: 04/06/16 18.04
+ * Package: com.ufos.cyw16.cleanyourworld.fragment.BarCodeSearchFragment
+ * Last modified: 05/07/16 11.24
  */
 
-package com.ufos.cyw16.cleanyourworld.fragment.subfragment;
+package com.ufos.cyw16.cleanyourworld.fragment;
 
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,9 +36,9 @@ import com.ufos.cyw16.cleanyourworld.R;
 /**
  * Created by simone_mancini on 19/05/16.
  */
-public class BarCodeSearchSubFragment extends Fragment{
+public class BarCodeSearchFragment extends Fragment{
 
-    private final int USER_CAMERA_PERMISSION = 0; //check int for camera permission: 0 equals to PERMISSION_GRANTED
+    private final int USER_CAMERA_PERMISSION = 12; //check int for camera permission: 0 equals to PERMISSION_GRANTED
     private final String TAG = "recycleDebug";
     private TextView tvEAN;
 
@@ -68,48 +64,51 @@ public class BarCodeSearchSubFragment extends Fragment{
 
     //runtime camera permission request
     private void checkCameraPermission() {
-        int permissionCheck = ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.CAMERA);
-        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            scan();
-        } else {
-            if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.CAMERA)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-
-                // Should we toast an explanation?
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), Manifest.permission.CAMERA)) {
-
-                    // Show an explanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user
-                    // sees the explanation, try again to request the permission.
-
-                } else {
-
-
-                    ActivityCompat.requestPermissions(this.getActivity(),
-                            new String[]{Manifest.permission.CAMERA}, USER_CAMERA_PERMISSION);
-
-                }
+        int cameraPermissionCheck = ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.CAMERA);
+        if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) {
+            if (!shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                showMessageOKCancel(getResources().getString(R.string.strNeedCamera),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                requestPermissions(new String[] {Manifest.permission.CAMERA},
+                                        USER_CAMERA_PERMISSION);
+                            }
+                        });
+                return;
             }
-            scan();
+            requestPermissions(new String[] {Manifest.permission.CAMERA},
+                    USER_CAMERA_PERMISSION);
+            return;
         }
+        scan();
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(getContext())
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
         switch (requestCode) {
-            case USER_CAMERA_PERMISSION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
+            case USER_CAMERA_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
                     scan();
-
                 } else {
-
+                    // Permission Denied
+                    Toast.makeText(getContext(), "CAMERA Denied", Toast.LENGTH_SHORT)
+                            .show();
                 }
-                return;
-            }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
     }

@@ -32,4 +32,5 @@
     <string name="not_available">Not Available</string>
     <string name="choose_another_comune">No Collection Available for selected comune. Choose another one!</string>
     <string name="you_chose">You chose </string>
+    <string name="strNeedCamera">You need to allow access to Camera</string>
 </resources>

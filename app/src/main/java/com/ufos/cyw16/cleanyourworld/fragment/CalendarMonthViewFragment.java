@@ -83,6 +83,7 @@ public class CalendarMonthViewFragment extends Fragment {
         return v;
     }
 
+
     /**this method prepare fragment for the configuration**/
     private View initializeMonthCalendar(LayoutInflater inflater, ViewGroup container) {
         View v;
