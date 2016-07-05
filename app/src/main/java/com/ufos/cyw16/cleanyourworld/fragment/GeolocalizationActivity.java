@@ -2,19 +2,28 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity
+ * Last modified: 05/07/16 4.33
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity
  * Last modified: 04/07/16 15.33
  */
 
 package com.ufos.cyw16.cleanyourworld.fragment;
 
 import android.Manifest;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -34,7 +43,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ufos.cyw16.cleanyourworld.R;
-import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 /**
  * The type Geolocalization activity.
@@ -60,6 +68,13 @@ public class GeolocalizationActivity extends FragmentActivity implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.geolocalization);
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+        } else {
+            showGPSDisabledAlertToUser();
+        }
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -123,6 +138,13 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 //start AsyncTask
                 placeSelectedTask(selectedPlace);
             }
+//            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+//
+//        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+//            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+//        }else{
+//            showGPSDisabledAlertToUser();
+//        }
 
             @Override
             public void onError(Status status) {
@@ -142,7 +164,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
             }
         }
 
-        googleMap.setMyLocationEnabled(true);
+//        googleMap.setMyLocationEnabled(true);
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 13));
         googleMap.addMarker(new MarkerOptions().position(currentLocation).title("You are here!"));
         //start AsyncTask
@@ -189,5 +211,27 @@ public class GeolocalizationActivity extends FragmentActivity implements
             }
 
         }.execute();
+    }
+
+    private void showGPSDisabledAlertToUser() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivity(callGPSSettingIntent);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 }

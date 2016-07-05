@@ -1,4 +1,11 @@
 /*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.MainActivity
+ * Last modified: 05/07/16 4.27
+ */
+
+/*
  * Created by Umberto Ferracci from urania on 04/06/16 18.06
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -43,8 +50,8 @@ import com.ufos.cyw16.cleanyourworld.fragment.CalendarMonthViewFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarWeekViewFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity;
-import com.ufos.cyw16.cleanyourworld.fragment.subfragment.BarCodeSearchSubFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.MaterialsSearchFragment;
+import com.ufos.cyw16.cleanyourworld.fragment.subfragment.BarCodeSearchSubFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.ProductsSearchSubFragment;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
@@ -234,15 +241,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Message4Debug.log("inizio aggiornamento del database interno...");
         long start = System.currentTimeMillis();
         for (EntityDao entity : entities) {
-            //TODO remove comment
-            /*try {
+            try {
                 Message4Debug.log(entity.getClass().getSimpleName());
                 entity.updateFromServer(null, null);
             } catch (DaoException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }*/
+            }
         }
         Message4Debug.log("aggiornamento completato in: " + (System.currentTimeMillis() - start));
     }

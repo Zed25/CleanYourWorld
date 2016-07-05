@@ -1,6 +1,14 @@
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite
+ * Last modified: 05/07/16 4.58
+ */
+
 package com.ufos.cyw16.cleanyourworld.dal.dao;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter_NEW;
@@ -9,6 +17,7 @@ import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * The type EntityDaoSQLite.
@@ -22,6 +31,7 @@ public abstract class EntityDaoSQLite<T> implements EntityDao<T> {
     private final Context context;
     private Class<T> persistentClass;
     private TableAdapter_NEW tableAdapter;
+    private long timeUpdate = 1 * 60 * 60 * 1000;
 
     /**
      * Instantiates a new EntityDaoSQLite.
@@ -47,7 +57,13 @@ public abstract class EntityDaoSQLite<T> implements EntityDao<T> {
 
     @Override
     public void updateFromServer(String[] keys, String[] values) throws DaoException, InterruptedException {
-        getTableAdapter().updateFromServer(keys, values);
+        SharedPreferences sharedPref = context.getSharedPreferences("CYW", Context.MODE_PRIVATE);
+        long lastUpdate = sharedPref.getLong(getTableAdapter().getTableName(), 0L);
+        if ((System.currentTimeMillis() - lastUpdate) > timeUpdate) {
+            getTableAdapter().updateFromServer(keys, values);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putLong(getTableAdapter().getTableName(), System.currentTimeMillis()).commit();
+        }
     }
 
     /**

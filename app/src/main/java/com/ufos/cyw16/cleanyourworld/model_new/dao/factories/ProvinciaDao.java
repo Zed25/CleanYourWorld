@@ -2,6 +2,13 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao
+ * Last modified: 05/07/16 3.37
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao
  * Last modified: 04/07/16 8.59
  */
 
@@ -67,11 +74,11 @@ public interface ProvinciaDao extends EntityDao<Provincia> {
             Provincia provincia = new Provincia();
             provincia.setIdProvincia(Integer.parseInt(args[0]));
             provincia.setName(args[1]);
-            try {
-                provincia.setComuni(DaoFactory_def.getInstance(getContext()).getComuneDao().getByIdProvinciaLazy(Integer.parseInt(args[0])));
-            } catch (DaoException e) {
-                Message4Debug.log(e.getMessage());
-            }
+//            try {
+//                provincia.setComuni(DaoFactory_def.getInstance(getContext()).getComuneDao().getByIdProvinciaLazy(Integer.parseInt(args[0])));
+//            } catch (DaoException e) {
+//                Message4Debug.log(e.getMessage());
+//            }
             return provincia;
         }
 

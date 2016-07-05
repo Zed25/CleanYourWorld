@@ -2,6 +2,13 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.RegioneDao
+ * Last modified: 05/07/16 3.37
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.RegioneDao
  * Last modified: 04/07/16 8.58
  */
 
@@ -59,11 +66,11 @@ public interface RegioneDao extends EntityDao<Regione> {
             Regione regione = new Regione();
             regione.setIdRegione_int(Integer.parseInt(args[0]));
             regione.setName(args[1]);
-            try {
-                regione.setProvince(DaoFactory_def.getInstance(getContext()).getProvinciaDao().getByIdRegionLazy(Integer.parseInt(args[0])));
-            } catch (DaoException e) {
-                Message4Debug.log(e.getMessage());
-            }
+//            try {
+//                regione.setProvince(DaoFactory_def.getInstance(getContext()).getProvinciaDao().getByIdRegionLazy(Integer.parseInt(args[0])));
+//            } catch (DaoException e) {
+//                Message4Debug.log(e.getMessage());
+//            }
             return regione;
         }
 

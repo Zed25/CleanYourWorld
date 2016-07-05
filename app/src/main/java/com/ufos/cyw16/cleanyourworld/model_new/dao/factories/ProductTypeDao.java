@@ -2,6 +2,13 @@
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao
+ * Last modified: 05/07/16 4.54
+ */
+
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao
  * Last modified: 04/07/16 11.02
  */
 
@@ -32,6 +39,8 @@ import java.util.List;
  * This interface and her inheritance class allow you to create a ProductTypeDao object
  */
 public interface ProductTypeDao extends EntityDao<ProductType> {
+
+    List<ProductType> findAllLazy() throws DaoException;
     /**
      * Gets products by id material.
      *
@@ -101,6 +110,29 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
             return productType;
         }
 
+        protected ProductType instanceEntity(String[] args, boolean lazy) throws DaoException {
+            ProductType productType = new ProductType();
+            productType.setIdProductType(Integer.parseInt(args[0]));
+            productType.setName(args[1]);
+            productType.setMaterial(DaoFactory_def.getInstance(getContext()).getMaterialDao().getByIdLazy(Integer.parseInt(args[2])));
+            try {
+                productType.setProducts(DaoFactory_def.getInstance(getContext()).getProductDao().getProdutsByIdProductType(Integer.parseInt(args[0]), productType));
+            } catch (DaoException e) {
+                Message4Debug.log(e.getMessage());
+            }
+            return productType;
+        }
+
+        @Override
+        public List<ProductType> findAllLazy() throws DaoException {
+            ArrayList<ProductType> result = new ArrayList<>();
+            List<String[]> list = getTableAdapter().getData(null, null, null);
+            for (String[] args : list) {
+                result.add(instanceEntity(args, true));
+            }
+            return result;
+        }
+
         @Override
         public List<ProductType> getProductsByIdMaterial(int id) throws DaoException {
             /* implementazione RELAZIONE DI COMPOSIZIONE */
@@ -117,5 +149,7 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
             }
             return products;
         }
+
+
     }
 }

@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by UFOS from urania
+  ~ Project: CleanYourWorld
+  ~ Package: /home/urania/AndroidStudioProjects/CleanYourWorld/app/src/main/AndroidManifest.xml
+  ~ Last modified: 05/07/16 5.12
+  -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ufos.cyw16.cleanyourworld">
 
@@ -9,6 +16,8 @@
 
     <uses-permission-sdk-23 android:name="android.permission.CAMERA" />
     <uses-permission-sdk-23 android:name="android.permission.INTERNET" />
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission-sdk-23 android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <uses-feature android:name="android.hardware.camera2.CameraCaptureSession" />
 

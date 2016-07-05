@@ -1,4 +1,11 @@
 /*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.ConfigurationActivity
+ * Last modified: 05/07/16 5.12
+ */
+
+/*
  * Created by Umberto Ferracci from simone_mancini and published on 20/06/16 15.47
  * email:   umberto.ferracci@gmail.com
  * Project: CleanYourWorld
@@ -34,17 +41,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ufos.cyw16.cleanyourworld.model_new.Comune;
-import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
-import com.ufos.cyw16.cleanyourworld.model_new.Provincia;
-import com.ufos.cyw16.cleanyourworld.model_new.Regione;
 import com.ufos.cyw16.cleanyourworld.config.ConfigAdapter;
 import com.ufos.cyw16.cleanyourworld.config.ConfigAdapterDataProvider;
 import com.ufos.cyw16.cleanyourworld.config.ConfigStep;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
-import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
-import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ProvinceTableAdapter;
-import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.RegioniTableAdapter;
+import com.ufos.cyw16.cleanyourworld.model_new.Comune;
+import com.ufos.cyw16.cleanyourworld.model_new.Provincia;
+import com.ufos.cyw16.cleanyourworld.model_new.Regione;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ComuneDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao;
@@ -54,6 +57,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigurationActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+    ConfigAdapter adapter;
+    LoadFromDB asyncTask;
     private RecyclerView recyclerView;
     private Button btnContinue;
     private Button btnBack;
@@ -61,32 +66,22 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
     private ImageView mapIV;
     private ImageView trashIV;
     private SwitchCompat switchRecycle;
-
-    ConfigAdapter adapter;
     private ConfigStep step;
     private ArrayList<ConfigAdapterDataProvider> data;
-
     private SearchView searchView;
-
     /* Animation */
     private ProgressBar progressBar;
     private int animationDuration;
-
-
     private RegioneDao regioneDao;
     private ProvinciaDao provinciaDao;
     private ComuneDao comuneDao;
-
     /* chosen regione,provincia and comune; used later to save in shared prefs */
     private Regione regioneChosen = new Regione();
     private Provincia provinciaChosen = new Provincia();
     private Comune comuneChosen = new Comune();
-
     private List<Regione> regioni_al = null;
     private List<Provincia> province_al = null;
     private List<Comune> comuni_al = null;
-
-    LoadFromDB asyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,35 +191,6 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         }));
     }
 
-    private class LoadFromDB extends AsyncTask<Void,Void,Void>{
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            startLoadingAnimation();
-
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            startStep(data);
-
-            crossfade();
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            updateDBFromServer();
-
-            return null;
-
-        }
-    }
-
     private void updateDBFromServer() {
         /* downloads all regioni,province,comuni from server and inserts into local DB */
         regioneDao = DaoFactory_def.getInstance(getApplicationContext()).getRegioneDao();
@@ -296,13 +262,23 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                 regioneChosen = regioni_al.get(position);
                 //regioneChosen.setIdRegione_int(provider.getId());
                 //regioneChosen.setName(provider.getName());
-                province_al = regioneChosen.getProvince();
+//                province_al = regioneChosen.getProvince();
+                try {
+                    province_al = provinciaDao.getByIdRegionLazy(regioneChosen.getIdRegione_int());
+                } catch (DaoException e) {
+                    e.printStackTrace();
+                }
                 break;
             case COMUNE:
                 provinciaChosen = province_al.get(position);
                 //provinciaChosen.setIdProvincia(province_al.get(position).getIdProvincia());
                 //provinciaChosen.setName(province_al.get(position).getName());
-                comuni_al = provinciaChosen.getComuni();
+//                comuni_al = provinciaChosen.getComuni();
+                try {
+                    comuni_al = comuneDao.getByIdProvinciaLazy(provinciaChosen.getIdProvincia());
+                } catch (DaoException e) {
+                    e.printStackTrace();
+                }
                 break;
             case END:
 
@@ -314,7 +290,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
     }
 
     private void startStep(ArrayList<ConfigAdapterDataProvider> data) {
-        
+
         if(step == ConfigStep.END){
             showRecapDialog();
         }
@@ -339,7 +315,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogStyle);
         builder.setTitle("Location");
-        builder.setMessage("You are in : \n" + comuneChosen.getName() + ","+provinciaChosen.getName() + "," + regioneChosen.getName());
+        builder.setMessage("You are in : \n" + comuneChosen.getName() + ", " + provinciaChosen.getName() + ", " + regioneChosen.getName());
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -405,7 +381,6 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                 break;
         }
     }
-
 
     /* fills data array depending on the step of the configuration you are in */
     private void fillDataArray(ArrayList<ConfigAdapterDataProvider> data) {
@@ -504,7 +479,6 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         }
     }
 
-
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
@@ -532,6 +506,40 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         return filteredModelList;
     }
 
+    public interface ClickListener {
+        void onClick(View view, int position);
+
+        void onLongClick(View view, int position);
+    }
+
+    private class LoadFromDB extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            startLoadingAnimation();
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            startStep(data);
+
+            crossfade();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            updateDBFromServer();
+
+            return null;
+
+        }
+    }
 
     public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
@@ -575,11 +583,5 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
         }
-    }
-
-    public interface ClickListener {
-        void onClick(View view, int position);
-
-        void onLongClick(View view, int position);
     }
 }

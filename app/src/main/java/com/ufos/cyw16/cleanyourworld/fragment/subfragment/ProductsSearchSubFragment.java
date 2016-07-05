@@ -1,14 +1,18 @@
+/*
+ * Created by UFOS from urania
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.fragment.subfragment.ProductsSearchSubFragment
+ * Last modified: 05/07/16 5.12
+ */
+
 package com.ufos.cyw16.cleanyourworld.fragment.subfragment;
 
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.media.tv.TvContract;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.os.AsyncTaskCompat;
-import android.support.v7.util.AsyncListUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -95,32 +99,6 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
         return v;
     }
 
-    private class LoadFromDB extends AsyncTask<Void,Void,Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                productTypes = DaoFactory_def.getInstance(getContext()).getProtuctTypeDao().findAll();
-
-            } catch (DaoException e) {
-                e.printStackTrace();
-            }
-
-            adapter = new ProductSearchAdapter(productTypes);
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            recyclerView.setAdapter(adapter);
-
-            crossfade();
-
-        }
-    }
-
     private void crossfade() {
 
 
@@ -150,7 +128,6 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
                 });
     }
 
-
     private List<ProductType> filter(List<ProductType> models, String query) {
         query = query.toLowerCase();
 
@@ -178,5 +155,31 @@ public class ProductsSearchSubFragment extends Fragment implements SearchView.On
         recyclerView.scrollToPosition(0);
         return true;
 
+    }
+
+    private class LoadFromDB extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                productTypes = DaoFactory_def.getInstance(getContext()).getProtuctTypeDao().findAllLazy();
+
+            } catch (DaoException e) {
+                e.printStackTrace();
+            }
+
+            adapter = new ProductSearchAdapter(productTypes);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            recyclerView.setAdapter(adapter);
+
+            crossfade();
+
+        }
     }
 }
