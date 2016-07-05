@@ -1,15 +1,8 @@
 /*
- * Created by UFOS from urania
+ * Created by UFOS from Sasha
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity
  * Last modified: 05/07/16 4.33
- */
-
-/*
- * Created by UFOS from urania
- * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity
- * Last modified: 04/07/16 15.33
  */
 
 package com.ufos.cyw16.cleanyourworld.fragment;
@@ -24,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -46,6 +40,8 @@ import com.ufos.cyw16.cleanyourworld.R;
 
 /**
  * The type Geolocalization activity.
+ * Allows the users to look for the nearest garbage islands
+ * using Google API's, in particular Maps API, Places API and Web Service API.
  */
 public class GeolocalizationActivity extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
@@ -55,19 +51,19 @@ public class GeolocalizationActivity extends FragmentActivity implements
     private GoogleMap myGoogleMap;
     private ProgressBar progressBar;
 
-    //TODO: insert toolbar
-
     /**
      * Instantiates a new Geolocalization activity.
      */
+
     public GeolocalizationActivity() {
-        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.geolocalization);
+
+        // Check GPS permissions
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -78,11 +74,11 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        //Map fragment declaration
+        // Map fragment declaration
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //adding Google API's
+        // Adding Google API's
         client = new GoogleApiClient
                 .Builder(this)
                 .addApi(Places.GEO_DATA_API)
@@ -112,7 +108,6 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 
     @Override
@@ -120,24 +115,25 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
         myGoogleMap = googleMap;
 
-        //TODO: if gps !isActive() marker on COMUNE, else on current location (PROBLEM: LatLng???)
-        //TODO: garb islands around (filtered) green markers
+        // Autocomplete fragment declaration
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
-        //Autocomplete fragment declaration
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-
-        //Autocomplete fragment listener
+        // Autocomplete fragment listener
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 
-            //When place is chosen, camera is moved on it
             @Override
             public void onPlaceSelected(Place place) {
+
+                // When a Place is chosen, camera is moved on it and a marker is set on it
                 LatLng selectedPlace = place.getLatLng();
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(selectedPlace, 13));
                 googleMap.addMarker(new MarkerOptions().position(selectedPlace).title(place.getAddress().toString()));
-                //start AsyncTask
+
+                // Start AsyncTask
                 placeSelectedTask(selectedPlace);
             }
+
 //            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 //
 //        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
@@ -148,14 +144,14 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
             @Override
             public void onError(Status status) {
-                // TODO: Handle the error.
+                Log.v("Error", status.toString());
             }
         });
 
-        //Default start
-        LatLng currentLocation = new LatLng(-33.867, 151.206);
+        // Default configuration
+        LatLng defaultLocation = new LatLng(-33.867, 151.206);
 
-        //API 23 permissions checks
+        // API 23 permissions checks
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
@@ -165,24 +161,28 @@ public class GeolocalizationActivity extends FragmentActivity implements
         }
 
 //        googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 13));
-        googleMap.addMarker(new MarkerOptions().position(currentLocation).title("You are here!"));
-        //start AsyncTask
-        placeSelectedTask(currentLocation);
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 13));
+        googleMap.addMarker(new MarkerOptions().position(defaultLocation));
+
+        // Start AsyncTask
+        placeSelectedTask(defaultLocation);
 
     }
 
     /**
      * Place selected task.
+     * Starts AsyncTask to find the nearest garbage islands.
      *
      * @param latLng the lat lng
      */
+
     public void placeSelectedTask(final LatLng latLng) {
         new PlaceSelectedTask(latLng) {
 
             @Override
             protected void onPreExecute() {
-                //clear the map and set progressBar visible
+
+                // Clear the map and set progressBar visible
                 myGoogleMap.clear();
                 progressBar.setVisibility(View.VISIBLE);
                 setQuery();
@@ -196,7 +196,8 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 Integer progress = (Integer) values[0];
                 progressBar.setIndeterminate(false);
                 progressBar.setProgress(progress);
-                //add markers on garbage islands
+
+                // Add markers on garbage islands
                 PlaceSelectedItem placeSelectedItem = (PlaceSelectedItem) values[1];
                 myGoogleMap.addMarker(new MarkerOptions().position(placeSelectedItem.getLatLng()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_electronics)));
 
@@ -212,6 +213,10 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
         }.execute();
     }
+
+    /**
+     * Show gps disabled alert to user.
+     */
 
     private void showGPSDisabledAlertToUser() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);

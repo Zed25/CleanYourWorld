@@ -25,11 +25,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.ParserConfigurationException;
 
+/**
+ * The type Place selected parser.
+ * Parses xml document to find the "recycling" Places using
+ * Google Web Service API's
+ */
+
 public class PlaceSelectedParser {
 
-    /**
-     * Tag XML di Google
-     */
     private static final String STATUS = "status";
     private static final String PLACE_ID = "place_id";
     private static final String ID = "id";
@@ -37,35 +40,31 @@ public class PlaceSelectedParser {
     private static final String RESULT = "result";
     private static final String GEOMETRY = "geometry";
 
-    /**
-     * Stato della risposta di Google
-     */
     private static final String STATUS_OK = "OK";
     private static final String STATUS_ZERO_RESULT = "ZERO_RESULT";
-    private static final String STATUS_OVER_QUERY_LIMIT = "OVER_QUERY_LIMIT";
-    private static final String STATUS_REQUEST_DENIED = "REQUEST_DENIED";
-    private static final String STATUS_INVALID_REQUEST = "INVALID_REQUEST";
 
-    /**
-     * Attributi "locali"
-     */
     private String status = "";
 
-
-    // TODO: 05/01/16 verificare lo stato "il risultato" della connessione
-
-
     private ArrayList<PlaceSelectedItem> placeSelectedObjects = new ArrayList<PlaceSelectedItem>();                                           //struttura dati che immagazzinerà i dati letti
+
+    /**
+     * Gets radar place search objects.
+     *
+     * @return the radar place search objects
+     */
 
     public ArrayList<PlaceSelectedItem> getRadarPlaceSearchObjects() {                                                   //metodo di accesso alla struttura dati
         return placeSelectedObjects;
     }
 
+
     /**
-     * @param xmlUrl: link del sito
+     * Parse xml document.
+     *
+     * @param xmlUrl the xml url
      */
+
     public void parseXml(String xmlUrl) {
-        // TODO: 06/01/16 scegliere il tipo di uscita della funzione
         Document xmlDocument;
         try {
             xmlDocument = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new URL(xmlUrl).openStream());
@@ -81,26 +80,32 @@ public class PlaceSelectedParser {
                     if (status.equals(STATUS_OK) & element.getNodeName().equals(RESULT)) {
                         placeSelectedObjects.add(getPlaceSelectedItem(element));
                     } else if (status.equals(STATUS_ZERO_RESULT)) {
-                        // TODO: 06/01/16 comunica l'impossibilità di effettuare la ricerca
-                    } else {
-                        // TODO: 06/01/16 interrompi la ricerca
+                        Log.v("Error", STATUS_ZERO_RESULT);
                     }
                 }
             }
-        } catch (SAXException e) {
-            eDebug(e.toString());
-        } catch (IOException e) {
-            eDebug(e.toString());
-        } catch (ParserConfigurationException e) {
-            eDebug(e.toString());
-        } catch (FactoryConfigurationError e) {
+        } catch (SAXException | FactoryConfigurationError |
+                ParserConfigurationException | IOException e) {
             eDebug(e.toString());
         }
     }
 
+    /**
+     * Sets status.
+     *
+     * @param status the status
+     */
+
     public void setStatus(String status) {
         this.status = status;
     }
+
+    /**
+     * Gets place selected item.
+     *
+     * @param element the element
+     * @return the place selected item
+     */
 
     private PlaceSelectedItem getPlaceSelectedItem(Element element) {
         PlaceSelectedItem placeSelectedItem = new PlaceSelectedItem();
@@ -127,7 +132,13 @@ public class PlaceSelectedParser {
         return placeSelectedItem;
     }
 
+    /**
+     * eDebug function.
+     *
+     * @param debugString the debug string
+     */
+
     static void eDebug(String debugString) {
-        Log.e("RadarPlaceSearchParser", debugString + "\n");
+        Log.e("SearchParser", debugString + "\n");
     }
 }

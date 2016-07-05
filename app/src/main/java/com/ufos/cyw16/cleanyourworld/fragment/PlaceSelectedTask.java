@@ -14,6 +14,11 @@ import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
 
+/**
+ * The type Place selected task extends AsyncTask.
+ * Recycling Place searching in radius km.
+ */
+
 public class PlaceSelectedTask extends AsyncTask<String, Object, String> {
 
     private final String googleAPIKey = "AIzaSyCd4ksb7VjC1IXtfJYAnnwAKP0FIRmdznE"; /* this key is different from android key */
@@ -24,6 +29,12 @@ public class PlaceSelectedTask extends AsyncTask<String, Object, String> {
     private String query;
 
 
+    /**
+     * Instantiates a new Place selected task.
+     *
+     * @param latLng the lat lng
+     */
+
     public PlaceSelectedTask(LatLng latLng) {
         this.latLng = latLng;
     }
@@ -32,7 +43,8 @@ public class PlaceSelectedTask extends AsyncTask<String, Object, String> {
     @Override
     protected String doInBackground(String... params) {
         PlaceSelectedParser placeSelectedParser = new PlaceSelectedParser();
-        //query parsing
+
+        // Query parsing
         placeSelectedParser.parseXml(query);
         ArrayList<PlaceSelectedItem> placeSelectedItems = placeSelectedParser.getRadarPlaceSearchObjects();
         int sizeList = placeSelectedItems.size();
@@ -41,6 +53,10 @@ public class PlaceSelectedTask extends AsyncTask<String, Object, String> {
         }
         return null;
     }
+
+    /**
+     * Sets query (Google standards)
+     */
 
     public void setQuery() {
         query = googleLink
