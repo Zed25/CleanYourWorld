@@ -8,46 +8,31 @@
 package com.ufos.cyw16.cleanyourworld.fragment;
 
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.ufos.cyw16.cleanyourworld.CustomLinearLayoutManager;
-import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
-import com.ufos.cyw16.cleanyourworld.Models.MaterialTrashInfo;
+import com.ufos.cyw16.cleanyourworld.model_new.MaterialTrashInfo;
 import com.ufos.cyw16.cleanyourworld.MultilevelRecyclerView;
 import com.ufos.cyw16.cleanyourworld.R;
-import com.ufos.cyw16.cleanyourworld.adapter.CalendarMonthAdapter;
 import com.ufos.cyw16.cleanyourworld.adapter.MaterialRecyclerViewAdapter;
-import com.ufos.cyw16.cleanyourworld.config.ConfigStep;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
-import com.ufos.cyw16.cleanyourworld.model_new.Collection;
 import com.ufos.cyw16.cleanyourworld.model_new.Day;
 import com.ufos.cyw16.cleanyourworld.model_new.Material;
-import com.ufos.cyw16.cleanyourworld.model_new.Product;
-import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
-import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**

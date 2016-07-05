@@ -31,7 +31,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.CalendarViewType;
-import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
+import com.ufos.cyw16.cleanyourworld.model_new.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarWeekAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;

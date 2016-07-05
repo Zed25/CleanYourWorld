@@ -14,24 +14,24 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.ufos.cyw16.cleanyourworld.model_new.ProductScannInfo;
 import com.ufos.cyw16.cleanyourworld.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by simone_mancini on 19/05/16.
@@ -39,8 +39,8 @@ import com.ufos.cyw16.cleanyourworld.R;
 public class BarCodeSearchFragment extends Fragment{
 
     private final int USER_CAMERA_PERMISSION = 12; //check int for camera permission: 0 equals to PERMISSION_GRANTED
-    private final String TAG = "recycleDebug";
-    private TextView tvEAN;
+    private RecyclerView rvScann;
+    private List<ProductScannInfo> productScannInfoList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,6 +117,33 @@ public class BarCodeSearchFragment extends Fragment{
 
     }
 
+    /**
+     * initialize Recycler View
+     * <p>
+     * Called in either in week view or in month view
+     **/
+    private void initializerecyclerView(View v) {
+
+        rvScann = (RecyclerView) v.findViewById(R.id.rvMaterials);
+
+
+        productScannInfoList = new ArrayList<>();
+
+        //set RecyclerView's size fixed
+        rvScann.setHasFixedSize(true);
+
+        //create the layout manager to insert into the recycler view
+        //linear layout manager is similar to layout manager for the list view
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        //set the layout manager in recycler view
+        rvScann.setLayoutManager(linearLayoutManager);
+
+
+
+    }
+
     private void scan() {
             IntentIntegrator intentIntegrator = IntentIntegrator.forSupportFragment(this);
             intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
@@ -130,9 +157,8 @@ public class BarCodeSearchFragment extends Fragment{
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
             String scanContent = scanningResult.getContents();
-            Log.v(TAG, scanContent);
+
             String scanFormat = scanningResult.getFormatName();
-            Log.v(TAG, scanFormat);
 
             //adaptBarcodeAndEAN(scanContent, scanFormat, tvEAN);
         } else {

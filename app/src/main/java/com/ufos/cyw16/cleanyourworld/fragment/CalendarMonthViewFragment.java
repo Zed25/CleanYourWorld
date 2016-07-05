@@ -26,11 +26,9 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.CalendarViewType;
-import com.ufos.cyw16.cleanyourworld.DAO.MaterialiDAO;
-import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
+import com.ufos.cyw16.cleanyourworld.model_new.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarMonthAdapter;
-import com.ufos.cyw16.cleanyourworld.adapter.CalendarWeekAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Collection;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;

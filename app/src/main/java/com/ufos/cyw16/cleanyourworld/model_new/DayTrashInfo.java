@@ -1,4 +1,11 @@
-package com.ufos.cyw16.cleanyourworld.Models;
+/*
+ * Created by UFOS from simone_mancini
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.DayTrashInfo
+ * Last modified: 05/07/16 17.16
+ */
+
+package com.ufos.cyw16.cleanyourworld.model_new;
 
 import android.graphics.Color;
 

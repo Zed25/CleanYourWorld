@@ -1,11 +1,18 @@
 /*
  * Created by UFOS from simone_mancini
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.Models.MaterialTrashInfo
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.MaterialTrashInfo
+ * Last modified: 05/07/16 17.16
+ */
+
+/*
+ * Created by UFOS from simone_mancini
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.model_new.MaterialTrashInfo
  * Last modified: 03/07/16 18.13
  */
 
-package com.ufos.cyw16.cleanyourworld.Models;
+package com.ufos.cyw16.cleanyourworld.model_new;
 
 import android.graphics.Color;
 

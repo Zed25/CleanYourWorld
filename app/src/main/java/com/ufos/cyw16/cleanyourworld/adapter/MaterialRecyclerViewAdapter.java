@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.CustomLinearLayoutManager;
 import com.ufos.cyw16.cleanyourworld.MultilevelRecyclerView;
-import com.ufos.cyw16.cleanyourworld.Models.MaterialTrashInfo;
+import com.ufos.cyw16.cleanyourworld.model_new.MaterialTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 
 import java.util.List;

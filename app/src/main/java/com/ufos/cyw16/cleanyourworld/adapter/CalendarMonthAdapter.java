@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.ufos.cyw16.cleanyourworld.Models.DayTrashInfo;
+import com.ufos.cyw16.cleanyourworld.model_new.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 
 import java.util.List;
