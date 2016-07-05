@@ -56,11 +56,10 @@ public class BarCodeSearchFragment extends Fragment{
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.barcode_search_subfragment, container, false); //inflate layout
 
-        tvEAN = (TextView) v.findViewById(R.id.tvEAN);
-
-        //createFragment(v); //set ViewPager and TabLayout
+        createFragment(v);
         return v;
     }
+
 
     //runtime camera permission request
     private void checkCameraPermission() {
@@ -113,6 +112,11 @@ public class BarCodeSearchFragment extends Fragment{
 
     }
 
+
+    private void createFragment(View v) {
+
+    }
+
     private void scan() {
             IntentIntegrator intentIntegrator = IntentIntegrator.forSupportFragment(this);
             intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
@@ -130,18 +134,12 @@ public class BarCodeSearchFragment extends Fragment{
             String scanFormat = scanningResult.getFormatName();
             Log.v(TAG, scanFormat);
 
-            adaptBarcodeAndEAN(scanContent, scanFormat, tvEAN);
+            //adaptBarcodeAndEAN(scanContent, scanFormat, tvEAN);
         } else {
             Toast toast = Toast.makeText(this.getActivity(),
                     "No scan data received!", Toast.LENGTH_SHORT);
             toast.show();
         }
-    }
-
-    private void adaptBarcodeAndEAN(String scanContent, String scanFormat, TextView tvEAN) {
-        String tvText = getResources().getString(R.string.barCode) + ": " + scanContent + " " + scanFormat;
-
-        tvEAN.setText(tvText);
     }
 
 
