@@ -17,11 +17,13 @@ import android.view.View;
 /**
  * Created by simone_mancini on 04/07/16.
  */
-public class MultilevelRecyclerView extends RecyclerView implements View.OnTouchListener {
+public class MultilevelRecyclerView extends RecyclerView{
 
-    private boolean enableTouchIntercept = true;
+    private boolean enableTouchIntercept = false;
 
     private MultilevelRecyclerView parentRecyclerView;
+
+    private MultilevelRecyclerView childRecyclerView;
 
     public MultilevelRecyclerView(Context context) {
         super(context);
@@ -37,27 +39,35 @@ public class MultilevelRecyclerView extends RecyclerView implements View.OnTouch
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent e) {
-        if (enableTouchIntercept) {
+        if(parentRecyclerView != null) {
+            if (!parentRecyclerView.enableTouchIntercept) {
+                //System.out.println("onInterruptTouchEvent with parent");
+                return super.onInterceptTouchEvent(e);
+            }
+        }
+        if(enableTouchIntercept) {
+            //System.out.println("onInterruptTouchEvent");
             return super.onInterceptTouchEvent(e);
         }
         return false;
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
+    public boolean onTouchEvent(MotionEvent e) {
         if (parentRecyclerView != null) {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            if (e.getAction() == MotionEvent.ACTION_MOVE||
+                    e.getAction() == MotionEvent.ACTION_UP) {
                 // Disable intercepting touch to allow children to scroll
                 parentRecyclerView.setEnableTouchIntercept(false);
-            } else if (event.getAction() == MotionEvent.ACTION_UP ||
-                    event.getAction() == MotionEvent.ACTION_CANCEL) {
+                System.out.println("false");
+            } else if (e.getAction() == MotionEvent.ACTION_CANCEL) {
                 // Re-enable after children handles touch
                 parentRecyclerView.setEnableTouchIntercept(true);
+                System.out.println("true");
             }
         }
-
-        return super.onTouchEvent(event);
+        //System.out.println("Touch event");
+        return super.onTouchEvent(e);
     }
 
     public boolean isEnableTouchIntercept() {
@@ -74,5 +84,13 @@ public class MultilevelRecyclerView extends RecyclerView implements View.OnTouch
 
     public void setParentRecyclerView(MultilevelRecyclerView parentRecyclerView) {
         this.parentRecyclerView = parentRecyclerView;
+    }
+
+    public MultilevelRecyclerView getChildRecyclerView() {
+        return childRecyclerView;
+    }
+
+    public void setChildRecyclerView(MultilevelRecyclerView childRecyclerView) {
+        this.childRecyclerView = childRecyclerView;
     }
 }
