@@ -25,6 +25,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -133,6 +134,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
     @Override
     public void onMapReady(final GoogleMap googleMap) {
 
+
         myGoogleMap = googleMap;
 
         // Autocomplete fragment declaration
@@ -160,15 +162,27 @@ public class GeolocalizationActivity extends FragmentActivity implements
             }
         });
 
-        // Default configuration
-        LatLng defaultLocation = new LatLng(-33.867, 151.206);
+        myGoogleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                try {
+                    setUpMap();
+                } catch (Exception e) {
+                    Message4Debug.log(e.getMessage());
+                }
+                return true;
+            }
+        });
 
-        if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+        // Default configuration
+        LatLng defaultLocation = new LatLng(41.893408, 12.482815);
+
+        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             checkMapsPermission();
-        }else{
+        } else {
             setPermission(true);
         }
-        if(permission != null && permission) {
+        if (permission != null && permission) {
             try {
                 setUpMap();
             } catch (Exception e) {
@@ -176,8 +190,8 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 Message4Debug.log(e.getMessage());
             }
         }
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 13));
-            googleMap.addMarker(new MarkerOptions().position(defaultLocation));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 13));
+        googleMap.addMarker(new MarkerOptions().position(defaultLocation));
         // Start AsyncTask
         placeSelectedTask(defaultLocation);
 
@@ -249,15 +263,11 @@ public class GeolocalizationActivity extends FragmentActivity implements
         // Get LocationManager object from System Service LOCATION_SERVICE
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        // Create a criteria object to retrieve provider
-        Criteria criteria = new Criteria();
-
-        // Get the name of the best provider
-        String provider = locationManager.getBestProvider(criteria, true);
-
         // Get Current Location
-        Location myLocation = locationManager.getLastKnownLocation(provider);
-
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            checkMapsPermission();
+        }
+        Location myLocation =  locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
         // Get latitude of the current location
         double latitude = myLocation.getLatitude();
@@ -342,6 +352,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 myGoogleMap.addMarker(new MarkerOptions().position(placeSelectedItem.getLatLng()).icon(BitmapDescriptorFactory.fromResource(R.drawable.recyclemapicon)).title(title).snippet(snippet));
 
             }
+
 
             @Override
             protected void onPostExecute(String s) {

@@ -8,7 +8,7 @@
 
 <resources>
     <string name="app_name">CleanYourWorld</string>
-    <string name="barCode">Codei a barre</string>
+    <string name="barCode">Codici a barre</string>
     <string name="calSection">Calendario</string>
     <string name="glcFind">Isole Ecologiche</string>
     <string name="glcSection">Nelle Vicinanze</string>
@@ -30,4 +30,28 @@
     <string name="sttComune">Cambia il tuo comune</string>
     <string name="strNoRecycle">Raccolta differenziata non disponibile in questo comune</string>
     <string name="pressAgain">Premi nuovamente per chiudere l\'applicazione</string>
+    <string name="back">Indietro</string>
+    <string name="cancel">Cancella</string>
+    <string name="choose_another_comune">Nessuna informazione sulla raccolta differenziata di questo comune. Scegline un altro!</string>
+    <string name="choose_comune">Scegli il tuo Comune</string>
+    <string name="choose_prov">Scegli la tua Provincia</string>
+    <string name="choose_regione">Scegli la tua Regione</string>
+    <string name="continue_">Continua</string>
+    <string name="exit">ESCI</string>
+    <string name="location">Posizione</string>
+    <string name="no_internet">Nessuna connesione ad internet</string>
+    <string name="not_available">Non disponibile</string>
+    <string name="ok">OK</string>
+    <string name="open_internet">Connettiti ad internet e riprova</string>
+    <string name="strBarcode">Codice a barre</string>
+    <string name="strClickOnFABToScann">Clicca sul pulsante in basso per iniziare la tua prima scansione!!</string>
+    <string name="strCollectionDay"></string>
+    <string name="strNeedCamera">Hai bisogno di accettare i permessi della FOTOCAMERA per proseguire</string>
+    <string name="strNeedCameraForFragment">Hai bisogno di accettare i permessi della FOTOCAMERA per proseguire: se hai spuntato "non mostrare più" vai in Impostazioni, Applicazioni, Permessi</string>
+    <string name="strNotInDB">Prodotto non presente dul db</string>
+    <string name="strScannDate"></string>
+    <string name="strShouldSendAllertMessage">Aiutaci a crescere: clicca su ok per iniviare un messaggio al server, inseriremo questo prodotto!</string>
+    <string name="try_again">RIPROVA</string>
+    <string name="you_are_in">Sei in:</string>
+    <string name="you_chose">Hai scelto</string>
 </resources>

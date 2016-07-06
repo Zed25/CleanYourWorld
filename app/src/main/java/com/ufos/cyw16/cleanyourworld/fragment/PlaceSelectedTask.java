@@ -29,7 +29,7 @@ public class PlaceSelectedTask extends AsyncTask<String, Object, String> {
 
     private final String googleAPIKey = "AIzaSyCd4ksb7VjC1IXtfJYAnnwAKP0FIRmdznE"; /* this key is different from android key */
     private final String googleLink = "https://maps.googleapis.com/maps/api/place/radarsearch/xml?";
-    private final int radius = 15000;
+    private final int radius = 5000;
     private final String keyword = "recycling";
     private LatLng latLng;
     private String query;

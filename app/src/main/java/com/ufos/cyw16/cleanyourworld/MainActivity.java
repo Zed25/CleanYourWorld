@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Cave");
 
         toolbar.setNavigationIcon(R.drawable.ic_menu_24dp); // set menu icon
 

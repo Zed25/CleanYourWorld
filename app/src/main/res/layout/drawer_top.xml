@@ -10,6 +10,6 @@
         android:layout_height="match_parent"
         android:id="@+id/imageView"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/clean_your_world"/>
+        android:src="@drawable/clean_your_world_nav_bar"/>
 
 </RelativeLayout>
