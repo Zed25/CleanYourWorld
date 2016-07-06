@@ -355,16 +355,19 @@ public class BarCodeSearchFragment extends Fragment{
                 Message4Debug.log(e.getMessage());
             }
 
-            if(productScanList.size() == 0){
-                tvSuggest.setText(getResources().getString(R.string.strClickOnFABToScann));
+            if(productScanList != null) {
+                if (productScanList.size() == 0) {
+                    tvSuggest.setText(getResources().getString(R.string.strClickOnFABToScann));
+                    return;
+                }
+
+                for (ProductScan p : productScanList) {
+                    ProductScanInfo productScanInfo = computeCardStructure(p);
+                    productScanInfoList.add(productScanInfo);
+                }
                 return;
             }
-
-            for (ProductScan p: productScanList) {
-                ProductScanInfo productScanInfo = computeCardStructure(p);
-                productScanInfoList.add(productScanInfo);
-            }
-
+            tvSuggest.setText(getResources().getString(R.string.strClickOnFABToScann));
 
         }
 
