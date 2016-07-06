@@ -262,6 +262,7 @@ public class BarCodeSearchFragment extends Fragment{
                 try {
                     DaoFactory_def.getInstance(getContext()).getProtuctScanDao().sendToServer(barcode);
                     dialog.dismiss();
+                    Toast.makeText(getContext(), R.string.strMessageSent, Toast.LENGTH_LONG);
                 } catch (DaoException e) {
                 Message4Debug.log(e.getMessage());
                 }
