@@ -38,5 +38,15 @@ public interface CollectionDao extends EntityDao<Collection> {
             }
             return new Collection(Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]), materials, colors, collectionType);
         }
+
+        @Override
+        protected List<String[]> serialize(Collection entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        protected List<String[]> serializeForUpdate(Collection entity) throws DaoException {
+            return null;
+        }
     }
 }

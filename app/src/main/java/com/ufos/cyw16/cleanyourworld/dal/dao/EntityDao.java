@@ -1,6 +1,8 @@
 package com.ufos.cyw16.cleanyourworld.dal.dao;
 
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.dal.dml.InsertDaoException;
+import com.ufos.cyw16.cleanyourworld.dal.dml.UpdateDaoException;
 
 import java.util.List;
 
@@ -49,7 +51,7 @@ public interface EntityDao<T> {
      * @param entity the entity
      * @return the t
      */
-    T insert(T entity);
+    T insert(T entity) throws DaoException, InsertDaoException;
 
     /**
      * Delete T entity.
@@ -66,6 +68,15 @@ public interface EntityDao<T> {
      * @param entity the entity
      * @return the t
      */
-    T update(T entity);
+    T update(T entity) throws DaoException, UpdateDaoException;
+
+    /**
+     * Insert or update T.
+     * This method inserts or updates on object entity from the database
+     *
+     * @param entity the entity
+     * @return the t
+     */
+    T insertOrUpdate(T entity) throws DaoException;
 
 }

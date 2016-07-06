@@ -82,6 +82,16 @@ public interface CollectionDao extends EntityDao<Collection> {
             return collection;
         }
 
+        @Override
+        protected List<String[]> serialize(Collection entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        protected List<String[]> serializeForUpdate(Collection entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
         protected Collection instanceEntity(String[] args, boolean lazy) {
             Collection collection = new Collection();
             collection.setIdCollection(Integer.parseInt(args[0]));

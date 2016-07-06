@@ -24,6 +24,7 @@ import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.DayDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.IsolaEcologicaDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductScanDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.RegioneDao;
@@ -138,6 +139,16 @@ public class DaoFactory_def {
     public ProductTypeDao getProtuctTypeDao() {
         return new ProductTypeDao.ProductTypeDaoSQLite(context);
     }
+
+    /**
+     * Gets protuctScanDao.
+     *
+     * @return the protuct type dao
+     */
+    public ProductScanDao getProtuctScanDao() {
+        return new ProductScanDao.ProductScanDaoSQLite(context);
+    }
+
 
     /**
      * Gets provinciaDao.

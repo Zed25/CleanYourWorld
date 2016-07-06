@@ -17,7 +17,7 @@ import java.util.HashMap;
  * This class is a Singleton class.
  */
 public class CYWOpenHelper extends SQLiteOpenHelper {
-    private final static int db_version = 1;
+    private final static int db_version = 3;
     private final static String db_name = "cyw16.db";
     private static CYWOpenHelper mInstance = null;
     private ArrayList<Table> tables;
@@ -99,7 +99,12 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
                 new Column("colori_id", "INTEGER"),
                 new Column("tipologiaRaccolta_id", "INTEGER"),
         }));
+        tables.add(new Table("productScan", new Column[]{
+                new Column("_id", "INTEGER", "PRIMARY KEY AUTOINCREMENT"),
+                new Column("prodotti_id", "INTEGER", "UNIQUE"),
+                new Column("date", "TEXT"),
 
+        }));
 
         /* HashMap of tables */
         for (Table t : tables) {
@@ -153,7 +158,8 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
      * @throws SQLException the sql exception
      */
     private void dropTable(SQLiteDatabase db, Table table) throws SQLException {
-        String qry = "DROP TABLE IF EXISTS" + table.getName() + ";";
+        String qry = "DROP TABLE IF EXISTS " + table.getName() + ";";
+        Message4Debug.log(qry);
         db.execSQL(qry);
 
     }
@@ -177,6 +183,7 @@ public class CYWOpenHelper extends SQLiteOpenHelper {
                     ",";
         }
         qry = qry.substring(0, qry.length() - 1) + ");";
+        Message4Debug.log(qry);
         db.execSQL(qry);
 
     }

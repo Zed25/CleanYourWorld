@@ -13,7 +13,6 @@ import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.IsolaEcologica;
-import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.List;
 
@@ -57,11 +56,18 @@ public interface IsolaEcologicaDao extends EntityDao<IsolaEcologica> {
         }
 
         @Override
+        protected List<String[]> serialize(IsolaEcologica entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        protected List<String[]> serializeForUpdate(IsolaEcologica entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
         public IsolaEcologica getByIdComune(int id) throws DaoException {
             List<String[]> resultQuery = getTableAdapter().getData(new String[]{"comuni_id"}, new String[]{String.valueOf(id)}, null);
-            if (id == 1865) {
-                Message4Debug.log("");
-            }
             if (resultQuery.size() == 0)
                 return null;
             return instanceEntity(resultQuery.get(0));

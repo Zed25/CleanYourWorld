@@ -11,7 +11,10 @@ import android.content.Context;
 
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
+import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Day;
+
+import java.util.List;
 
 /**
  * The interface DayDao.
@@ -39,6 +42,16 @@ public interface DayDao extends EntityDao<Day> {
             day.setIdDay(Integer.parseInt(args[0]));
             day.setName(args[1]);
             return day;
+        }
+
+        @Override
+        protected List<String[]> serialize(Day entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        protected List<String[]> serializeForUpdate(Day entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
         }
     }
 }

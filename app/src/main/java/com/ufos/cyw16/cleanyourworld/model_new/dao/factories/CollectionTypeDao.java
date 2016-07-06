@@ -11,7 +11,10 @@ import android.content.Context;
 
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
+import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.CollectionType;
+
+import java.util.List;
 
 /**
  * The interface CollectionTypeDao.
@@ -39,6 +42,16 @@ public interface CollectionTypeDao extends EntityDao<CollectionType> {
             collectionType.setIdCollectionType(Integer.parseInt(args[0]));
             collectionType.setName(args[1]);
             return collectionType;
+        }
+
+        @Override
+        protected List<String[]> serialize(CollectionType entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        protected List<String[]> serializeForUpdate(CollectionType entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
         }
     }
 }

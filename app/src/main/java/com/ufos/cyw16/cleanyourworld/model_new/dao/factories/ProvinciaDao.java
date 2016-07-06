@@ -70,6 +70,16 @@ public interface ProvinciaDao extends EntityDao<Provincia> {
             return provincia;
         }
 
+        @Override
+        protected List<String[]> serialize(Provincia entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        protected List<String[]> serializeForUpdate(Provincia entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
         protected Provincia instanceEntity(String[] args, boolean lazy) {
             Provincia provincia = new Provincia();
             provincia.setIdProvincia(Integer.parseInt(args[0]));

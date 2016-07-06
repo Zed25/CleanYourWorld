@@ -11,7 +11,10 @@ import android.content.Context;
 
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
+import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Color;
+
+import java.util.List;
 
 /**
  * The interface ColorDao.
@@ -41,5 +44,16 @@ public interface ColorDao extends EntityDao<Color> {
             color.setColorCode(args[2]);
             return color;
         }
+
+        @Override
+        protected List<String[]> serialize(Color entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        protected List<String[]> serializeForUpdate(Color entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
     }
 }

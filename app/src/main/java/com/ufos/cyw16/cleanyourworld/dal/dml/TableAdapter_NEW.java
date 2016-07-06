@@ -17,6 +17,8 @@ package com.ufos.cyw16.cleanyourworld.dal.dml;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
 
@@ -81,10 +83,21 @@ public class TableAdapter_NEW {
      * @return the long
      * @throws DaoException the dao exception
      */
-    public long insert(String[] key, String[] value) throws DaoException {
+    public long insert(String[] key, String[] value) throws InsertDaoException, DaoException {
         SQLiteDatabase db = openHelper.getWritableDatabase();
         db.beginTransaction();
-        long lastId = db.insert(tableName, null, contentValuesCasted(key, value));
+        long lastId = -10;
+        try {
+            lastId = db.insertOrThrow(tableName, null, contentValuesCasted(key, value));
+        } catch (SQLiteConstraintException e) {
+            db.endTransaction();
+            db.close();
+            throw new InsertDaoException("Element already present in the database: " + e.getMessage());
+        } catch (SQLException e) {
+            db.endTransaction();
+            db.close();
+            throw new DaoException("SQLException: " + e.getMessage());
+        }
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
@@ -107,12 +120,15 @@ public class TableAdapter_NEW {
      * @return the int
      * @throws DaoException the dao exception
      */
-    public int update(String[] key, String[] newValues, String[] whereClauses, String[] whereArgs) throws DaoException {
+    public int update(String[] key, String[] newValues, String[] whereClauses, String[] whereArgs) throws DaoException, UpdateDaoException {
         SQLiteDatabase db = openHelper.getWritableDatabase();
         String whereClause = whereClauseElaborate(whereClauses);
         if (whereClauses.length != whereArgs.length)
             throw new DaoException("Numbers of elements of 'whereClauses[]' is different from that of 'whereArgs[]'");
+        db.beginTransaction();
         int id = db.update(tableName, contentValuesCasted(key, newValues), whereClause, whereArgs);
+        db.setTransactionSuccessful();
+        db.endTransaction();
         db.close();
         if (id > 0)
             return id;
@@ -122,7 +138,7 @@ public class TableAdapter_NEW {
         for (int i = 1; i < whereArgs.length; i++)
             exceptionMessage += ", " + whereArgs[i];
         exceptionMessage += ")';";
-        throw new DaoException(tableName + ": " + exceptionMessage);
+        throw new UpdateDaoException(tableName + ": " + exceptionMessage);
     }
 
 
@@ -236,7 +252,6 @@ public class TableAdapter_NEW {
             RunnableDb(BlockingQueue<String[][]> queue) {
                 this.queue = queue;
                 this.db = openHelper.getWritableDatabase();
-
             }
 
             @Override
@@ -251,9 +266,9 @@ public class TableAdapter_NEW {
                         db.insert(tableName, null, contentValuesCasted(keys, values));
                     }
                 } catch (InterruptedException e) {
-                    Message4Debug.log(e.toString());
+                    Message4Debug.log(e.getMessage());
                 } catch (DaoException e) {
-                    Message4Debug.log(e.toString());
+                    Message4Debug.log(e.getMessage());
                 } finally {
                     db.setTransactionSuccessful();
                     db.endTransaction();
@@ -286,9 +301,9 @@ public class TableAdapter_NEW {
                     }
                     queue.put(new String[][]{null, null});
                 } catch (IOException e) {
-                    Message4Debug.log(e.toString());
+                    Message4Debug.log(e.getMessage());
                 } catch (InterruptedException e) {
-                    Message4Debug.log(e.toString());
+                    Message4Debug.log(e.getMessage());
                 }
             }
         }
@@ -381,7 +396,6 @@ public class TableAdapter_NEW {
      */
     public void sendToServer() throws DaoException {
         String query = url + "&operation=secureInsert&table=" + tableName;
-        // TODO: 03/07/16
     }
 
     /**

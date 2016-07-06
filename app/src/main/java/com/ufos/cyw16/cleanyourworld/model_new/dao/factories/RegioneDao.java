@@ -62,6 +62,16 @@ public interface RegioneDao extends EntityDao<Regione> {
             return regione;
         }
 
+        @Override
+        protected List<String[]> serialize(Regione entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        protected List<String[]> serializeForUpdate(Regione entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
         protected Regione instanceEntity(String[] args, boolean lazy) {
             Regione regione = new Regione();
             regione.setIdRegione_int(Integer.parseInt(args[0]));

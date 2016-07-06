@@ -40,7 +40,14 @@ import java.util.List;
  */
 public interface ProductTypeDao extends EntityDao<ProductType> {
 
+    /**
+     * Fins all lazy.
+     *
+     * @return the products by id material
+     * @throws DaoException the dao exception
+     */
     List<ProductType> findAllLazy() throws DaoException;
+
     /**
      * Gets products by id material.
      *
@@ -65,7 +72,6 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
      * This class implements the instruction of the ProductTypeDao and inherits all method of EntityDaoSQLite
      */
     class ProductTypeDaoSQLite extends EntityDaoSQLite<ProductType> implements ProductTypeDao {
-        private static int count = 0;
         /**
          * Instantiates a new ProductTypeDaoSQLite.
          *
@@ -77,7 +83,6 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
 
         @Override
         protected ProductType instanceEntity(String[] args) {
-            Message4Debug.log("instanza numero: " + (++count));
             /* RELAZIONE DI COMPOSIZIONE */
             ProductType productType = null;
             try {
@@ -87,6 +92,16 @@ public interface ProductTypeDao extends EntityDao<ProductType> {
             }
             return productType;
 
+        }
+
+        @Override
+        protected List<String[]> serialize(ProductType entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        protected List<String[]> serializeForUpdate(ProductType entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
         }
 
         /**

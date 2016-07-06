@@ -111,5 +111,15 @@ public interface ProductDao extends EntityDao<Product> {
             }
             return products;
         }
+
+        @Override
+        protected List<String[]> serialize(Product entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        protected List<String[]> serializeForUpdate(Product entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
     }
 }

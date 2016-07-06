@@ -35,7 +35,14 @@ import java.util.List;
  */
 public interface MaterialDao extends EntityDao<Material> {
 
+    /**
+     * Gets by id Lazy.
+     *
+     * @param id the id
+     * @return the materials from id comune
+     */
     Material getByIdLazy(int id) throws DaoException;
+
     /**
      * Gets materials from id comune.
      *
@@ -75,6 +82,16 @@ public interface MaterialDao extends EntityDao<Material> {
             }
             material.setProdutctTypes(productTypes);
             return material;
+        }
+
+        @Override
+        protected List<String[]> serialize(Material entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        protected List<String[]> serializeForUpdate(Material entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
         }
 
         protected Material instanceEntity(String[] args, boolean lazy) {

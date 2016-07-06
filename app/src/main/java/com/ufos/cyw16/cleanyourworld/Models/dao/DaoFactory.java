@@ -3,16 +3,9 @@ package com.ufos.cyw16.cleanyourworld.Models.dao;
 
 import android.content.Context;
 
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.CollectionDao;
 import com.ufos.cyw16.cleanyourworld.Models.dao.factories.CollectionTypeDao;
 import com.ufos.cyw16.cleanyourworld.Models.dao.factories.ColorsDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.ComuneDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.IsolaEcologicaDao;
 import com.ufos.cyw16.cleanyourworld.Models.dao.factories.MaterialsDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProductTypeDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProductsDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.ProvinciaDao;
-import com.ufos.cyw16.cleanyourworld.Models.dao.factories.RegioneDao;
 
 @Deprecated
 public class DaoFactory {
@@ -29,9 +22,6 @@ public class DaoFactory {
         return instance;
     }
 
-    public CollectionDao getCollectionDao() {
-        return new CollectionDao.CollectionDaoSQLite(context);
-    }
 
     public CollectionTypeDao getCollectionTypeDao() {
         return new CollectionTypeDao.CollectionTypeDaoSQLite(context);
@@ -41,31 +31,10 @@ public class DaoFactory {
         return new ColorsDao.ColorsDaoSQLite(context);
     }
 
-    public ComuneDao getComuneDao() {
-        return new ComuneDao.ComuneDaoSQLite(context);
-    }
 
-    public IsolaEcologicaDao getIsolaEcologicaDao() {
-        return new IsolaEcologicaDao.IsolaEcologicaDaoSQLite(context);
-    }
 
     public MaterialsDao getMaterialsDao() {
         return new MaterialsDao.MaterialsDaoSQLite(context);
     }
 
-    public ProductsDao getProductsDao() {
-        return new ProductsDao.ProductsDaoSQLite(context);
-    }
-
-    public ProductTypeDao getProtuctTypeDao() {
-        return new ProductTypeDao.ProductTypeDaoSQLite(context);
-    }
-
-    public ProvinciaDao getProvinciaDao() {
-        return new ProvinciaDao.ProvinciaDAOSQLite(context);
-    }
-
-    public RegioneDao getRegioneDao() {
-        return new RegioneDao.RegioneDaoSQLite(context);
-    }
 }

@@ -30,9 +30,8 @@ import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Collection;
-import com.ufos.cyw16.cleanyourworld.model_new.Comune;
-import com.ufos.cyw16.cleanyourworld.model_new.Day;
-import com.ufos.cyw16.cleanyourworld.model_new.Material;
+import com.ufos.cyw16.cleanyourworld.model_new.Product;
+import com.ufos.cyw16.cleanyourworld.model_new.ProductScan;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionTypeDao;
@@ -42,6 +41,7 @@ import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.DayDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.IsolaEcologicaDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductDao;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductScanDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.RegioneDao;
@@ -192,28 +192,36 @@ public class DbFragment extends Fragment {
                     }
                     break;
                 case R.id.btn_comuni:
-                    MaterialDao materialDao = daoFactory.getMaterialDao();
+                    Product product = null;
                     try {
-                        List<Material> materials = materialDao.getMaterialsFromIdComune(1865);
-                        for (Material m : materials) {
-                            System.out.println(m.getName());
-                            for(Day d : m.getDays()){
-                                System.out.println(d.getName());
-                            }
-                        }
+                        product = daoFactory.getProductDao().findById(1);
                     } catch (DaoException e) {
-                        e.printStackTrace();
+                        Message4Debug.log(e.getMessage());
                     }
-                   /* ComuneDao comuneDao = daoFactory.getComuneDao();
-                    try {
-                        List<Comune> comunes = comuneDao.getComuniThatProvideCollection();
-                        for (Comune c : comunes) {
-                            System.out.println(c.getName());
+                    ProductScanDao productScanDao = daoFactory.getProtuctScanDao();
+                    List<ProductScan> scanList = new ArrayList<>();
+                    for (int i = 0; i < 100; i++) {
+                        ProductScan productScan = new ProductScan();
+                        productScan.setProduct(product);
+                        productScan.setDate((i * 25) + "/12/58");
+                        try {
+                            productScanDao.insertOrUpdate(productScan);
+                        } catch (DaoException e) {
+                            Message4Debug.log(e.getMessage());
+                            e.printStackTrace();
+                        }
+                    }
 
+                    try {
+                        List<ProductScan> lis = productScanDao.findAll();
+                        Message4Debug.log("date: " + lis.get(0).getDate());
+                        for (ProductScan item : lis) {
+                            Message4Debug.log(item.getProduct().getName());
                         }
                     } catch (DaoException e) {
-                        e.printStackTrace();
-                    }*/
+                        Message4Debug.log(e.getMessage());
+                    }
+
 
                     break;
             }

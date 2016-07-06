@@ -24,7 +24,13 @@ import java.util.List;
  * This interface and her inheritance class allow you to create a ComuneDao object
  */
 public interface ComuneDao extends EntityDao<Comune> {
-
+    /**
+     * Gets by id provincia. lazy
+     *
+     * @param id the id
+     * @return the by id provincia
+     * @throws DaoException the dao exception
+     */
     List<Comune> getByIdProvinciaLazy(int id) throws DaoException;
 
     /**
@@ -77,6 +83,16 @@ public interface ComuneDao extends EntityDao<Comune> {
             return comune;
         }
 
+        @Override
+        protected List<String[]> serialize(Comune entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        protected List<String[]> serializeForUpdate(Comune entity) throws DaoException {
+            throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
         protected Comune instanceEntity(String[] args, boolean lazy) {
             Comune comune = new Comune();
             comune.setIdComune(Integer.parseInt(args[0]));
@@ -112,7 +128,6 @@ public interface ComuneDao extends EntityDao<Comune> {
 
         @Override
         public List<Comune> getComuniThatProvideCollection() throws DaoException {
-            // FIXME: 04/07/16 interrogare lo schema raccolta!
             List<Comune> comuneList = DaoFactory_def.getInstance(getContext()).getComuneDao().findAll();
             List<Comune> result = new ArrayList<>();
             for (Comune c : comuneList) {

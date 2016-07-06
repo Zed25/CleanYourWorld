@@ -11,8 +11,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.dal.dml.InsertDaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.TableAdapter_NEW;
-import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
+import com.ufos.cyw16.cleanyourworld.dal.dml.UpdateDaoException;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
@@ -55,17 +56,6 @@ public abstract class EntityDaoSQLite<T> implements EntityDao<T> {
         return context;
     }
 
-    @Override
-    public void updateFromServer(String[] keys, String[] values) throws DaoException, InterruptedException {
-        SharedPreferences sharedPref = context.getSharedPreferences("CYW", Context.MODE_PRIVATE);
-        long lastUpdate = sharedPref.getLong(getTableAdapter().getTableName(), 0L);
-        if ((System.currentTimeMillis() - lastUpdate) > timeUpdate) {
-            getTableAdapter().updateFromServer(keys, values);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putLong(getTableAdapter().getTableName(), System.currentTimeMillis()).commit();
-        }
-    }
-
     /**
      * Gets tableAdapter.
      *
@@ -84,6 +74,24 @@ public abstract class EntityDaoSQLite<T> implements EntityDao<T> {
         this.tableAdapter = tableAdapter;
     }
 
+    /**
+     * Find entity classes into database
+     *
+     * @param selectionClauses the selection clauses
+     * @param selectionArgs    the selection args
+     * @param orderBy          the order by
+     * @return the list of entity
+     * @throws DaoException the dao exception
+     */
+    public List<T> find(String[] selectionClauses, String[] selectionArgs, String orderBy) throws DaoException {
+        ArrayList<T> result = new ArrayList<>();
+        List<String[]> list = getTableAdapter().getData(selectionClauses, selectionArgs, orderBy);
+        for (String[] args : list) {
+            result.add(instanceEntity(args));
+        }
+        return result;
+    }
+
     @Override
     public T findById(int id) throws DaoException {
         List<String[]> list = getTableAdapter().getData(new String[]{"_id"}, new String[]{String.valueOf(id)}, null);
@@ -98,9 +106,26 @@ public abstract class EntityDaoSQLite<T> implements EntityDao<T> {
     }
 
     @Override
-    public T insert(T entity) {
-        // TODO: 03/07/16  
-        return null;
+    public T insert(T entity) throws InsertDaoException, DaoException {
+        List<String[]> serialization = serialize(entity);
+        if (serialization.size() != 2)
+            throw new DaoException("Impossible to insert the object into database. <keys, values>");
+        getTableAdapter().insert(serialization.get(0), serialization.get(1));
+        return entity;
+    }
+
+    @Override
+    public T insertOrUpdate(T entity) throws DaoException {
+        try {
+            insert(entity);
+        } catch (InsertDaoException e) {
+            try {
+                update(entity);
+            } catch (UpdateDaoException e1) {
+                throw new DaoException("Update of the the object" + entity.getClass().getSimpleName() + " in table " + tableAdapter.getTableName() + " failed");
+            }
+        }
+        return entity;
     }
 
     @Override
@@ -109,9 +134,28 @@ public abstract class EntityDaoSQLite<T> implements EntityDao<T> {
     }
 
     @Override
-    public T update(T entity) {
-        // TODO: 03/07/16
-        return null;
+    public T update(T entity) throws DaoException, UpdateDaoException {
+        List<String[]> serialization = serializeForUpdate(entity);
+        if (serialization.size() != 4)
+            throw new DaoException("Impossible to update the object into database. <keys, newValues, whereClause, whereArgs>");
+        String[] key, newValues, whereClauses, whereArgs;
+        key = serialization.get(0);
+        newValues = serialization.get(1);
+        whereClauses = serialization.get(2);
+        whereArgs = serialization.get(3);
+        getTableAdapter().update(key, newValues, whereClauses, whereArgs);
+        return entity;
+    }
+
+    @Override
+    public void updateFromServer(String[] keys, String[] values) throws DaoException, InterruptedException {
+        SharedPreferences sharedPref = context.getSharedPreferences("CYW", Context.MODE_PRIVATE);
+        long lastUpdate = sharedPref.getLong(getTableAdapter().getTableName(), 0L);
+        if ((System.currentTimeMillis() - lastUpdate) > timeUpdate) {
+            getTableAdapter().updateFromServer(keys, values);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putLong(getTableAdapter().getTableName(), System.currentTimeMillis()).commit();
+        }
     }
 
     /**
@@ -124,21 +168,20 @@ public abstract class EntityDaoSQLite<T> implements EntityDao<T> {
     protected abstract T instanceEntity(String[] args);
 
     /**
-     * Find entity classes into database
+     * Serialize entity T.
+     * abstract method that serialize the entity class
      *
-     * @param selectionClauses the selection clauses
-     * @param selectionArgs    the selection args
-     * @param orderBy          the order by
-     * @return the list of entity
-     * @throws DaoException the dao exception
+     * @param entity the entity
+     * @return the T entity
      */
-    public List<T> find(String[] selectionClauses, String[] selectionArgs, String orderBy) throws DaoException {
-        ArrayList<T> result = new ArrayList<>();
-        List<String[]> list = getTableAdapter().getData(selectionClauses, selectionArgs, orderBy);
-        for (String[] args : list) {
-            Message4Debug.log(args.toString());
-            result.add(instanceEntity(args));
-        }
-        return result;
-    }
+    protected abstract List<String[]> serialize(T entity) throws DaoException;
+
+    /**
+     * Serialize for upadte entity T.
+     * abstract method that serialize the entity class
+     *
+     * @param entity the entity
+     * @return the T entity
+     */
+    protected abstract List<String[]> serializeForUpdate(T entity) throws DaoException;
 }
