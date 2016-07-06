@@ -212,8 +212,10 @@ public class TableAdapter_NEW {
         cursor.close();
         if (rows.size() < 1) {
             String ss = "";
+            if (selectionArgs != null) {
             for (String s : selectionArgs) {
                 ss += s + " ";
+            }
             }
             throw new DaoException("There aren't elements in table " + tableName + " where <" + whereclasues + "> " + ss);
         }

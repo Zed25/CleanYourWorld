@@ -102,7 +102,10 @@ public abstract class EntityDaoSQLite<T> implements EntityDao<T> {
 
     @Override
     public List<T> findAll() throws DaoException {
-        return find(null, null, null);
+        List<T> find = find(null, null, null);
+        if (find == null)
+            throw new DaoException("");
+        return find;
     }
 
     @Override

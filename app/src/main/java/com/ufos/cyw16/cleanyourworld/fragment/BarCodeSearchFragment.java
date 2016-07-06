@@ -148,6 +148,7 @@ public class BarCodeSearchFragment extends Fragment{
         initializerecyclerView(v);
         tvSuggest = (TextView) v.findViewById(R.id.tvSuggest);
         fabScannProduct = (FloatingActionButton) v.findViewById(R.id.fabScannProduct);
+        setPermission(false);
         checkCameraPermission();
         if(permission != null) {
             if (permission) {
@@ -434,9 +435,9 @@ public class BarCodeSearchFragment extends Fragment{
 
             productScanInfo.setProductName(productScan.getProduct().getName());
             productScanInfo.setMaterialProduct(productScan.getProduct().getProductType().getMaterial().getName());
-            //productScanInfo.setTrashColorCode(productScan.getProduct().getProductType().getMaterial().getColor().getColorCode());
+            productScanInfo.setTrashColorCode(productScan.getProduct().getProductType().getMaterial().getColor().getColorCode());
             productScanInfo.setBarcode(productScan.getProduct().getEAN());
-            //productScanInfo.setCollectionDay(selectDay(productScan.getProduct().getProductType().getMaterial().getDays()));
+            productScanInfo.setCollectionDay(selectDay(productScan.getProduct().getProductType().getMaterial().getDays()));
             productScanInfo.setScannDate(productScan.getDate());
 
             return productScanInfo;

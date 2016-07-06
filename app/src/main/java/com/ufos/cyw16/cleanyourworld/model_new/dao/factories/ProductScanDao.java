@@ -12,9 +12,10 @@ import android.content.Context;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
-import com.ufos.cyw16.cleanyourworld.model_new.Product;
+import com.ufos.cyw16.cleanyourworld.model_new.Material;
 import com.ufos.cyw16.cleanyourworld.model_new.ProductScan;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
+import com.ufos.cyw16.cleanyourworld.utlity.Choises;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
@@ -47,11 +48,25 @@ public interface ProductScanDao extends EntityDao<ProductScan> {
 
         @Override
         protected ProductScan instanceEntity(String[] args) {
+            List<Material> materials = null;
+            try {
+                materials = DaoFactory_def.getInstance(getContext()).getMaterialDao().getMaterialsFromIdComune(Choises.getIdComune());
+            } catch (DaoException e) {
+                e.printStackTrace();
+            }
             ProductScan productScan = new ProductScan();
             productScan.setIdScan(Integer.parseInt(args[0]));
             productScan.setDate(args[2]);
             try {
                 productScan.setProduct(DaoFactory_def.getInstance(getContext()).getProductDao().findById(Integer.parseInt(args[1])));
+                if (materials != null) {
+                    for (Material m : materials) {
+                        if (m.getIdMaterial() == productScan.getProduct().getProductType().getMaterial().getIdMaterial()) {
+                            productScan.getProduct().getProductType().setMaterial(m);
+                            break;
+                        }
+                    }
+                }
             } catch (DaoException e) {
                 Message4Debug.log(e.getMessage());
             }
