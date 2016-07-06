@@ -16,6 +16,14 @@ public class ProductScan {
     private Product product;
     private String date;
 
+    public ProductScan(Product product, String date) {
+        this.product = product;
+        this.date = date;
+    }
+
+    public ProductScan() {
+    }
+
     /**
      * Gets id scan.
      *

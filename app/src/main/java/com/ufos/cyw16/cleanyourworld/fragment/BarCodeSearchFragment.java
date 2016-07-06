@@ -31,13 +31,21 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.ufos.cyw16.cleanyourworld.NotFoundElementException;
 import com.ufos.cyw16.cleanyourworld.adapter.ProductScanRecyclerViewAdapter;
+import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Day;
+import com.ufos.cyw16.cleanyourworld.model_new.Product;
+import com.ufos.cyw16.cleanyourworld.model_new.ProductScan;
 import com.ufos.cyw16.cleanyourworld.model_new.ProductScanInfo;
 import com.ufos.cyw16.cleanyourworld.R;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
+import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductScanDao;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -53,6 +61,8 @@ public class BarCodeSearchFragment extends Fragment{
     private TextView tvSuggest;
     private Boolean permission;
     private FloatingActionButton fabScannProduct;
+    private BarCodeSearchAsyncTask barCodeSearchAsyncTask;
+    private ProductScan productScan;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -139,8 +149,10 @@ public class BarCodeSearchFragment extends Fragment{
         if(permission != null) {
             if (permission) {
 
-                BarCodeSearchAsyncTask barCodeSearchAsyncTask = new BarCodeSearchAsyncTask();
-                barCodeSearchAsyncTask.execute();
+                if(barCodeSearchAsyncTask == null) {
+                    barCodeSearchAsyncTask = new BarCodeSearchAsyncTask();
+                }
+                barCodeSearchAsyncTask.execute("getAll");
 
                 openWaitingDialog();
             } else {
@@ -211,17 +223,78 @@ public class BarCodeSearchFragment extends Fragment{
             intentIntegrator.initiateScan();
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    public void onActivityResult (int requestCode, int resultCode, Intent intent){
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null) {
             String scanContent = scanningResult.getContents();
 
             String scanFormat = scanningResult.getFormatName();
 
-            //adaptBarcodeAndEAN(scanContent, scanFormat, tvEAN);
+
+            try {
+                productScan = createProductScan(scanContent);
+            } catch (NotFoundElementException e) {
+                showAllertDialogSendToServer(scanContent);
+            }
+
+            if(barCodeSearchAsyncTask == null){
+                barCodeSearchAsyncTask = new BarCodeSearchAsyncTask();
+            }
+            barCodeSearchAsyncTask.execute("Scan");
         } else {
             Toast.makeText(this.getActivity(), "No scan data received!", Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void showAllertDialogSendToServer(final String barcode) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext(), R.style.RedAlertDialogStyle);
+        builder.setTitle(getResources().getString(R.string.strNotInDB));
+        builder.setMessage(getResources().getString(R.string.strShouldSendAllertMessage));
+        builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    DaoFactory_def.getInstance(getContext()).getProtuctScanDao().sendToServer(barcode);
+                    dialog.dismiss();
+                } catch (DaoException e) {
+                Message4Debug.log(e.getMessage());
+                }
+            }
+        });
+        builder.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builder.show();
+    }
+
+    private ProductScan createProductScan(String scanContent) throws NotFoundElementException {
+        Product product = null;
+        try {
+            product = DaoFactory_def.getInstance(getContext()).getProductDao().getProductByBarCode(scanContent);
+        } catch (DaoException e) {
+            Message4Debug.log(e.getMessage());
+        }
+        if(product == null){
+            throw new NotFoundElementException("No element in db");
+        }
+
+       return new ProductScan(product, computeReverseToday());
+
+    }
+
+    /**this method determinates the current date aaaa/mm/dd**/
+    private String computeReverseToday() {
+        GregorianCalendar calendar = new GregorianCalendar();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+
+
+        return Integer.toString(year) + "/" + Integer.toString(month) + "/" + Integer.toString(day);
     }
 
 
@@ -233,87 +306,81 @@ public class BarCodeSearchFragment extends Fragment{
         this.permission = permission;
     }
 
-    private class BarCodeSearchAsyncTask extends AsyncTask<Integer, Void, Void> {
+    private class BarCodeSearchAsyncTask extends AsyncTask<String, Void, Void> {
 
 
         @Override
-        protected Void doInBackground(Integer... ints) {
+        protected Void doInBackground(String... strings) {
 
-            computeBarCodeCards(productScanInfoList);
+            switch (strings[0]){
+                case "getAll":
+                    computeBarCodeCards(productScanInfoList);
+                    break;
+                case "Scan":
+                    insertNewScan(productScan);
+                    computeBarCodeCards(productScanInfoList);
+                    break;
+            }
+
+
 
             return null;
         }
 
-        private void computeBarCodeCards(List<ProductScanInfo> productScanInfoList) {
-            /*materialTrashInfoList.clear();
-            List<Material> materials = null;
-
-            MaterialDao materialDao = DaoFactory_def.getInstance(getContext()).getMaterialDao();
-
+        private void insertNewScan(ProductScan productScan) {
             try {
-                materials = materialDao.getMaterialsFromIdComune(comuneID);
+                DaoFactory_def.getInstance(getContext()).getProtuctScanDao().insertOrUpdate(productScan);
+            } catch (DaoException e) {
+                Message4Debug.log(e.getMessage());
+            }
+        }
 
+        private void computeBarCodeCards(List<ProductScanInfo> productScanInfoList) {
+
+            productScanInfoList.clear();
+
+            List<ProductScan> productScanList = null;
+
+            ProductScanDao productScanDao = DaoFactory_def.getInstance(getContext()).getProtuctScanDao();
+
+            try{
+                productScanList = productScanDao.findAll();
             } catch (DaoException e) {
                 Message4Debug.log(e.getMessage());
             }
 
-            if (materials != null) {
-                for (Material m : materials) {
-                    MaterialTrashInfo materialTrashInfo;
-                    materialTrashInfo = computeCardStructure(m);
+            if(productScanList.size() == 0){
+                tvSuggest.setText(getResources().getString(R.string.strClickOnFABToScann));
+                return;
+            }
 
-                    if(materialTrashInfo != null) {
-                        materialTrashInfoList.add(materialTrashInfo);
-                    }else {
-                        Toast.makeText(getContext(), getResources().getString(R.string.strNoRecycle) + ": " + m.getName(), Toast.LENGTH_LONG).show();
-                    }
-                }
-            }*/
+            for (ProductScan p: productScanList){
+                ProductScanInfo productScanInfo = computeCardStructure(p);
+                productScanInfoList.add(productScanInfo);
+            }
 
-            productScanInfoList.clear();
-
-            //TODO crea Lista di ProductScann
-
-            //TODO istanzia ProductScann dao
-
-            //TODO try catch con l'operazione get all (se tabella vuota set text sulla text view)
-
-            //TODO se la lista non è null fai un for
-                //elabora card con ProductscanInfo
-                //add a productScanInfoList
-
-            //TODO TextView gone e RecyclerView visible
+            if(productScanInfoList != null){
+                productScanRecyclerViewAdapter.notifyDataSetChanged();
+            }
+            tvSuggest.setVisibility(View.GONE);
+            rvScann.setVisibility(View.VISIBLE);
 
 
 
         }
 
-        private ProductScanInfo computeCardStructure(){
-
-            /*MaterialTrashInfo materialTrashInfo = new MaterialTrashInfo();
-            String dayName = selectDay(material.getDays());
-            materialTrashInfo.setDay(dayName);
-            String trashName = material.getName();
-            String trashColor = material.getColor().getColorCode();
-
-            materialTrashInfo.setThrash(trashName);
-            materialTrashInfo.setColorOfTheTrash(trashColor);
-
-            ProductTypeDao productTypeDao = DaoFactory_def.getInstance(getContext()).getProtuctTypeDao();
-            /*List<ProductType> productTypes = null;
-
-            try {
-                productTypes = productTypeDao.getProductsByIdMaterial(material.getIdMaterial());
-            } catch (DaoException e) {
-                Message4Debug.log("problem in productTypeDao.getProductsByIdMaterial()");
-            }
-            if(productTypes != null){/*
-            /*materialTrashInfo.setProductTypes(material.getProdutctTypes());
-
-            return materialTrashInfo;*/
+        private ProductScanInfo computeCardStructure(ProductScan productScan){
 
             ProductScanInfo productScanInfo = new ProductScanInfo();
-            return null;
+
+            productScanInfo.setProductName(productScan.getProduct().getName());
+            productScanInfo.setMaterialProduct(productScan.getProduct().getProductType().getMaterial().getName());
+            //productScanInfo.setTrashColorCode(productScan.getProduct().getProductType().getMaterial().getColor().getColorCode());
+            productScanInfo.setBarcode(productScan.getProduct().getEAN());
+            productScanInfo.setCollectionDay(selectDay(productScan.getProduct().getProductType().getMaterial().getDays()));
+            productScanInfo.setScannDate(productScan.getDate());
+
+            return productScanInfo;
         }
 
         private String selectDay(List<Day> days) {

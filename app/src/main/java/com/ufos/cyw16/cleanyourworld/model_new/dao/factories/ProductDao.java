@@ -33,6 +33,8 @@ public interface ProductDao extends EntityDao<Product> {
      */
     List<Product> getProdutsByIdProductType(int id);
 
+    Product getProductByBarCode(String barcode) throws DaoException;
+
     /**
      * Gets produts by id product type.
      *
@@ -99,6 +101,14 @@ public interface ProductDao extends EntityDao<Product> {
                 Message4Debug.log(e.getMessage());
             }
             return products;
+        }
+
+        @Override
+        public Product getProductByBarCode(String barcode) throws DaoException {
+            /* implementazione RELAZIONE DI AGGREGAZIONE */
+            List<String[]> resultQuery = getTableAdapter().getData(new String[]{"EAN"}, new String[]{barcode}, null);
+            List<Product> products = new ArrayList<>();
+            return instanceEntity(resultQuery.get(0));
         }
 
         @Override

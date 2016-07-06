@@ -24,6 +24,8 @@ import java.util.List;
  * This interface and her inheritance class allow you to create a ProductScanDao object
  */
 public interface ProductScanDao extends EntityDao<ProductScan> {
+    void sendToServer(String barcode) throws DaoException;
+
     ProductScan getProductScanByProducdId(int id) throws DaoException;
 
     /**
@@ -79,6 +81,11 @@ public interface ProductScanDao extends EntityDao<ProductScan> {
         @Override
         public void updateFromServer(String[] keys, String[] values) throws DaoException, InterruptedException {
             throw new DaoException("Illegal instruction for table " + getTableAdapter().getTableName());
+        }
+
+        @Override
+        public void sendToServer(String barcode) throws DaoException {
+            getTableAdapter().sendToServer();
         }
 
         @Override

@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by simone_mancini on 05/07/16.
  */
-public class ProductScanRecyclerViewAdapter extends RecyclerView.Adapter<ProductScanRecyclerViewAdapter.ProductScannHolder> {
+public class ProductScanRecyclerViewAdapter extends RecyclerView.Adapter<ProductScanRecyclerViewAdapter.ProductScanHolder> {
     private List<ProductScanInfo> lvProductScanInfo;
 
     public ProductScanRecyclerViewAdapter(List<ProductScanInfo> lvProductScanInfo) {
@@ -35,27 +35,34 @@ public class ProductScanRecyclerViewAdapter extends RecyclerView.Adapter<Product
     }
 
     @Override
-    public void onBindViewHolder(ProductScannHolder calendarWeekHolder, int i) {
+    public void onBindViewHolder(ProductScanHolder productScanHolder, int i) {
 
         ProductScanInfo productScanInfo = lvProductScanInfo.get(i);
+
+        productScanHolder.tvProductName.setText(productScanInfo.getProductName());
+        //productScanHolder.tvProductName.setBackgroundColor(productScanInfo.getTrashColorCode());
+        productScanHolder.tvBarCode.setText(productScanInfo.getBarcode());
+        productScanHolder.tvCollectionDay.setText(productScanInfo.getCollectionDay());
+        productScanHolder.tvMaterialProduct.setText(productScanInfo.getMaterialProduct());
+        productScanHolder.tvScannDate.setText(productScanInfo.getScannDate());
     }
 
     @Override
-    public ProductScannHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public ProductScanHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.scann_card_semple_layout, viewGroup, false);
 
-        return new ProductScannHolder(itemView);
+        return new ProductScanHolder(itemView);
     }
 
 
 
-    public static class ProductScannHolder extends RecyclerView.ViewHolder{
+    public static class ProductScanHolder extends RecyclerView.ViewHolder{
 
         protected TextView tvProductName, tvMaterialProduct, tvBarCode, tvCollectionDay, tvScannDate;
 
-        public ProductScannHolder(View v) {
+        public ProductScanHolder(View v) {
             super(v);
             tvProductName = (TextView) v.findViewById(R.id.tvProductName);
             tvMaterialProduct = (TextView) v.findViewById(R.id.tvMaterialProduct);

@@ -44,4 +44,7 @@
     <string name="open_internet">Open an Internet connection and try again.</string>
     <string name="try_again">TRY AGAIN</string>
     <string name="exit">EXIT</string>
+    <string name="strClickOnFABToScann">Click on lower side button to initiate your first scan!!</string>
+    <string name="strNotInDB">Product no in db</string>
+    <string name="strShouldSendAllertMessage">Help us to grow up: send a message to server, we\'ll insert this product!</string>
 </resources>

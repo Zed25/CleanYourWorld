@@ -79,4 +79,5 @@ public interface EntityDao<T> {
      */
     T insertOrUpdate(T entity) throws DaoException;
 
+
 }
