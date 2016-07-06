@@ -48,7 +48,7 @@
         </menu>
     </item>
 
-    <item android:title="@string/sttSection">
+    <item android:title="@string/sttSettings">
 
         <menu>
             <group android:checkableBehavior="single">
@@ -60,7 +60,7 @@
         </menu>
     </item>
 
-    <item android:title="Debug sestion">
+    <!--<item android:title="Debug sestion">
 
         <menu>
             <group android:checkableBehavior="single">
@@ -70,5 +70,5 @@
                     android:icon="@drawable/ic_cached"/>
             </group>
         </menu>
-    </item>
+    </item>-->
 </menu>

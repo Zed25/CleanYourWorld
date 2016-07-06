@@ -18,9 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ufos.cyw16.cleanyourworld.Models.Regione;
 import com.ufos.cyw16.cleanyourworld.R;
-import com.ufos.cyw16.cleanyourworld.model_new.ProductType;
 
 import java.util.ArrayList;
 import java.util.List;

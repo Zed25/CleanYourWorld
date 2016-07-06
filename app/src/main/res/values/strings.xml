@@ -50,4 +50,5 @@
     <string name="strDownloading">Download database from server</string>
     <string name="strTryAgain">No connection available, enable it and try again!</string>
     <string name="strMessageSent">Message sent!</string>
+    <string name="sttSettings">Settings</string>
 </resources>

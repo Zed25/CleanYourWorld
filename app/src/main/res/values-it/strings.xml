@@ -23,7 +23,7 @@
     <string name="strThursday">Giovedì</string>
     <string name="strTuesday">Martedì</string>
     <string name="strWednesday">Mercoledì</string>
-    <string name="sttSection">Impostazioni</string>
+    <string name="sttSection">Cambia comune</string>
     <string name="strProblem">Un problema è occorso</string>
     <string name="calMonthSection">Vista mensile</string>
     <string name="calWeekSection">Vista settimanale</string>
@@ -55,4 +55,5 @@
     <string name="you_are_in">Sei in:</string>
     <string name="you_chose">Hai scelto</string>
     <string name="strMessageSent">Messaggio inviato!</string>
+    <string name="sttSettings">Impostazioni</string>
 </resources>

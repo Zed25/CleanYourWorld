@@ -46,13 +46,12 @@ import android.widget.Toast;
 
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
-import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.fragment.BarCodeSearchFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarMonthViewFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarWeekViewFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.MaterialsSearchFragment;
-import com.ufos.cyw16.cleanyourworld.fragment.subfragment.ProductsSearchSubFragment;
+import com.ufos.cyw16.cleanyourworld.fragment.ProductsSearchFragment;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionTypeDao;
@@ -90,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
 
-    private ComuniTableAdapter comuniTableAdapter;
 
 
     private CollectionDao collectionDao;
@@ -403,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ft.commit();
                 break;
             case R.id.srchProduct:
-                ft.replace(R.id.fragmentContent, new ProductsSearchSubFragment(), "fragment_screen");
+                ft.replace(R.id.fragmentContent, new ProductsSearchFragment(), "fragment_screen");
                 ft.commit();
                 break;
             case R.id.srchMaterial:
@@ -426,10 +424,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent settingsIntent = new Intent(getBaseContext(), ConfigurationActivity.class);
                 startActivity(settingsIntent);
                 break;
-            case R.id.dbFragment:
-                ft.replace(R.id.fragmentContent, new DbFragment(), "fragment_screen");
-                ft.commit();
-                break;
+            //case R.id.dbFragment:
+            //    ft.replace(R.id.fragmentContent, new DbFragment(), "fragment_screen");
+            //    ft.commit();
+            //    break;
         }
         }
 

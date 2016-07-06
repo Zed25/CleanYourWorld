@@ -237,7 +237,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
             }));
 
         } else {
-            return;
+            showNoNetworkDialog();
         }
     }
 

@@ -1,11 +1,18 @@
 /*
+ * Created by UFOS from simone_mancini
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.fragment.ProductsSearchFragment
+ * Last modified: 06/07/16 22.36
+ */
+
+/*
  * Created by UFOS from urania
  * Project: CleanYourWorld
  * Package: com.ufos.cyw16.cleanyourworld.fragment.subfragment.ProductsSearchSubFragment
  * Last modified: 05/07/16 5.12
  */
 
-package com.ufos.cyw16.cleanyourworld.fragment.subfragment;
+package com.ufos.cyw16.cleanyourworld.fragment;
 
 
 import android.animation.Animator;
@@ -33,7 +40,7 @@ import java.util.List;
 /**
  * Created by simone_mancini on 19/05/16.
  */
-public class ProductsSearchSubFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class ProductsSearchFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private SearchView searchView;
     private RecyclerView recyclerView;
