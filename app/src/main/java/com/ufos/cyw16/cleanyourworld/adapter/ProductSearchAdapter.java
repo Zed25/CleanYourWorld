@@ -28,6 +28,11 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 
     private List<ProductType> productTypes;
 
+    /**
+     * Instantiates a new Product search adapter.
+     *
+     * @param productTypes the product types
+     */
     public ProductSearchAdapter(List<ProductType> productTypes) {
         //creates new variable because it needs to filter with original array
         this.productTypes = new ArrayList<>(productTypes);
@@ -60,6 +65,12 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
 
     }
 
+    /**
+     * Sets material icon.
+     *
+     * @param imageView the image view
+     * @param matID     the mat id
+     */
     private void setMaterialIcon(ImageView imageView, int matID) {
         // sets icon according to material of product
         switch (matID){
@@ -119,6 +130,12 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         }
     }
 
+    /**
+     * Gets color by materil id.
+     *
+     * @param idMaterial the id material
+     * @return the color by materil id
+     */
     private String getColorByMaterilID(int idMaterial) {
 
         // colors every text view according to material
@@ -149,6 +166,11 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         return productTypes.size();
     }
 
+    /**
+     * Animate to.
+     *
+     * @param models the models
+     */
     public void animateTo(List<ProductType> models) {
         // animates removal,addition and moving of items with new List
         applyAndAnimateRemovals(models);
@@ -156,6 +178,11 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         applyAndAnimateMovedItems(models);
     }
 
+    /**
+     * Apply and animate removals.
+     *
+     * @param newModels the new models
+     */
     private void applyAndAnimateRemovals(List<ProductType> newModels) {
         // if newModels doesn't contain a product, remove it
         for (int i = productTypes.size() - 1; i >= 0; i--) {
@@ -166,6 +193,11 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         }
     }
 
+    /**
+     * Apply and animate additions.
+     *
+     * @param newModels the new models
+     */
     private void applyAndAnimateAdditions(List<ProductType> newModels) {
         // if productTypes doesn't include a newModel, isert it
         for (int i = 0, count = newModels.size(); i < count; i++) {
@@ -176,6 +208,11 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         }
     }
 
+    /**
+     * Apply and animate moved items.
+     *
+     * @param newModels the new models
+     */
     private void applyAndAnimateMovedItems(List<ProductType> newModels) {
         // move from a position to a new one
         for (int toPosition = newModels.size() - 1; toPosition >= 0; toPosition--) {
@@ -187,6 +224,12 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         }
     }
 
+    /**
+     * Remove item product type.
+     *
+     * @param position the position
+     * @return the product type
+     */
     public ProductType removeItem(int position) {
         //removes an item ffrom productTypes
         final ProductType model = productTypes.remove(position);
@@ -194,12 +237,24 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
         return model;
     }
 
+    /**
+     * Add item.
+     *
+     * @param position the position
+     * @param model    the model
+     */
     public void addItem(int position, ProductType model) {
         // add an item to productTypes
         productTypes.add(position, model);
         notifyItemInserted(position);
     }
 
+    /**
+     * Move item.
+     *
+     * @param fromPosition the from position
+     * @param toPosition   the to position
+     */
     public void moveItem(int fromPosition, int toPosition) {
         //moves an item from a position to another
         final ProductType model = productTypes.remove(fromPosition);
@@ -208,12 +263,20 @@ public class ProductSearchAdapter extends RecyclerView.Adapter<ProductSearchAdap
     }
 
 
+    /**
+     * The type Product search view holder.
+     */
     public class ProductSearchViewHolder extends RecyclerView.ViewHolder{
 
         //view holder for every row of recycler view
         private TextView textView;
         private ImageView imageView;
 
+        /**
+         * Instantiates a new Product search view holder.
+         *
+         * @param itemView the item view
+         */
         public ProductSearchViewHolder(View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.product_search_tv);

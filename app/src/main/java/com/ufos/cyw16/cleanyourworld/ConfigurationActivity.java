@@ -52,6 +52,9 @@ import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.RegioneDao;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Configuration activity.
+ */
 public class ConfigurationActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private RecyclerView recyclerView;
     private Button btnContinue;
@@ -241,6 +244,9 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         }
     }
 
+    /**
+     * Disable switch.
+     */
     private void disableSwitch() {
         //make it unchecked
         switchRecycle.setChecked(false);
@@ -249,7 +255,10 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
 
     }
 
-    // private async task that gets from local db all regioni,province and comuni
+    /**
+     * The type Load from db.
+     */
+// private async task that gets from local db all regioni,province and comuni
     private class LoadFromDB extends AsyncTask<Void,Void,Void>{
 
         @Override
@@ -284,6 +293,9 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         }
     }
 
+    /**
+     * Update db from server.
+     */
     private void updateDBFromServer() {
         /* downloads all regioni,province,comuni from server and inserts into local DB */
         regioneDao = DaoFactory_def.getInstance(getApplicationContext()).getRegioneDao();
@@ -312,13 +324,19 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
 
     }
 
-    //show indeterminate progress bar
+    /**
+     * Start loading animation.
+     */
+//show indeterminate progress bar
     private void startLoadingAnimation() {
         recyclerView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
     }
 
+    /**
+     * Crossfade.
+     */
     private void crossfade() {
 
         // Set the content view to 0% opacity but visible, so that it is visible
@@ -347,6 +365,12 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                 });
     }
 
+    /**
+     * Sets chosen location.
+     *
+     * @param provider the provider
+     * @param position the position
+     */
     private void setChosenLocation(ConfigAdapterDataProvider provider,int position) {
         switch (step){
             case REGIONE:
@@ -403,6 +427,11 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         }
     }
 
+    /**
+     * Start step.
+     *
+     * @param data the data
+     */
     private void startStep(ArrayList<ConfigAdapterDataProvider> data) {
         
         if(step == ConfigStep.END){
@@ -430,6 +459,9 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
 
     }
 
+    /**
+     * Show choose another comune dialog.
+     */
     private void showChooseAnotherComuneDialog() {
         //show dialog to choose another comune because this one doesn't have collection in out db
 
@@ -447,6 +479,9 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
 
     }
 
+    /**
+     * Show recap dialog.
+     */
     private void showRecapDialog() {
         //once you chose a comune, shows position IF collection is available in our db
 
@@ -475,6 +510,9 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         builder.show();
     }
 
+    /**
+     * Save to shared prefs.
+     */
     private void saveToSharedPrefs() {
         //saves ids to later use in main activity
         SharedPreferences prefs = getSharedPreferences("CYW", MODE_PRIVATE);
@@ -488,6 +526,9 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         editor.apply();
     }
 
+    /**
+     * Start new activity.
+     */
     private void startNewActivity(){
 
         Intent main = new Intent(getApplicationContext(),MainActivity.class);
@@ -503,6 +544,9 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         finish();
     }
 
+    /**
+     * Change choose tv.
+     */
     private void changeChooseTV() {
 
         // depending on the config step you are in, the text view changes
@@ -523,7 +567,12 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
     }
 
 
-    /* fills data array depending on the step of the configuration you are in */
+    /**
+     * Fill data array.
+     *
+     * @param data the data
+     */
+/* fills data array depending on the step of the configuration you are in */
     private void fillDataArray(ArrayList<ConfigAdapterDataProvider> data) {
 
         switch (step){
@@ -563,11 +612,20 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         }
     }
 
+    /**
+     * Enable switch.
+     */
     private void enableSwitch() {
         switchRecycle.setVisibility(View.VISIBLE);
         trashIV.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Convert to data provider comune.
+     *
+     * @param data      the data
+     * @param comuni_al the comuni al
+     */
     private void convertToDataProviderComune(ArrayList<ConfigAdapterDataProvider> data, List<Comune> comuni_al) {
         //converts Comune class to ConfigAdapterDataProvider class used to fill recycler view
         for(Comune r : comuni_al){
@@ -587,6 +645,12 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         }
     }
 
+    /**
+     * Convert to data provider provincia.
+     *
+     * @param data        the data
+     * @param province_al the province al
+     */
     private void convertToDataProviderProvincia(ArrayList<ConfigAdapterDataProvider> data, List<Provincia> province_al) {
         //converts Provincia class to ConfigAdapterDataProvider used by adapter to fill list
         // it's the same adapter and recycler view for REGIONI,PROVINCE and COMUNI
@@ -598,6 +662,12 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         }
     }
 
+    /**
+     * Convert to data provider regione.
+     *
+     * @param data       the data
+     * @param regioni_al the regioni al
+     */
     private void convertToDataProviderRegione(ArrayList<ConfigAdapterDataProvider> data, List<Regione> regioni_al) {
         //converts Regione class to ConfigAdapterDataProvider needed to fill list
         for(Regione r : regioni_al){
@@ -632,6 +702,13 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         return true;
     }
 
+    /**
+     * Filter list.
+     *
+     * @param models the models
+     * @param query  the query
+     * @return the list
+     */
     private List<ConfigAdapterDataProvider> filter(List<ConfigAdapterDataProvider> models, String query) {
         query = query.toLowerCase();
 
@@ -647,6 +724,9 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
     }
 
 
+    /**
+     * The type Recycler touch listener.
+     */
     public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         //OnItemTouchListener for recycler view
@@ -654,7 +734,14 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         private GestureDetector gestureDetector;
         private ClickListener clickListener;
 
-        //adds a listener for every row in recycler view
+        /**
+         * Instantiates a new Recycler touch listener.
+         *
+         * @param context       the context
+         * @param recyclerView  the recycler view
+         * @param clickListener the click listener
+         */
+//adds a listener for every row in recycler view
         public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
             this.clickListener = clickListener;
             gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
@@ -693,13 +780,33 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         }
     }
 
-    //Click listener interface used in recycler view on item listener
+    /**
+     * The interface Click listener.
+     */
+//Click listener interface used in recycler view on item listener
     public interface ClickListener {
+        /**
+         * On click.
+         *
+         * @param view     the view
+         * @param position the position
+         */
         void onClick(View view, int position);
 
+        /**
+         * On long click.
+         *
+         * @param view     the view
+         * @param position the position
+         */
         void onLongClick(View view, int position);
     }
 
+    /**
+     * Is network available boolean.
+     *
+     * @return the boolean
+     */
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -707,6 +814,9 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    /**
+     * Show no network dialog.
+     */
     private void showNoNetworkDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.YellowAlertDialogStyle);

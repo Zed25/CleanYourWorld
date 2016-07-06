@@ -103,6 +103,9 @@ public class ProductsSearchFragment extends Fragment implements SearchView.OnQue
         return v;
     }
 
+    /**
+     * Crossfade.
+     */
     private void crossfade() {
 
 
@@ -132,6 +135,13 @@ public class ProductsSearchFragment extends Fragment implements SearchView.OnQue
                 });
     }
 
+    /**
+     * Filter list.
+     *
+     * @param models the models
+     * @param query  the query
+     * @return the list
+     */
     private List<ProductType> filter(List<ProductType> models, String query) {
         query = query.toLowerCase();
 
@@ -165,6 +175,9 @@ public class ProductsSearchFragment extends Fragment implements SearchView.OnQue
 
     }
 
+    /**
+     * The type Load from db.
+     */
     private class LoadFromDB extends AsyncTask<Void, Void, Void> {
 
         @Override

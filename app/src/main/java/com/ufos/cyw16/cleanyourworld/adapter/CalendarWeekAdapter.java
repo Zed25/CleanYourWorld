@@ -27,6 +27,11 @@ import java.util.List;
 public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapter.CalendarWeekHolder> {
     private List<DayTrashInfo> lvDayTrashInfo;
 
+    /**
+     * Instantiates a new Calendar week adapter.
+     *
+     * @param lvDayTrashInfo the lv day trash info
+     */
     public CalendarWeekAdapter(List<DayTrashInfo> lvDayTrashInfo) {
         this.lvDayTrashInfo = lvDayTrashInfo;
     }
@@ -56,11 +61,18 @@ public class CalendarWeekAdapter extends RecyclerView.Adapter<CalendarWeekAdapte
     }
 
 
-
+    /**
+     * The type Calendar week holder.
+     */
     public static class CalendarWeekHolder extends RecyclerView.ViewHolder{
 
         protected TextView tvCardViewDay, tvCardViewDate, tvCardViewTrash, tvColorOfTheDay;
 
+        /**
+         * Instantiates a new Calendar week holder.
+         *
+         * @param v the v
+         */
         public CalendarWeekHolder(View v) {
             super(v);
             tvCardViewDate =  (TextView) v.findViewById(R.id.tvCardViewDate);

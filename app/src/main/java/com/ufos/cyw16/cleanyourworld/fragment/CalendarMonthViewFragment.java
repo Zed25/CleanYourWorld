@@ -64,6 +64,9 @@ public class CalendarMonthViewFragment extends Fragment {
 
     private int[] dayChoosen;
 
+    /**
+     * Instantiates a new Calendar month view fragment.
+     */
     public CalendarMonthViewFragment() {
         // Required empty public constructor
     }
@@ -83,7 +86,12 @@ public class CalendarMonthViewFragment extends Fragment {
     }
 
 
-    /**this method prepare fragment for the configuration**/
+    /**
+     * this method prepare fragment for the configuration @param inflater the inflater
+     *
+     * @param container the container
+     * @return the view
+     */
     private View initializeMonthCalendar(LayoutInflater inflater, ViewGroup container) {
         View v;
         // Inflate the layout for Calendarfragment's default view (week view)
@@ -92,7 +100,9 @@ public class CalendarMonthViewFragment extends Fragment {
         return v;
     }
 
-    /**this method initialize CalendarView's month view**/
+    /**
+     * this method initialize CalendarView's month view @param v the v
+     */
     private void initializeCalendarMonthView(View v) {
         //initialize components
         initializerecyclerView(v);
@@ -115,9 +125,11 @@ public class CalendarMonthViewFragment extends Fragment {
         });
     }
 
-    /**initialize Recycler View
-     *
-     * Called in either in week view or in month view **/
+    /**
+     * initialize Recycler View
+     * <p/>
+     * Called in either in week view or in month view  @param v the v
+     */
     private void initializerecyclerView(View v){
         rvWeekList = (RecyclerView) v.findViewById(R.id.rvMonthList);
 
@@ -149,6 +161,12 @@ public class CalendarMonthViewFragment extends Fragment {
         rvWeekList.setAdapter(calendarMonthAdapter);
     }
 
+    /**
+     * Generate day trash card.
+     *
+     * @param list the list
+     * @param date the date
+     */
     private void generateDayTrashCard(List<DayTrashInfo> list, int[] date) {
         //clear the list because if create another one the recycler view's adapter changes the riferiment list, so notifyDataSetChanged() doesen't work
         list.clear();
@@ -165,7 +183,9 @@ public class CalendarMonthViewFragment extends Fragment {
         //}
     }
 
-    /**this method determinates the current date**/
+    /**
+     * this method determinates the current date @return the int [ ]
+     */
     private int[] computeToday() {
         GregorianCalendar calendar = new GregorianCalendar();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -177,6 +197,12 @@ public class CalendarMonthViewFragment extends Fragment {
         return dateInformations;
     }
 
+    /**
+     * Create card structure day trash info.
+     *
+     * @param calendar the calendar
+     * @return the day trash info
+     */
     private DayTrashInfo createCardStructure(GregorianCalendar calendar) {
         DayTrashInfo dayTrashInfo = new DayTrashInfo();
         String dayDate = computeDateString(calendar);
@@ -222,6 +248,12 @@ public class CalendarMonthViewFragment extends Fragment {
         return dayTrashInfo;
     }
 
+    /**
+     * Select day string.
+     *
+     * @param calendar the calendar
+     * @return the string
+     */
     private String selectDay(GregorianCalendar calendar) {
         int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
         String str;
@@ -255,7 +287,11 @@ public class CalendarMonthViewFragment extends Fragment {
     }
 
 
-    /**this method creates the string dd/mm/yyyy**/
+    /**
+     * this method creates the string dd/mm/yyyy @param calendar the calendar
+     *
+     * @return the string
+     */
     private String computeDateString(GregorianCalendar calendar) {
 
         String date;
@@ -267,83 +303,180 @@ public class CalendarMonthViewFragment extends Fragment {
         return date;
     }
 
-    /**GETTER AND SETTER**/
+    /**
+     * GETTER AND SETTER @return the calendar view
+     */
     public CalendarView getCalendarView() {
         return calendarView;
     }
 
+    /**
+     * Sets calendar view.
+     *
+     * @param calendarView the calendar view
+     */
     public void setCalendarView(CalendarView calendarView) {
         this.calendarView = calendarView;
     }
 
+    /**
+     * Gets tv date.
+     *
+     * @return the tv date
+     */
     public TextView getTvDate() {
         return tvDate;
     }
 
+    /**
+     * Sets tv date.
+     *
+     * @param tvDate the tv date
+     */
     public void setTvDate(TextView tvDate) {
         this.tvDate = tvDate;
     }
 
+    /**
+     * Gets tv trash.
+     *
+     * @return the tv trash
+     */
     public TextView getTvTrash() {
         return tvTrash;
     }
 
+    /**
+     * Sets tv trash.
+     *
+     * @param tvTrash the tv trash
+     */
     public void setTvTrash(TextView tvTrash) {
         this.tvTrash = tvTrash;
     }
 
+    /**
+     * Gets pref.
+     *
+     * @return the pref
+     */
     public SharedPreferences getPref() {
         return pref;
     }
 
+    /**
+     * Sets pref.
+     *
+     * @param pref the pref
+     */
     public void setPref(SharedPreferences pref) {
         this.pref = pref;
     }
 
+    /**
+     * Gets editor.
+     *
+     * @return the editor
+     */
     public SharedPreferences.Editor getEditor() {
         return editor;
     }
 
+    /**
+     * Sets editor.
+     *
+     * @param editor the editor
+     */
     public void setEditor(SharedPreferences.Editor editor) {
         this.editor = editor;
     }
 
+    /**
+     * Gets view mode.
+     *
+     * @return the view mode
+     */
     public CalendarViewType getViewMode() {
         return viewMode;
     }
 
+    /**
+     * Sets view mode.
+     *
+     * @param viewMode the view mode
+     */
     public void setViewMode(CalendarViewType viewMode) {
         this.viewMode = viewMode;
     }
 
+    /**
+     * Gets rv week list.
+     *
+     * @return the rv week list
+     */
     public RecyclerView getRvWeekList() {
         return rvWeekList;
     }
 
+    /**
+     * Sets rv week list.
+     *
+     * @param rvWeekList the rv week list
+     */
     public void setRvWeekList(RecyclerView rvWeekList) {
         this.rvWeekList = rvWeekList;
     }
 
+    /**
+     * Gets calendar month adapter.
+     *
+     * @return the calendar month adapter
+     */
     public CalendarMonthAdapter getCalendarMonthAdapter() {
         return calendarMonthAdapter;
     }
 
+    /**
+     * Sets calendar month adapter.
+     *
+     * @param calendarMonthAdapter the calendar month adapter
+     */
     public void setCalendarMonthAdapter(CalendarMonthAdapter calendarMonthAdapter) {
         this.calendarMonthAdapter = calendarMonthAdapter;
     }
 
+    /**
+     * Gets day trash info list.
+     *
+     * @return the day trash info list
+     */
     public List<DayTrashInfo> getDayTrashInfoList() {
         return dayTrashInfoList;
     }
 
+    /**
+     * Sets day trash info list.
+     *
+     * @param dayTrashInfoList the day trash info list
+     */
     public void setDayTrashInfoList(List<DayTrashInfo> dayTrashInfoList) {
         this.dayTrashInfoList = dayTrashInfoList;
     }
 
+    /**
+     * Get day choosen int [ ].
+     *
+     * @return the int [ ]
+     */
     public int[] getDayChoosen() {
         return dayChoosen;
     }
 
+    /**
+     * Sets day choosen.
+     *
+     * @param dayChoosen the day choosen
+     */
     public void setDayChoosen(int[] dayChoosen) {
         this.dayChoosen = dayChoosen;
     }

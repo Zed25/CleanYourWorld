@@ -25,6 +25,11 @@ import java.util.List;
 public class ProductScanRecyclerViewAdapter extends RecyclerView.Adapter<ProductScanRecyclerViewAdapter.ProductScanHolder> {
     private List<ProductScanInfo> lvProductScanInfo;
 
+    /**
+     * Instantiates a new Product scan recycler view adapter.
+     *
+     * @param lvProductScanInfo the lv product scan info
+     */
     public ProductScanRecyclerViewAdapter(List<ProductScanInfo> lvProductScanInfo) {
         this.lvProductScanInfo = lvProductScanInfo;
     }
@@ -57,11 +62,18 @@ public class ProductScanRecyclerViewAdapter extends RecyclerView.Adapter<Product
     }
 
 
-
+    /**
+     * The type Product scan holder.
+     */
     public static class ProductScanHolder extends RecyclerView.ViewHolder{
 
         protected TextView tvProductName, tvMaterialProduct, tvBarCode, tvCollectionDay, tvScannDate;
 
+        /**
+         * Instantiates a new Product scan holder.
+         *
+         * @param v the v
+         */
         public ProductScanHolder(View v) {
             super(v);
             tvProductName = (TextView) v.findViewById(R.id.tvProductName);

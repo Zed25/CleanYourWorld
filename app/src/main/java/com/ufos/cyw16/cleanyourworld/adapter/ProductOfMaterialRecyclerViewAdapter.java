@@ -32,6 +32,11 @@ public class ProductOfMaterialRecyclerViewAdapter extends RecyclerView.Adapter<P
 
     private List<ProductType> productTypes;
 
+    /**
+     * Instantiates a new Product of material recycler view adapter.
+     *
+     * @param productTypes the product types
+     */
     public ProductOfMaterialRecyclerViewAdapter(List<ProductType> productTypes) {
         this.productTypes = new ArrayList<>(productTypes);
     }
@@ -55,6 +60,12 @@ public class ProductOfMaterialRecyclerViewAdapter extends RecyclerView.Adapter<P
         setMaterialIcon(holder.imageView,matID);
     }
 
+    /**
+     * Sets material icon.
+     *
+     * @param imageView the image view
+     * @param matID     the mat id
+     */
     private void setMaterialIcon(ImageView imageView, int matID) {
         switch (matID){
             case 1:
@@ -113,6 +124,12 @@ public class ProductOfMaterialRecyclerViewAdapter extends RecyclerView.Adapter<P
         }
     }
 
+    /**
+     * Gets color by materil id.
+     *
+     * @param idMaterial the id material
+     * @return the color by materil id
+     */
     private String getColorByMaterilID(int idMaterial) {
 
         switch (idMaterial){
@@ -142,11 +159,19 @@ public class ProductOfMaterialRecyclerViewAdapter extends RecyclerView.Adapter<P
     }
 
 
+    /**
+     * The type Product of material recycler view holder.
+     */
     public class ProductOfMaterialRecyclerViewHolder extends RecyclerView.ViewHolder{
 
         private TextView textView;
         private ImageView imageView;
 
+        /**
+         * Instantiates a new Product of material recycler view holder.
+         *
+         * @param itemView the item view
+         */
         public ProductOfMaterialRecyclerViewHolder(View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.product_search_tv);

@@ -84,7 +84,10 @@ public class BarCodeSearchFragment extends Fragment{
     }
 
 
-    //runtime camera permission request
+    /**
+     * Check camera permission.
+     */
+//runtime camera permission request
     private void checkCameraPermission() {
         int cameraPermissionCheck = ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.CAMERA);
         if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) {
@@ -117,6 +120,13 @@ public class BarCodeSearchFragment extends Fragment{
         }
     }
 
+    /**
+     * Show message ok cancel.
+     *
+     * @param message        the message
+     * @param okListener     the ok listener
+     * @param cancelListener the cancel listener
+     */
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener cancelListener) {
         new AlertDialog.Builder(getContext())
                 .setMessage(message)
@@ -148,6 +158,11 @@ public class BarCodeSearchFragment extends Fragment{
     }
 
 
+    /**
+     * Create fragment.
+     *
+     * @param v the v
+     */
     private void createFragment(View v) {
         initializerecyclerView(v);
         tvSuggest = (TextView) v.findViewById(R.id.tvSuggest);
@@ -196,9 +211,11 @@ public class BarCodeSearchFragment extends Fragment{
 
     /**
      * initialize Recycler View
-     * <p>
+     * <p/>
      * Called in either in week view or in month view
-     **/
+     *
+     * @param v the v
+     */
     private void initializerecyclerView(View v) {
 
         rvScann = (RecyclerView) v.findViewById(R.id.rvBarCodeScann);
@@ -226,6 +243,9 @@ public class BarCodeSearchFragment extends Fragment{
 
     }
 
+    /**
+     * Open waiting dialog.
+     */
     private void openWaitingDialog() {
         waitingDialog = new ProgressDialog(getContext(), R.style.MyAlertDialogStyle);
         waitingDialog.setIndeterminate(true);
@@ -234,6 +254,9 @@ public class BarCodeSearchFragment extends Fragment{
         waitingDialog.show();
     }
 
+    /**
+     * Scan.
+     */
     private void scan() {
             IntentIntegrator intentIntegrator = IntentIntegrator.forSupportFragment(this);
             intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
@@ -267,6 +290,11 @@ public class BarCodeSearchFragment extends Fragment{
         }
     }
 
+    /**
+     * Show allert dialog send to server.
+     *
+     * @param barcode the barcode
+     */
     private void showAllertDialogSendToServer(final String barcode) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext(), R.style.RedAlertDialogStyle);
         builder.setTitle(getResources().getString(R.string.strNotInDB));
@@ -297,6 +325,13 @@ public class BarCodeSearchFragment extends Fragment{
         builder.show();
     }
 
+    /**
+     * Create product scan product scan.
+     *
+     * @param scanContent the scan content
+     * @return the product scan
+     * @throws NotFoundElementException the not found element exception
+     */
     private ProductScan createProductScan(String scanContent) throws NotFoundElementException {
         Product product = null;
         try {
@@ -312,7 +347,9 @@ public class BarCodeSearchFragment extends Fragment{
 
     }
 
-    /**this method determinates the current date aaaa/mm/dd**/
+    /**
+     * this method determinates the current date aaaa/mm/dd @return the string
+     */
     private String computeReverseToday() {
         GregorianCalendar calendar = new GregorianCalendar();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -323,6 +360,11 @@ public class BarCodeSearchFragment extends Fragment{
         return Integer.toString(year) + "/" + Integer.toString(month) + "/" + Integer.toString(day);
     }
 
+    /**
+     * Is network available boolean.
+     *
+     * @return the boolean
+     */
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -331,6 +373,11 @@ public class BarCodeSearchFragment extends Fragment{
     }
 
 
+    /**
+     * Show no network dialog.
+     *
+     * @param barcode the barcode
+     */
     private void showNoNetworkDialog(final String barcode) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext(),R.style.YellowAlertDialogStyle);
@@ -374,14 +421,27 @@ public class BarCodeSearchFragment extends Fragment{
 
     }
 
+    /**
+     * Is permission boolean.
+     *
+     * @return the boolean
+     */
     public boolean isPermission() {
         return permission;
     }
 
+    /**
+     * Sets permission.
+     *
+     * @param permission the permission
+     */
     public void setPermission(boolean permission) {
         this.permission = permission;
     }
 
+    /**
+     * The type Bar code search async task.
+     */
     private class BarCodeSearchAsyncTask extends AsyncTask<String, Void, Void> {
 
 
@@ -403,6 +463,11 @@ public class BarCodeSearchFragment extends Fragment{
             return null;
         }
 
+        /**
+         * Insert new scan.
+         *
+         * @param productScan the product scan
+         */
         private void insertNewScan(ProductScan productScan) {
             try {
                 DaoFactory_def.getInstance(getContext()).getProtuctScanDao().insertOrUpdate(productScan);
@@ -411,6 +476,11 @@ public class BarCodeSearchFragment extends Fragment{
             }
         }
 
+        /**
+         * Compute bar code cards.
+         *
+         * @param productScanInfoList the product scan info list
+         */
         private void computeBarCodeCards(List<ProductScanInfo> productScanInfoList) {
 
             productScanInfoList.clear();
@@ -440,6 +510,12 @@ public class BarCodeSearchFragment extends Fragment{
             }
         }
 
+        /**
+         * Compute card structure product scan info.
+         *
+         * @param productScan the product scan
+         * @return the product scan info
+         */
         private ProductScanInfo computeCardStructure(ProductScan productScan){
 
             ProductScanInfo productScanInfo = new ProductScanInfo();
@@ -454,6 +530,12 @@ public class BarCodeSearchFragment extends Fragment{
             return productScanInfo;
         }
 
+        /**
+         * Select day string.
+         *
+         * @param days the days
+         * @return the string
+         */
         private String selectDay(List<Day> days) {
             String str = "";
             if(days.size() == 1){

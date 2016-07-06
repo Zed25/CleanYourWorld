@@ -56,4 +56,12 @@
     <string name="you_chose">Hai scelto</string>
     <string name="strMessageSent">Messaggio inviato!</string>
     <string name="sttSettings">Impostazioni</string>
+    <string name="strTryAgain">Nessuna connesione disponibile, attiva una connesione dati e riprova!</string>
+    <string name="strDownloading">Scarico database dal server</string>
+    <string name="strNeedMultiplePermissions">Hai bisogno di permettere l\'accesso a</string>
+    <string name="strNo">No</string>
+    <string name="strGPSAvailable">Il GPS è disponibile sul tuo dispositivo</string>
+    <string name="strGSPNotAvailable">Il GPS non è disponibile sul tuo dispositivo. Vuoi attivarlo</string>
+    <string name="strYes">Si</string>
+    <string name="strYouAreHere">Tu sei qui!</string>
 </resources>

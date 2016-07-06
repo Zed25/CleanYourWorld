@@ -51,4 +51,10 @@
     <string name="strTryAgain">No connection available, enable it and try again!</string>
     <string name="strMessageSent">Message sent!</string>
     <string name="sttSettings">Settings</string>
+    <string name="strGPSAvailable">GPS is available on your device</string>
+    <string name="strGSPNotAvailable">GPS is disabled in your device. Would you like to enable it</string>
+    <string name="strYes">Yes</string>
+    <string name="strNo">No</string>
+    <string name="strYouAreHere">You are here!</string>
+    <string name="strNeedMultiplePermissions">You need to grant access to</string>
 </resources>

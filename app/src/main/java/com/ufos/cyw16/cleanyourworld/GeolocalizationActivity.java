@@ -75,7 +75,6 @@ public class GeolocalizationActivity extends FragmentActivity implements
     /**
      * Instantiates a new Geolocalization activity.
      */
-
     public GeolocalizationActivity() {
     }
 
@@ -88,7 +87,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.strGPSAvailable), Toast.LENGTH_SHORT).show();
         } else {
             showGPSDisabledAlertToUser();
         }
@@ -197,7 +196,10 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
     }
 
-    //runtime gps and localizzation permission request
+    /**
+     * Check maps permission.
+     */
+//runtime gps and localizzation permission request
     @TargetApi(Build.VERSION_CODES.M)
     private void checkMapsPermission() {
         List<String> permissionsNeeded = new ArrayList<String>();
@@ -211,7 +213,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
         if (permissionsList.size() > 0) {
             if (permissionsNeeded.size() > 0) {
                 // Need Rationale
-                String message = "You need to grant access to " + permissionsNeeded.get(0);
+                String message = getResources().getString(R.string.strNeedMultiplePermissions) + permissionsNeeded.get(0);
                 for (int i = 1; i < permissionsNeeded.size(); i++)
                     message = message + ", " + permissionsNeeded.get(i);
                 showMessageOKCancel(message,
@@ -236,15 +238,29 @@ public class GeolocalizationActivity extends FragmentActivity implements
         setPermission(true);
     }
 
+    /**
+     * Show message ok cancel.
+     *
+     * @param message        the message
+     * @param okListener     the ok listener
+     * @param cancelListener the cancel listener
+     */
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener cancelListener) {
         new AlertDialog.Builder(this)
                 .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", cancelListener)
+                .setPositiveButton(getResources().getString(R.string.ok), okListener)
+                .setNegativeButton(getResources().getString(R.string.cancel), cancelListener)
                 .create()
                 .show();
     }
 
+    /**
+     * Add permission boolean.
+     *
+     * @param permissionsList the permissions list
+     * @param permission      the permission
+     * @return the boolean
+     */
     @TargetApi(Build.VERSION_CODES.M)
     private boolean addPermission(List<String> permissionsList, String permission) {
         if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
@@ -256,6 +272,11 @@ public class GeolocalizationActivity extends FragmentActivity implements
         return true;
     }
 
+    /**
+     * Sets up map.
+     *
+     * @throws Exception the exception
+     */
     private void setUpMap() throws Exception {
         // Enable MyLocation Layer of Google Map
         myGoogleMap.setMyLocationEnabled(true);
@@ -283,7 +304,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
         // Zoom in the Google Map
         myGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
-        myGoogleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("You are here!"));
+        myGoogleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title(getResources().getString(R.string.strYouAreHere)));
         placeSelectedTask(latLng);
     }
 
@@ -324,7 +345,6 @@ public class GeolocalizationActivity extends FragmentActivity implements
      *
      * @param latLng the lat lng
      */
-
     public void placeSelectedTask(final LatLng latLng) {
         new PlaceSelectedTask(latLng, getBaseContext()) {
 
@@ -368,12 +388,11 @@ public class GeolocalizationActivity extends FragmentActivity implements
     /**
      * Show gps disabled alert to user.
      */
-
     private void showGPSDisabledAlertToUser() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+        alertDialogBuilder.setMessage(getResources().getString(R.string.strGSPNotAvailable) + "?")
                 .setCancelable(false)
-                .setPositiveButton("Yes",
+                .setPositiveButton(getResources().getString(R.string.strYes),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Intent callGPSSettingIntent = new Intent(
@@ -381,7 +400,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
                                 startActivity(callGPSSettingIntent);
                             }
                         });
-        alertDialogBuilder.setNegativeButton("No",
+        alertDialogBuilder.setNegativeButton(getResources().getString(R.string.strNo),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -391,10 +410,20 @@ public class GeolocalizationActivity extends FragmentActivity implements
         alert.show();
     }
 
+    /**
+     * Gets permission.
+     *
+     * @return the permission
+     */
     public Boolean getPermission() {
         return permission;
     }
 
+    /**
+     * Sets permission.
+     *
+     * @param permission the permission
+     */
     public void setPermission(Boolean permission) {
         this.permission = permission;
     }

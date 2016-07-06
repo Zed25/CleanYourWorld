@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.ufos.cyw16.cleanyourworld.CustomLinearLayoutManager;
 import com.ufos.cyw16.cleanyourworld.MultilevelRecyclerView;
 import com.ufos.cyw16.cleanyourworld.model_new.MaterialTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
@@ -87,7 +86,7 @@ public class MaterialRecyclerViewAdapter extends RecyclerView.Adapter<MaterialRe
 
             //create the layout manager to insert into the recycler view
             //linear layout manager is similar to layout manager for the list view
-            LinearLayoutManager linearLayoutManager = new CustomLinearLayoutManager(context);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
             //set the layout manager in recycler view

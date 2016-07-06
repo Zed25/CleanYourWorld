@@ -72,6 +72,11 @@ public class MaterialsSearchFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Create fragment.
+     *
+     * @param v the v
+     */
     private void createFragment(View v) {
 
         initializerecyclerView(v);
@@ -84,6 +89,9 @@ public class MaterialsSearchFragment extends Fragment {
 
     }
 
+    /**
+     * Open waiting dialog.
+     */
     private void openWaitingDialog() {
         waitingDialog = new ProgressDialog(getContext(), R.style.MyAlertDialogStyle);
         waitingDialog.setIndeterminate(true);
@@ -95,9 +103,11 @@ public class MaterialsSearchFragment extends Fragment {
 
     /**
      * initialize Recycler View
-     * <p>
+     * <p/>
      * Called in either in week view or in month view
-     **/
+     *
+     * @param v the v
+     */
     private void initializerecyclerView(View v) {
 
         detectorCompat = new GestureDetectorCompat(getActivity(), new GestureDetector.SimpleOnGestureListener());
@@ -121,6 +131,9 @@ public class MaterialsSearchFragment extends Fragment {
 
     }
 
+    /**
+     * The type Material search async task.
+     */
     private class MaterialSearchAsyncTask extends AsyncTask<Integer, Void, Void> {
 
 
@@ -132,6 +145,12 @@ public class MaterialsSearchFragment extends Fragment {
             return null;
         }
 
+        /**
+         * Compute material cards.
+         *
+         * @param materialTrashInfoList the material trash info list
+         * @param comuneID              the comune id
+         */
         private void computeMaterialCards(List<MaterialTrashInfo> materialTrashInfoList, int comuneID) {
             materialTrashInfoList.clear();
             List<Material> materials = null;
@@ -159,6 +178,12 @@ public class MaterialsSearchFragment extends Fragment {
             }
         }
 
+        /**
+         * Compute card structure material trash info.
+         *
+         * @param material the material
+         * @return the material trash info
+         */
         private MaterialTrashInfo computeCardStructure(Material material){
 
             MaterialTrashInfo materialTrashInfo = new MaterialTrashInfo();
@@ -184,6 +209,12 @@ public class MaterialsSearchFragment extends Fragment {
             return materialTrashInfo;
         }
 
+        /**
+         * Select day string.
+         *
+         * @param days the days
+         * @return the string
+         */
         private String selectDay(List<Day> days) {
             String str = "";
             if(days.size() == 1){
