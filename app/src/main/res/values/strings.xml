@@ -17,7 +17,7 @@
     <string name="calSection">Calendar View\'s</string>
     <string name="calWeekSection">Calendar week\'s view</string>
     <string name="calMonthSection">Calendar month\'s view</string>
-    <string name="sttSection">Settings</string>
+    <string name="sttSection">Change town</string>
     <string name="sttComune">Settings</string>
     <string name="strProblem">A problem as occurred</string>
     <string name="strNoRecycle">No recycling in this city</string>
@@ -46,7 +46,7 @@
     <string name="exit">EXIT</string>
     <string name="strClickOnFABToScann">Click on lower side button to initiate your first scan!!</string>
     <string name="strNotInDB">Product no in db</string>
-    <string name="strShouldSendAllertMessage">Help us to grow up: send a message to server, we\'ll insert this product!</string>
+    <string name="strShouldSendAllertMessage">Help us to grow up: click OK to send a message to server, we\'ll insert this product!</string>
     <string name="strDownloading">Download database from server</string>
     <string name="strTryAgain">No connection available, enable it and try again!</string>
 </resources>
