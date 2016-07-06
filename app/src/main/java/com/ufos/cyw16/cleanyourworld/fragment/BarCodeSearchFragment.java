@@ -110,6 +110,10 @@ public class BarCodeSearchFragment extends Fragment{
             return;
         }else{
             setPermission(true);
+            tvSuggest.setText(getResources().getString(R.string.strClickOnFABToScann));
+            if(tvSuggest.getVisibility()!=View.VISIBLE){
+                tvSuggest.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -152,7 +156,6 @@ public class BarCodeSearchFragment extends Fragment{
         checkCameraPermission();
         if(permission != null) {
             if (permission) {
-
                 if(barCodeSearchAsyncTask == null) {
                     barCodeSearchAsyncTask = new BarCodeSearchAsyncTask();
                 }
@@ -175,6 +178,14 @@ public class BarCodeSearchFragment extends Fragment{
                 if(permission !=null){
                     if(permission){
                         scan();
+                        if(productScanInfoList != null){
+                            if(productScanInfoList.size() == 0){
+                                if(tvSuggest.getVisibility() != View.VISIBLE){
+                                    tvSuggest.setText(getResources().getString(R.string.strClickOnFABToScann));
+                                    tvSuggest.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
                     }else{
                         checkCameraPermission();
                     }
@@ -460,14 +471,20 @@ public class BarCodeSearchFragment extends Fragment{
         @Override
         protected void onPostExecute(Void aVoid) {
 
-            if(productScanRecyclerViewAdapter != null){
+            if (productScanRecyclerViewAdapter != null) {
                 productScanRecyclerViewAdapter.notifyDataSetChanged();
-            }else{
+            } else {
                 productScanRecyclerViewAdapter = new ProductScanRecyclerViewAdapter(productScanInfoList);
                 rvScann.setAdapter(productScanRecyclerViewAdapter);
+            }if(productScanInfoList != null){
+                if(productScanInfoList.size() == 0){
+                    tvSuggest.setVisibility(View.VISIBLE);
+                    rvScann.setVisibility(View.GONE);
+                }else {
+                    tvSuggest.setVisibility(View.GONE);
+                    rvScann.setVisibility(View.VISIBLE);
+                }
             }
-            tvSuggest.setVisibility(View.GONE);
-            rvScann.setVisibility(View.VISIBLE);
 
 
             if(waitingDialog != null){

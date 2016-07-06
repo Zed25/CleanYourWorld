@@ -40,7 +40,7 @@ public class ProductScanRecyclerViewAdapter extends RecyclerView.Adapter<Product
         ProductScanInfo productScanInfo = lvProductScanInfo.get(i);
 
         productScanHolder.tvProductName.setText(productScanInfo.getProductName());
-        //productScanHolder.tvProductName.setBackgroundColor(productScanInfo.getTrashColorCode());
+        productScanHolder.tvProductName.setBackgroundColor(productScanInfo.getTrashColorCode());
         productScanHolder.tvBarCode.setText(productScanInfo.getBarcode());
         productScanHolder.tvCollectionDay.setText(productScanInfo.getCollectionDay());
         productScanHolder.tvMaterialProduct.setText(productScanInfo.getMaterialProduct());

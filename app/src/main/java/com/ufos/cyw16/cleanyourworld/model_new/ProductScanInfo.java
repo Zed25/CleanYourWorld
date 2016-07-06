@@ -14,6 +14,9 @@
 
 package com.ufos.cyw16.cleanyourworld.model_new;
 
+
+import android.graphics.Color;
+
 /**
  * Created by simone_mancini on 05/07/16.
  */
@@ -53,8 +56,9 @@ public class ProductScanInfo {
         this.collectionDay = collectionDay;
     }
 
-    public String getTrashColorCode() {
-        return trashColorCode;
+    public int getTrashColorCode() {
+        int color = Color.parseColor(trashColorCode);
+        return color;
     }
 
     public void setTrashColorCode(String trashColorCode) {
