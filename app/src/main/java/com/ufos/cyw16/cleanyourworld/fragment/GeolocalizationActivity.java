@@ -46,7 +46,7 @@ import com.ufos.cyw16.cleanyourworld.R;
 public class GeolocalizationActivity extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
 
-    private final int PLACE_PERMISSION = 0;
+    private final int MY_PLACE_PERMISSION = 0;
     private GoogleApiClient client;
     private GoogleMap myGoogleMap;
     private ProgressBar progressBar;
@@ -156,7 +156,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
             } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PLACE_PERMISSION);
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PLACE_PERMISSION);
             }
         }
 
@@ -239,4 +239,57 @@ public class GeolocalizationActivity extends FragmentActivity implements
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
+
+
+  /*  //runtime camera permission request
+    private void checkCameraPermission() {
+        int cameraPermissionCheck = ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.CAMERA);
+        if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) {
+            if (!shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
+                showMessageOKCancel(getResources().getString(R.string.strNeedCamera),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                requestPermissions(new String[] {Manifest.permission.CAMERA},
+                                        MY_PLACE_PERMISSION);
+                            }
+                        });
+                return;
+            }
+            requestPermissions(new String[] {Manifest.permission.CAMERA},
+                    MY_PLACE_PERMISSION);
+            return;
+        }
+        scan();
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(getContext())
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case MY_PLACE_PERMISSION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission Granted
+                    scan();
+                } else {
+                    // Permission Denied
+                    Toast.makeText(getContext(), "CAMERA Denied", Toast.LENGTH_SHORT)
+                            .show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+    }*/
+
 }

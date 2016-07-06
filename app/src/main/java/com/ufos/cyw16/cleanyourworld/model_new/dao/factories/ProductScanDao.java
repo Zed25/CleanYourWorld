@@ -85,7 +85,14 @@ public interface ProductScanDao extends EntityDao<ProductScan> {
 
         @Override
         public void sendToServer(String barcode) throws DaoException {
-            getTableAdapter().sendToServer();
+            String[] keys, values;
+            keys = new String[]{"barcode"};
+            values = new String[]{barcode};
+            try {
+                getTableAdapter().sendToServer(keys, values);
+            } catch (InterruptedException e) {
+                throw new DaoException("404!");
+            }
         }
 
         @Override

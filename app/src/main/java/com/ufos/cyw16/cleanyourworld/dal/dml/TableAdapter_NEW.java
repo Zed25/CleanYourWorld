@@ -394,8 +394,35 @@ public class TableAdapter_NEW {
      *
      * @throws DaoException the dao exception
      */
-    public void sendToServer() throws DaoException {
+    public void sendToServer(String[] keys, String values[]) throws DaoException, InterruptedException {
         String query = url + "&operation=secureInsert&table=" + tableName;
+        for (int i = 0; i < keys.length; i++) {
+            query += "&" + keys[i] + "=" + values[i];
+        }
+        Message4Debug.log(query);
+        final String finalQuery = query;
+
+        class RunnableServer implements Runnable {
+
+            @Override
+            public void run() {
+                HttpURLConnection connection = null;
+                try {
+                    URL url = new URL(finalQuery);
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.connect();
+                    connection.disconnect();
+                } catch (IOException e) {
+                    Message4Debug.log(e.getMessage());
+                } finally {
+                    if (connection != null)
+                        connection.disconnect();
+                }
+            }
+        }
+        Thread threadServer = new Thread(new RunnableServer());
+        threadServer.start();
+        threadServer.join();
     }
 
     /**
