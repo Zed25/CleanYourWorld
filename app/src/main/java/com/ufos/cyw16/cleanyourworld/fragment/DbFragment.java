@@ -45,6 +45,7 @@ import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductScanDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.RegioneDao;
+import com.ufos.cyw16.cleanyourworld.utlity.Choises;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
@@ -185,7 +186,7 @@ public class DbFragment extends Fragment {
                 case R.id.btn_typeProd:
                     DaoFactory_def daoFactory_def = DaoFactory_def.getInstance(context);
                     try {
-                        List<Collection> collections = daoFactory_def.getCollectionDao().getCollectionsByIdComune(1865);
+                        List<Collection> collections = daoFactory_def.getCollectionDao().getCollectionsByIdComune(Choises.getIdComune());
                         collections.get(0).getIdCollection();
                     } catch (DaoException e) {
                         e.printStackTrace();

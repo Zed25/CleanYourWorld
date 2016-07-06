@@ -32,13 +32,13 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.ufos.cyw16.cleanyourworld.NotFoundElementException;
+import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.ProductScanRecyclerViewAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Day;
 import com.ufos.cyw16.cleanyourworld.model_new.Product;
 import com.ufos.cyw16.cleanyourworld.model_new.ProductScan;
 import com.ufos.cyw16.cleanyourworld.model_new.ProductScanInfo;
-import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductScanDao;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
@@ -240,6 +240,8 @@ public class BarCodeSearchFragment extends Fragment{
                 productScan = createProductScan(scanContent);
             } catch (NotFoundElementException e) {
                 showAllertDialogSendToServer(scanContent);
+            } catch (Exception e) {
+                return;
             }
             if(productScan != null) {
                 barCodeSearchAsyncTask = new BarCodeSearchAsyncTask();

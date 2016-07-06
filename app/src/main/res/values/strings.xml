@@ -47,4 +47,5 @@
     <string name="strClickOnFABToScann">Click on lower side button to initiate your first scan!!</string>
     <string name="strNotInDB">Product no in db</string>
     <string name="strShouldSendAllertMessage">Help us to grow up: send a message to server, we\'ll insert this product!</string>
+    <string name="strDownloading">Download database from server</string>
 </resources>

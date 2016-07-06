@@ -76,11 +76,11 @@ public interface RegioneDao extends EntityDao<Regione> {
             Regione regione = new Regione();
             regione.setIdRegione_int(Integer.parseInt(args[0]));
             regione.setName(args[1]);
-            try {
-                regione.setProvince(DaoFactory_def.getInstance(getContext()).getProvinciaDao().getByIdRegionLazy(Integer.parseInt(args[0])));
-            } catch (DaoException e) {
-                Message4Debug.log(e.getMessage());
-            }
+//            try {
+//                regione.setProvince(DaoFactory_def.getInstance(getContext()).getProvinciaDao().getByIdRegionLazy(Integer.parseInt(args[0])));
+//            } catch (DaoException e) {
+//                Message4Debug.log(e.getMessage());
+//            }
             return regione;
         }
 

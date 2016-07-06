@@ -20,16 +20,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.ufos.cyw16.cleanyourworld.model_new.MaterialTrashInfo;
 import com.ufos.cyw16.cleanyourworld.MultilevelRecyclerView;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.MaterialRecyclerViewAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Day;
 import com.ufos.cyw16.cleanyourworld.model_new.Material;
+import com.ufos.cyw16.cleanyourworld.model_new.MaterialTrashInfo;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao;
+import com.ufos.cyw16.cleanyourworld.utlity.Choises;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public class MaterialsSearchFragment extends Fragment {
 
         materialSearchAsyncTask = new MaterialSearchAsyncTask();
 
-        materialSearchAsyncTask.execute(1865);
+        materialSearchAsyncTask.execute(Choises.getIdComune());
 
         openWaitingDialog();
 

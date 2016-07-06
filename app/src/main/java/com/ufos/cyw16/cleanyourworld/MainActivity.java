@@ -17,6 +17,7 @@
 
 package com.ufos.cyw16.cleanyourworld;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,11 +47,11 @@ import android.widget.Toast;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
+import com.ufos.cyw16.cleanyourworld.fragment.BarCodeSearchFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarMonthViewFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarWeekViewFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.MaterialsSearchFragment;
-import com.ufos.cyw16.cleanyourworld.fragment.BarCodeSearchFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.ProductsSearchSubFragment;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
@@ -64,6 +65,7 @@ import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.RegioneDao;
+import com.ufos.cyw16.cleanyourworld.utlity.Choises;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
@@ -100,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RegioneDao regioneDao;
     private DayDao dayDao;
     private int count = 0;
+    private ProgressDialog waitingDialog;
 
 
     //private ListView mDrawerList;
@@ -139,13 +142,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             printSharedPrefsAfterConfig();
         } else {
 
-                if(!isNetworkAvailable()){
+            if (!isNetworkAvailable()) {
 
-                    showNoNetworkDialog();
-                } else {
-                    // prepare for configuration as to choose your COMUNE
-                    prepareForConfiguration();
-                }
+                showNoNetworkDialog();
+            } else {
+                // prepare for configuration as to choose your COMUNE
+                prepareForConfiguration();
+            }
 
         }
 
@@ -185,42 +188,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
 
-        if (count == 1){
-            count += 1;
-        }
-        if (count == 2){
-            super.onBackPressed();
-        }
-        if (count == 0) {
-            final Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    count += 1;
-                    if (count == 1) {
-                        Handler handler = new Handler(Looper.getMainLooper());
-                        handler.post(new Runnable() {
-                            public void run() {
-                                Toast.makeText(getApplicationContext(),
-                                        getApplicationContext().getResources().getString(R.string.pressAgain),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        });
+            if (count == 1) {
+                count += 1;
+            }
+            if (count == 2) {
+                super.onBackPressed();
+            }
+            if (count == 0) {
+                final Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        count += 1;
+                        if (count == 1) {
+                            Handler handler = new Handler(Looper.getMainLooper());
+                            handler.post(new Runnable() {
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(),
+                                            getApplicationContext().getResources().getString(R.string.pressAgain),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                        try {
+                            Thread.sleep(2000, 0);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        count = 0;
                     }
-                    try {
-                        Thread.sleep(2000, 0);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    count = 0;
-                }
-            });
-            thread.start();
-        }
+                });
+                thread.start();
+            }
         }
     }
 
     private void updateServer() {
-
+        openWaitingDialog();
          /* DAOFactory */
         DaoFactory_def daoFactory = DaoFactory_def.getInstance(getBaseContext());
 
@@ -237,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         entities.add((provinciaDao = daoFactory.getProvinciaDao()));
         entities.add((regioneDao = daoFactory.getRegioneDao()));
         entities.add((dayDao = daoFactory.getDayDao()));
+
         Message4Debug.log("inizio aggiornamento del database interno...");
         long start = System.currentTimeMillis();
         for (EntityDao entity : entities) {
@@ -249,7 +253,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 e.printStackTrace();
             }
         }
+        if (waitingDialog != null) {
+            waitingDialog.dismiss();
+        }
         Message4Debug.log("aggiornamento completato in: " + (System.currentTimeMillis() - start));
+    }
+
+    private void openWaitingDialog() {
+        waitingDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
+        waitingDialog.setIndeterminate(true);
+        waitingDialog.setMessage(getResources().getString(R.string.strDownloading));
+        waitingDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        waitingDialog.show();
     }
 
     private void showNoNetworkDialog() {
@@ -292,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // TODO remove before deploy; used only for debug
     private void printSharedPrefsAfterConfig() {
 
-        SharedPreferences prefs = getSharedPreferences("comune",MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("CYW", MODE_PRIVATE);
         System.out.println("CHOSEN REGIONE ID: " + prefs.getInt("regione_id",0));
         System.out.println("CHOSEN PROV ID: " + prefs.getInt("provincia_id",0));
         System.out.println("CHOSEN COMUNE ID: " + prefs.getInt("comune_id",0));
@@ -303,15 +318,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         /* if configuration process completed successfully, a configDone Bool variable (set to TRUE)
          * is passed by the config activity
          */
-        if(getIntent().hasExtra("configDone")) {
 
-            Bundle b = getIntent().getExtras();
-            Boolean configDone = b.getBoolean("configDone");
-            return configDone;
+        SharedPreferences sharedPref = getSharedPreferences("CYW", Context.MODE_PRIVATE);
+        int comenueId = sharedPref.getInt("comune_id", 0);
+        if (comenueId != 0) {
+            Choises.setIdComune(comenueId);
+            return true;
+//        } else {
+//            if (getIntent().hasExtra("configDone")) {
+//                Bundle b = getIntent().getExtras();
+//                Boolean configDone = b.getBoolean("configDone");
+//                return configDone;
+//            }
         }
-
         return false;
-
     }
 
 
@@ -381,4 +401,3 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 }
-

@@ -26,13 +26,14 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.CalendarViewType;
-import com.ufos.cyw16.cleanyourworld.model_new.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.adapter.CalendarMonthAdapter;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
 import com.ufos.cyw16.cleanyourworld.model_new.Collection;
+import com.ufos.cyw16.cleanyourworld.model_new.DayTrashInfo;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.CollectionDao;
+import com.ufos.cyw16.cleanyourworld.utlity.Choises;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
@@ -188,7 +189,7 @@ public class CalendarMonthViewFragment extends Fragment {
         CollectionDao collectionDao = DaoFactory_def.getInstance(getContext()).getCollectionDao();
         List<Collection> collectionList = null;
         try {
-            collectionList = collectionDao.getCollectionByDayOfWeek(1865, calendar.get(Calendar.DAY_OF_WEEK));
+            collectionList = collectionDao.getCollectionByDayOfWeek(Choises.getIdComune(), calendar.get(Calendar.DAY_OF_WEEK));
         } catch (DaoException e) {
             Message4Debug.log("Problems in collectionDao.getCollectionByDayOfWeek()");
         }

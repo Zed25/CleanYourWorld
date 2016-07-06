@@ -37,13 +37,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ufos.cyw16.cleanyourworld.model_new.Comune;
-import com.ufos.cyw16.cleanyourworld.model_new.Provincia;
-import com.ufos.cyw16.cleanyourworld.model_new.Regione;
 import com.ufos.cyw16.cleanyourworld.config.ConfigAdapter;
 import com.ufos.cyw16.cleanyourworld.config.ConfigAdapterDataProvider;
 import com.ufos.cyw16.cleanyourworld.config.ConfigStep;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.model_new.Comune;
+import com.ufos.cyw16.cleanyourworld.model_new.Provincia;
+import com.ufos.cyw16.cleanyourworld.model_new.Regione;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ComuneDao;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProvinciaDao;
@@ -360,7 +360,12 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                 }
 
                 //get list of all province once you chose a regione
-                province_al = regioneChosen.getProvince();
+//                province_al = regioneChosen.getProvince(); // FIXME: 06/07/16
+                try {
+                    province_al = provinciaDao.getByIdRegionLazy(regioneChosen.getIdRegione_int());
+                } catch (DaoException e) {
+                    e.printStackTrace();
+                }
                 break;
             case COMUNE:
                 int provincia_id = adapter.getData().get(position).getId();
@@ -374,7 +379,12 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                 }
 
                 //get all comuni once you chose a provincia
-                comuni_al = provinciaChosen.getComuni();
+//                comuni_al = provinciaChosen.getComuni(); //// FIXME: 06/07/16
+                try {
+                    comuni_al = comuneDao.getByIdProvinciaLazy(provinciaChosen.getIdProvincia());
+                } catch (DaoException e) {
+                    e.printStackTrace();
+                }
                 break;
             case END:
 
@@ -463,7 +473,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
 
     private void saveToSharedPrefs() {
         //saves ids to later use in main activity
-        SharedPreferences prefs = getSharedPreferences("comune",MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("CYW", MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
         editor.putBoolean("configDone",true);
