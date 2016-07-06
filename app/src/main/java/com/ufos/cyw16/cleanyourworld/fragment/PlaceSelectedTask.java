@@ -7,12 +7,18 @@
 
 package com.ufos.cyw16.cleanyourworld.fragment;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * The type Place selected task extends AsyncTask.
@@ -27,6 +33,7 @@ public class PlaceSelectedTask extends AsyncTask<String, Object, String> {
     private final String keyword = "recycling";
     private LatLng latLng;
     private String query;
+    private Context context;
 
 
     /**
@@ -35,8 +42,9 @@ public class PlaceSelectedTask extends AsyncTask<String, Object, String> {
      * @param latLng the lat lng
      */
 
-    public PlaceSelectedTask(LatLng latLng) {
+    public PlaceSelectedTask(LatLng latLng, Context context) {
         this.latLng = latLng;
+        this.context = context;
     }
 
 
@@ -49,7 +57,22 @@ public class PlaceSelectedTask extends AsyncTask<String, Object, String> {
         ArrayList<PlaceSelectedItem> placeSelectedItems = placeSelectedParser.getRadarPlaceSearchObjects();
         int sizeList = placeSelectedItems.size();
         for (int i = 0; i < sizeList; i++) {
-            publishProgress((100 * i / sizeList), placeSelectedItems.get(i));
+
+            Geocoder geocoder = new Geocoder(context, Locale.getDefault());
+            List<Address> addresses = null;
+            String title = "";
+            String snippet = "";
+            try {
+                addresses = geocoder.getFromLocation(placeSelectedItems.get(i).getLatLng().latitude, placeSelectedItems.get(i).getLatLng().longitude, 1);
+                title += addresses.get(0).getLocality();
+                for (int j = 0; j < addresses.get(0).getMaxAddressLineIndex(); j++) {
+                    snippet += " " + addresses.get(0).getAddressLine(j);
+                }
+
+            } catch (IOException e) {
+                Message4Debug.log(e.getMessage());
+            }
+            publishProgress((100 * i / sizeList), placeSelectedItems.get(i), title, snippet);
         }
         return null;
     }

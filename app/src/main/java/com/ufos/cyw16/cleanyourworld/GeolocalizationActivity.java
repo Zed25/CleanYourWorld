@@ -19,13 +19,13 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -46,7 +46,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.ufos.cyw16.cleanyourworld.R;
 import com.ufos.cyw16.cleanyourworld.fragment.PlaceSelectedItem;
 import com.ufos.cyw16.cleanyourworld.fragment.PlaceSelectedTask;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
@@ -155,14 +154,6 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 placeSelectedTask(selectedPlace);
             }
 
-//            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-//
-//        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-//            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
-//        }else{
-//            showGPSDisabledAlertToUser();
-//        }
-
             @Override
             public void onError(Status status) {
                 Log.v("Error", status.toString());
@@ -172,24 +163,18 @@ public class GeolocalizationActivity extends FragmentActivity implements
         // Default configuration
         LatLng defaultLocation = new LatLng(-33.867, 151.206);
 
-        // API 23 permissions checks
-        //if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-        //    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-        //    } else {
-        //        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PLACE_PERMISSION);
-        //    }
-        //}
         if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             checkMapsPermission();
         }else{
             setPermission(true);
         }
         if(permission != null && permission) {
-            Message4Debug.log("Entrato");
-            myGoogleMap.setMyLocationEnabled(true);
-            //FIXME Umberto
-
+            try {
+                setUpMap();
+            } catch (Exception e) {
+                myGoogleMap.setMyLocationEnabled(true);
+                Message4Debug.log(e.getMessage());
+            }
         }
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 13));
             googleMap.addMarker(new MarkerOptions().position(defaultLocation));
@@ -245,6 +230,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 .create()
                 .show();
     }
+
     @TargetApi(Build.VERSION_CODES.M)
     private boolean addPermission(List<String> permissionsList, String permission) {
         if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
@@ -254,6 +240,41 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 return false;
         }
         return true;
+    }
+
+    private void setUpMap() throws Exception {
+        // Enable MyLocation Layer of Google Map
+        myGoogleMap.setMyLocationEnabled(true);
+
+        // Get LocationManager object from System Service LOCATION_SERVICE
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        // Create a criteria object to retrieve provider
+        Criteria criteria = new Criteria();
+
+        // Get the name of the best provider
+        String provider = locationManager.getBestProvider(criteria, true);
+
+        // Get Current Location
+        Location myLocation = locationManager.getLastKnownLocation(provider);
+
+
+        // Get latitude of the current location
+        double latitude = myLocation.getLatitude();
+
+        // Get longitude of the current location
+        double longitude = myLocation.getLongitude();
+
+        // Create a LatLng object for the current location
+        LatLng latLng = new LatLng(latitude, longitude);
+
+        // Show the current location in Google Map
+        myGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+        // Zoom in the Google Map
+        myGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(13));
+        myGoogleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("You are here!"));
+        placeSelectedTask(latLng);
     }
 
     @Override
@@ -274,6 +295,8 @@ public class GeolocalizationActivity extends FragmentActivity implements
                     // All Permissions Granted
                     setPermission(true);
                     myGoogleMap.setMyLocationEnabled(true); //this is NOT an error beacause it requires permissions check, but this line is in an if block permission check
+
+
                 } else {
                     // Permission Denied
                     setPermission(false);
@@ -293,7 +316,7 @@ public class GeolocalizationActivity extends FragmentActivity implements
      */
 
     public void placeSelectedTask(final LatLng latLng) {
-        new PlaceSelectedTask(latLng) {
+        new PlaceSelectedTask(latLng, getBaseContext()) {
 
             @Override
             protected void onPreExecute() {
@@ -312,10 +335,11 @@ public class GeolocalizationActivity extends FragmentActivity implements
                 Integer progress = (Integer) values[0];
                 progressBar.setIndeterminate(false);
                 progressBar.setProgress(progress);
-
                 // Add markers on garbage islands
                 PlaceSelectedItem placeSelectedItem = (PlaceSelectedItem) values[1];
-                myGoogleMap.addMarker(new MarkerOptions().position(placeSelectedItem.getLatLng()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_electronics)));
+                String title = (String) values[2];
+                String snippet = (String) values[3];
+                myGoogleMap.addMarker(new MarkerOptions().position(placeSelectedItem.getLatLng()).icon(BitmapDescriptorFactory.fromResource(R.drawable.recyclemapicon)).title(title).snippet(snippet));
 
             }
 
@@ -355,59 +379,6 @@ public class GeolocalizationActivity extends FragmentActivity implements
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
-
-
-  /*  //runtime camera permission request
-    private void checkCameraPermission() {
-        int cameraPermissionCheck = ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.CAMERA);
-        if (cameraPermissionCheck != PackageManager.PERMISSION_GRANTED) {
-            if (!shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-                showMessageOKCancel(getResources().getString(R.string.strNeedCamera),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                requestPermissions(new String[] {Manifest.permission.CAMERA},
-                                        MY_PLACE_PERMISSION);
-                            }
-                        });
-                return;
-            }
-            requestPermissions(new String[] {Manifest.permission.CAMERA},
-                    MY_PLACE_PERMISSION);
-            return;
-        }
-        scan();
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(getContext())
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
-        switch (requestCode) {
-            case MY_PLACE_PERMISSION:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission Granted
-                    scan();
-                } else {
-                    // Permission Denied
-                    Toast.makeText(getContext(), "CAMERA Denied", Toast.LENGTH_SHORT)
-                            .show();
-                }
-                break;
-            default:
-                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-
-    }*/
-
 
     public Boolean getPermission() {
         return permission;

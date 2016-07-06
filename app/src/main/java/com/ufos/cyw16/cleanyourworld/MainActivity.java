@@ -360,6 +360,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        if (!isNetworkAvailable()) {
+            Toast.makeText(this, R.string.strTryAgain, Toast.LENGTH_LONG).show();
+        } else {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         switch (item.getItemId()){
@@ -395,6 +398,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ft.replace(R.id.fragmentContent, new DbFragment(), "fragment_screen");
                 ft.commit();
                 break;
+        }
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
