@@ -15,32 +15,29 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ufos.cyw16.cleanyourworld.R;
-import com.ufos.cyw16.cleanyourworld.model_new.DayTrashInfo;
-import com.ufos.cyw16.cleanyourworld.model_new.ProductScannInfo;
-
-import org.w3c.dom.Text;
+import com.ufos.cyw16.cleanyourworld.model_new.ProductScanInfo;
 
 import java.util.List;
 
 /**
  * Created by simone_mancini on 05/07/16.
  */
-public class ProductScannRecyclerViewAdapter extends RecyclerView.Adapter<ProductScannRecyclerViewAdapter.ProductScannHolder> {
-    private List<ProductScannInfo> lvProductScannInfo;
+public class ProductScanRecyclerViewAdapter extends RecyclerView.Adapter<ProductScanRecyclerViewAdapter.ProductScannHolder> {
+    private List<ProductScanInfo> lvProductScanInfo;
 
-    public ProductScannRecyclerViewAdapter(List<ProductScannInfo> lvProductScannInfo) {
-        this.lvProductScannInfo = lvProductScannInfo;
+    public ProductScanRecyclerViewAdapter(List<ProductScanInfo> lvProductScanInfo) {
+        this.lvProductScanInfo = lvProductScanInfo;
     }
 
     @Override
     public int getItemCount() {
-        return lvProductScannInfo.size();
+        return lvProductScanInfo.size();
     }
 
     @Override
     public void onBindViewHolder(ProductScannHolder calendarWeekHolder, int i) {
 
-        ProductScannInfo productScannInfo = lvProductScannInfo.get(i);
+        ProductScanInfo productScanInfo = lvProductScanInfo.get(i);
     }
 
     @Override

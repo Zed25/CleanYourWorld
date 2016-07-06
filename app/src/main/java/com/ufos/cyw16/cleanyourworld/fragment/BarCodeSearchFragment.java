@@ -10,12 +10,10 @@ package com.ufos.cyw16.cleanyourworld.fragment;
 
 
 import android.Manifest;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ProviderInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,18 +31,10 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.ufos.cyw16.cleanyourworld.adapter.MaterialRecyclerViewAdapter;
-import com.ufos.cyw16.cleanyourworld.adapter.ProductScannRecyclerViewAdapter;
-import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.adapter.ProductScanRecyclerViewAdapter;
 import com.ufos.cyw16.cleanyourworld.model_new.Day;
-import com.ufos.cyw16.cleanyourworld.model_new.Material;
-import com.ufos.cyw16.cleanyourworld.model_new.MaterialTrashInfo;
-import com.ufos.cyw16.cleanyourworld.model_new.Product;
-import com.ufos.cyw16.cleanyourworld.model_new.ProductScannInfo;
+import com.ufos.cyw16.cleanyourworld.model_new.ProductScanInfo;
 import com.ufos.cyw16.cleanyourworld.R;
-import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
-import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.MaterialDao;
-import com.ufos.cyw16.cleanyourworld.model_new.dao.factories.ProductTypeDao;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 
 import java.util.ArrayList;
@@ -57,9 +47,9 @@ public class BarCodeSearchFragment extends Fragment{
 
     private final int USER_CAMERA_PERMISSION = 12; //check int for camera permission: 0 equals to PERMISSION_GRANTED
     private RecyclerView rvScann;
-    private List<ProductScannInfo> productScannInfoList;
+    private List<ProductScanInfo> productScanInfoList;
     private ProgressDialog waitingDialog;
-    private ProductScannRecyclerViewAdapter productScannRecyclerViewAdapter;
+    private ProductScanRecyclerViewAdapter productScanRecyclerViewAdapter;
     private TextView tvSuggest;
     private Boolean permission;
     private FloatingActionButton fabScannProduct;
@@ -187,7 +177,7 @@ public class BarCodeSearchFragment extends Fragment{
         rvScann = (RecyclerView) v.findViewById(R.id.rvBarCodeScann);
 
 
-        productScannInfoList = new ArrayList<>();
+        productScanInfoList = new ArrayList<>();
 
         //set RecyclerView's size fixed
         rvScann.setHasFixedSize(true);
@@ -249,12 +239,12 @@ public class BarCodeSearchFragment extends Fragment{
         @Override
         protected Void doInBackground(Integer... ints) {
 
-            computeBarCodeCards(productScannInfoList);
+            computeBarCodeCards(productScanInfoList);
 
             return null;
         }
 
-        private void computeBarCodeCards(List<ProductScannInfo> productScannInfoList) {
+        private void computeBarCodeCards(List<ProductScanInfo> productScanInfoList) {
             /*materialTrashInfoList.clear();
             List<Material> materials = null;
 
@@ -280,7 +270,7 @@ public class BarCodeSearchFragment extends Fragment{
                 }
             }*/
 
-            productScannInfoList.clear();
+            productScanInfoList.clear();
 
             //TODO crea Lista di ProductScann
 
@@ -290,7 +280,7 @@ public class BarCodeSearchFragment extends Fragment{
 
             //TODO se la lista non è null fai un for
                 //elabora card con ProductscanInfo
-                //add a productScannInfoList
+                //add a productScanInfoList
 
             //TODO TextView gone e RecyclerView visible
 
@@ -298,7 +288,7 @@ public class BarCodeSearchFragment extends Fragment{
 
         }
 
-        private ProductScannInfo computeCardStructure(){
+        private ProductScanInfo computeCardStructure(){
 
             /*MaterialTrashInfo materialTrashInfo = new MaterialTrashInfo();
             String dayName = selectDay(material.getDays());
@@ -322,7 +312,7 @@ public class BarCodeSearchFragment extends Fragment{
 
             return materialTrashInfo;*/
 
-            ProductScannInfo productScannInfo = new ProductScannInfo();
+            ProductScanInfo productScanInfo = new ProductScanInfo();
             return null;
         }
 
@@ -343,8 +333,8 @@ public class BarCodeSearchFragment extends Fragment{
         @Override
         protected void onPostExecute(Void aVoid) {
 
-            productScannRecyclerViewAdapter = new ProductScannRecyclerViewAdapter(productScannInfoList);
-            rvScann.setAdapter(productScannRecyclerViewAdapter);
+            productScanRecyclerViewAdapter = new ProductScanRecyclerViewAdapter(productScanInfoList);
+            rvScann.setAdapter(productScanRecyclerViewAdapter);
 
             if(waitingDialog != null){
                 waitingDialog.dismiss();

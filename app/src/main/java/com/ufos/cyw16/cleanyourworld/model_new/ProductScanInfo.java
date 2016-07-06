@@ -17,7 +17,7 @@ package com.ufos.cyw16.cleanyourworld.model_new;
 /**
  * Created by simone_mancini on 05/07/16.
  */
-public class ProductScannInfo {
+public class ProductScanInfo {
 
     private String barcode, productName, materialProduct, collectionDay, trashColorCode, scannDate;
 
