@@ -11,9 +11,12 @@ package com.ufos.cyw16.cleanyourworld.fragment;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -259,12 +262,16 @@ public class BarCodeSearchFragment extends Fragment{
         builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                try {
-                    DaoFactory_def.getInstance(getContext()).getProtuctScanDao().sendToServer(barcode);
-                    dialog.dismiss();
-                    Toast.makeText(getContext(), R.string.strMessageSent, Toast.LENGTH_LONG);
-                } catch (DaoException e) {
-                Message4Debug.log(e.getMessage());
+                if(isNetworkAvailable()) {
+                    try {
+                        DaoFactory_def.getInstance(getContext()).getProtuctScanDao().sendToServer(barcode);
+                        dialog.dismiss();
+                        Toast.makeText(getContext(), R.string.strMessageSent, Toast.LENGTH_LONG).show();
+                    } catch (DaoException e) {
+                        Message4Debug.log(e.getMessage());
+                    }
+                }else{
+                    showNoNetworkDialog(barcode);
                 }
             }
         });
@@ -304,6 +311,56 @@ public class BarCodeSearchFragment extends Fragment{
         return Integer.toString(year) + "/" + Integer.toString(month) + "/" + Integer.toString(day);
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+
+    private void showNoNetworkDialog(final String barcode) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext(),R.style.YellowAlertDialogStyle);
+        builder.setTitle(getString(R.string.no_internet));
+        builder.setMessage(getString(R.string.open_internet));
+
+        String positiveText = getString(R.string.try_again);
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // check if internet connect and try again
+                        if(isNetworkAvailable()){
+                            try {
+                                DaoFactory_def.getInstance(getContext()).getProtuctScanDao().sendToServer(barcode);
+                                dialog.dismiss();
+                                Toast.makeText(getContext(), R.string.strMessageSent, Toast.LENGTH_LONG);
+                            } catch (DaoException e) {
+                                Message4Debug.log(e.getMessage());
+                            }
+                        }else {
+                            showNoNetworkDialog(barcode);
+                        }
+
+                    }
+                });
+
+        String negativeText = getString(R.string.exit);
+        builder.setNegativeButton(negativeText, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getActivity().finish();
+            }
+        });
+
+
+        AlertDialog dialog = builder.create();
+        // display dialog
+        dialog.show();
+
+
+    }
 
     public boolean isPermission() {
         return permission;
