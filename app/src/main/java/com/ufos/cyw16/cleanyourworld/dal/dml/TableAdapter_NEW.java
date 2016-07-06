@@ -409,14 +409,18 @@ public class TableAdapter_NEW {
                 HttpURLConnection connection = null;
                 try {
                     URL url = new URL(finalQuery);
+                    Message4Debug.log("sdera "+finalQuery);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.connect();
-                    connection.disconnect();
+                    InputStream inputStream = connection.getInputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+                    String line = br.readLine();
+                    //connection.disconnect();
                 } catch (IOException e) {
                     Message4Debug.log(e.getMessage());
                 } finally {
-                    if (connection != null)
-                        connection.disconnect();
+                   // if (connection != null)
+                     //   connection.disconnect();
                 }
             }
         }

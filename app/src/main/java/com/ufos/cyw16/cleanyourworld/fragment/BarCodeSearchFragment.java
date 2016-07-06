@@ -202,6 +202,11 @@ public class BarCodeSearchFragment extends Fragment{
         //set the layout manager in recycler view
         rvScann.setLayoutManager(linearLayoutManager);
 
+        if(productScanInfoList != null) {
+            productScanRecyclerViewAdapter = new ProductScanRecyclerViewAdapter(productScanInfoList);
+            rvScann.setAdapter(productScanRecyclerViewAdapter);
+        }
+
 
 
     }
@@ -236,11 +241,10 @@ public class BarCodeSearchFragment extends Fragment{
             } catch (NotFoundElementException e) {
                 showAllertDialogSendToServer(scanContent);
             }
-
-            if(barCodeSearchAsyncTask == null){
+            if(productScan != null) {
                 barCodeSearchAsyncTask = new BarCodeSearchAsyncTask();
+                barCodeSearchAsyncTask.execute("Scan");
             }
-            barCodeSearchAsyncTask.execute("Scan");
         } else {
             Toast.makeText(this.getActivity(), "No scan data received!", Toast.LENGTH_LONG).show();
         }
@@ -354,17 +358,10 @@ public class BarCodeSearchFragment extends Fragment{
                 return;
             }
 
-            for (ProductScan p: productScanList){
+            for (ProductScan p: productScanList) {
                 ProductScanInfo productScanInfo = computeCardStructure(p);
                 productScanInfoList.add(productScanInfo);
             }
-
-            if(productScanInfoList != null){
-                productScanRecyclerViewAdapter.notifyDataSetChanged();
-            }
-            tvSuggest.setVisibility(View.GONE);
-            rvScann.setVisibility(View.VISIBLE);
-
 
 
         }
@@ -377,7 +374,7 @@ public class BarCodeSearchFragment extends Fragment{
             productScanInfo.setMaterialProduct(productScan.getProduct().getProductType().getMaterial().getName());
             //productScanInfo.setTrashColorCode(productScan.getProduct().getProductType().getMaterial().getColor().getColorCode());
             productScanInfo.setBarcode(productScan.getProduct().getEAN());
-            productScanInfo.setCollectionDay(selectDay(productScan.getProduct().getProductType().getMaterial().getDays()));
+            //productScanInfo.setCollectionDay(selectDay(productScan.getProduct().getProductType().getMaterial().getDays()));
             productScanInfo.setScannDate(productScan.getDate());
 
             return productScanInfo;
@@ -400,8 +397,15 @@ public class BarCodeSearchFragment extends Fragment{
         @Override
         protected void onPostExecute(Void aVoid) {
 
-            productScanRecyclerViewAdapter = new ProductScanRecyclerViewAdapter(productScanInfoList);
-            rvScann.setAdapter(productScanRecyclerViewAdapter);
+            if(productScanRecyclerViewAdapter != null){
+                productScanRecyclerViewAdapter.notifyDataSetChanged();
+            }else{
+                productScanRecyclerViewAdapter = new ProductScanRecyclerViewAdapter(productScanInfoList);
+                rvScann.setAdapter(productScanRecyclerViewAdapter);
+            }
+            tvSuggest.setVisibility(View.GONE);
+            rvScann.setVisibility(View.VISIBLE);
+
 
             if(waitingDialog != null){
                 waitingDialog.dismiss();

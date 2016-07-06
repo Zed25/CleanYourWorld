@@ -12,6 +12,7 @@ import android.content.Context;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDao;
 import com.ufos.cyw16.cleanyourworld.dal.dao.EntityDaoSQLite;
 import com.ufos.cyw16.cleanyourworld.dal.dml.DaoException;
+import com.ufos.cyw16.cleanyourworld.model_new.Product;
 import com.ufos.cyw16.cleanyourworld.model_new.ProductScan;
 import com.ufos.cyw16.cleanyourworld.model_new.dao.DaoFactory_def;
 import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
@@ -60,6 +61,10 @@ public interface ProductScanDao extends EntityDao<ProductScan> {
         @Override
         protected List<String[]> serialize(ProductScan entity) throws DaoException {
             String[] key = new String[]{"prodotti_id", "date"};
+            //Product p;
+            //if(( p = entity.getProduct())==null){
+            //    throw new DaoException("Elemento non presente");
+            //}
             String[] values = new String[]{String.valueOf(entity.getProduct().getIdProduct()), entity.getDate()};
             List<String[]> serialization = new ArrayList<>();
             serialization.add(key);

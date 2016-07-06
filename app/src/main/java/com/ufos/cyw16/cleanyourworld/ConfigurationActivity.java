@@ -466,8 +466,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         SharedPreferences prefs = getSharedPreferences("comune",MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
 
-        // TODO remove comments when finished
-        //editor.putBoolean("firstTime",false);
+        editor.putBoolean("configDone",true);
         editor.putInt("regione_id",regioneChosen.getIdRegione_int());
         editor.putInt("provincia_id",provinciaChosen.getIdProvincia());
         editor.putInt("comune_id",comuneChosen.getIdComune());
