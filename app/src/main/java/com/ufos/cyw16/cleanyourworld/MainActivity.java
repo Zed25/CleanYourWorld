@@ -49,7 +49,6 @@ import com.ufos.cyw16.cleanyourworld.dal.dml.tablesAdapter.ComuniTableAdapter;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarMonthViewFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.CalendarWeekViewFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.DbFragment;
-import com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity;
 import com.ufos.cyw16.cleanyourworld.fragment.MaterialsSearchFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.BarCodeSearchFragment;
 import com.ufos.cyw16.cleanyourworld.fragment.subfragment.ProductsSearchSubFragment;

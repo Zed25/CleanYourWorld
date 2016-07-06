@@ -1,21 +1,31 @@
 /*
+ * Created by UFOS from simone_mancini
+ * Project: CleanYourWorld
+ * Package: com.ufos.cyw16.cleanyourworld.GeolocalizationActivity
+ * Last modified: 06/07/16 13.42
+ */
+
+/*
  * Created by UFOS from Sasha
  * Project: CleanYourWorld
- * Package: com.ufos.cyw16.cleanyourworld.fragment.GeolocalizationActivity
+ * Package: com.ufos.cyw16.cleanyourworld.GeolocalizationActivity
  * Last modified: 05/07/16 4.33
  */
 
-package com.ufos.cyw16.cleanyourworld.fragment;
+package com.ufos.cyw16.cleanyourworld;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +47,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.ufos.cyw16.cleanyourworld.R;
+import com.ufos.cyw16.cleanyourworld.fragment.PlaceSelectedItem;
+import com.ufos.cyw16.cleanyourworld.fragment.PlaceSelectedTask;
+import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The type Geolocalization activity.
@@ -46,10 +64,13 @@ import com.ufos.cyw16.cleanyourworld.R;
 public class GeolocalizationActivity extends FragmentActivity implements
         GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
 
-    private final int MY_PLACE_PERMISSION = 0;
+    private final int USER_PLACE_PERMISSION = 40;
+    private final int USER_GPS_PERMISSION = 50;
+    final private int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
     private GoogleApiClient client;
     private GoogleMap myGoogleMap;
     private ProgressBar progressBar;
+    private Boolean permission;
 
     /**
      * Instantiates a new Geolocalization activity.
@@ -152,21 +173,116 @@ public class GeolocalizationActivity extends FragmentActivity implements
         LatLng defaultLocation = new LatLng(-33.867, 151.206);
 
         // API 23 permissions checks
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+        //if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        //    if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PLACE_PERMISSION);
-            }
+        //    } else {
+        //        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PLACE_PERMISSION);
+        //    }
+        //}
+        if(android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
+            checkMapsPermission();
+        }else{
+            setPermission(true);
         }
+        if(permission != null && permission) {
+            Message4Debug.log("Entrato");
+            myGoogleMap.setMyLocationEnabled(true);
+            //FIXME Umberto
 
-//        googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 13));
-        googleMap.addMarker(new MarkerOptions().position(defaultLocation));
-
+        }
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLocation, 13));
+            googleMap.addMarker(new MarkerOptions().position(defaultLocation));
         // Start AsyncTask
         placeSelectedTask(defaultLocation);
 
+    }
+
+    //runtime gps and localizzation permission request
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkMapsPermission() {
+        List<String> permissionsNeeded = new ArrayList<String>();
+
+        final List<String> permissionsList = new ArrayList<String>();
+        if (!addPermission(permissionsList, Manifest.permission.ACCESS_FINE_LOCATION))
+            permissionsNeeded.add("GPS");
+        if (!addPermission(permissionsList, Manifest.permission.ACCESS_COARSE_LOCATION))
+            permissionsNeeded.add("GSM");
+
+        if (permissionsList.size() > 0) {
+            if (permissionsNeeded.size() > 0) {
+                // Need Rationale
+                String message = "You need to grant access to " + permissionsNeeded.get(0);
+                for (int i = 1; i < permissionsNeeded.size(); i++)
+                    message = message + ", " + permissionsNeeded.get(i);
+                showMessageOKCancel(message,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                                        REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+                            }
+                        }, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                setPermission(false);
+                            }
+                        });
+                return;
+            }
+            requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                    REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+            return;
+        }
+        setPermission(true);
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener cancelListener) {
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", cancelListener)
+                .create()
+                .show();
+    }
+    @TargetApi(Build.VERSION_CODES.M)
+    private boolean addPermission(List<String> permissionsList, String permission) {
+        if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+            permissionsList.add(permission);
+            // Check for Rationale Option
+            if (!shouldShowRequestPermissionRationale(permission))
+                return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS:
+            {
+                Map<String, Integer> perms = new HashMap<String, Integer>();
+                // Initial
+                perms.put(Manifest.permission.ACCESS_FINE_LOCATION, PackageManager.PERMISSION_GRANTED);
+                perms.put(Manifest.permission.ACCESS_COARSE_LOCATION, PackageManager.PERMISSION_GRANTED);
+                // Fill with results
+                for (int i = 0; i < permissions.length; i++)
+                    perms.put(permissions[i], grantResults[i]);
+                // Check for ACCESS_FINE_LOCATION and ACCESS_COARSE_LOCATION
+                if (perms.get(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                        && perms.get(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                    // All Permissions Granted
+                    setPermission(true);
+                    myGoogleMap.setMyLocationEnabled(true); //this is NOT an error beacause it requires permissions check, but this line is in an if block permission check
+                } else {
+                    // Permission Denied
+                    setPermission(false);
+                }
+            }
+            break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     /**
@@ -292,4 +408,12 @@ public class GeolocalizationActivity extends FragmentActivity implements
 
     }*/
 
+
+    public Boolean getPermission() {
+        return permission;
+    }
+
+    public void setPermission(Boolean permission) {
+        this.permission = permission;
+    }
 }
