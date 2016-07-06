@@ -9,17 +9,23 @@ import android.view.View;
 
 /**
  * Created by simone_mancini on 29/06/16.
- *
+ * <p>
  * This class will be used to define how the floating action button should respond to other views contained within the same CoordinatorLayout.
- *
+ * <p>
  * It has to be associate with a Floating Action Button (FAB).
- *
+ * <p>
  * It can be define within the XML declatation as a custom attribut app:layout_behaviour:"com.codepath.floatingactionbuttontest.ScrollAwareFABBehavior"
  */
 public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
 
 
-    //this kind of constructor is necessary to implement a static definition of this behavior class
+    /**
+     * Instantiates a new Scroll aware fab behavior.
+     *
+     * @param context the context
+     * @param attrs   the attrs
+     */
+//this kind of constructor is necessary to implement a static definition of this behavior class
     public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
         super();
     }

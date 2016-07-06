@@ -71,6 +71,9 @@ import com.ufos.cyw16.cleanyourworld.utlity.Message4Debug;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Main activity.
+ */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private RelativeLayout parent;
@@ -223,6 +226,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Update server.
+     */
     private void updateServer() {
         openWaitingDialog();
          /* DAOFactory */
@@ -260,6 +266,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Message4Debug.log("aggiornamento completato in: " + (System.currentTimeMillis() - start));
     }
 
+    /**
+     * Open waiting dialog.
+     */
     private void openWaitingDialog() {
         waitingDialog = new ProgressDialog(this, R.style.MyAlertDialogStyle);
         waitingDialog.setIndeterminate(true);
@@ -268,6 +277,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         waitingDialog.show();
     }
 
+    /**
+     * Show no network dialog.
+     */
     private void showNoNetworkDialog() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this,R.style.YellowAlertDialogStyle);
@@ -305,7 +317,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    // TODO remove before deploy; used only for debug
+    /**
+     * Print shared prefs after config.
+     */
+// TODO remove before deploy; used only for debug
     private void printSharedPrefsAfterConfig() {
 
         SharedPreferences prefs = getSharedPreferences("CYW", MODE_PRIVATE);
@@ -314,6 +329,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         System.out.println("CHOSEN COMUNE ID: " + prefs.getInt("comune_id",0));
     }
 
+    /**
+     * Configuration done boolean.
+     *
+     * @return the boolean
+     */
     private boolean configurationDone() {
 
         /* if configuration process completed successfully, a configDone Bool variable (set to TRUE)
@@ -336,6 +356,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    /**
+     * Prepare for configuration.
+     */
     private void prepareForConfiguration() {
         /* if it's the first time you open the app or you haven't previously chosen a COMUNE,
         *  a configuration activity starts */
@@ -344,6 +367,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    /**
+     * Is network available boolean.
+     *
+     * @return the boolean
+     */
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -351,6 +379,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    /**
+     * Create fragment.
+     */
     public void createFragment() {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
