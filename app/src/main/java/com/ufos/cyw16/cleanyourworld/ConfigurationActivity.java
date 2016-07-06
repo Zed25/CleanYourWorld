@@ -132,109 +132,113 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
         data = new ArrayList<>();
 
         //updateDBFromServer();
+        if (isNetworkAvailable()) {
 
-        asyncTask = new LoadFromDB();
-        asyncTask.execute();
+            asyncTask = new LoadFromDB();
+            asyncTask.execute();
 
-        //startStep(data);
+            //startStep(data);
 
         /* set adapter and layout manager for recycler view */
-        adapter = new ConfigAdapter(data);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+            adapter = new ConfigAdapter(data);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setAdapter(adapter);
 
-        // when switch is available,filters list with comuni with available collection
-        switchRecycle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    adapter.animateTo(comuniWithCollection);
-                } else {
-                    adapter.animateTo(data);
-                    recyclerView.scrollToPosition(0);
+            // when switch is available,filters list with comuni with available collection
+            switchRecycle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        adapter.animateTo(comuniWithCollection);
+                    } else {
+                        adapter.animateTo(data);
+                        recyclerView.scrollToPosition(0);
+                    }
                 }
-            }
-        });
+            });
 
-        btnContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            btnContinue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                 /* btnContinue is enabled when you choose an item of the list ;
                 * when it's clicked updates the data array and notifies the adapter that data has changed */
-                startStep(data);
-            }
-        });
-
-        btnBack.setOnClickListener(new View.OnClickListener() {
-
-            //change the step of the configuration
-            @Override
-            public void onClick(View v) {
-                // change step of config 1 step before
-                // when back button is pressed
-                switch (step){
-                    case PROVINCIA:
-                        step = ConfigStep.REGIONE;
-                        break;
-                    case COMUNE:
-                        step = ConfigStep.REGIONE;
-                        break;
-                    case END:
-                        step = ConfigStep.PROVINCIA;
-                        comuniWithCollection.clear();
-                        disableSwitch();
-
-                        break;
-                    default:
-                        step = ConfigStep.COMUNE;
-                        break;
+                    startStep(data);
                 }
+            });
 
-                startStep(data);
-            }
-        });
+            btnBack.setOnClickListener(new View.OnClickListener() {
+
+                //change the step of the configuration
+                @Override
+                public void onClick(View v) {
+                    // change step of config 1 step before
+                    // when back button is pressed
+                    switch (step) {
+                        case PROVINCIA:
+                            step = ConfigStep.REGIONE;
+                            break;
+                        case COMUNE:
+                            step = ConfigStep.REGIONE;
+                            break;
+                        case END:
+                            step = ConfigStep.PROVINCIA;
+                            comuniWithCollection.clear();
+                            disableSwitch();
+
+                            break;
+                        default:
+                            step = ConfigStep.COMUNE;
+                            break;
+                    }
+
+                    startStep(data);
+                }
+            });
 
 
-
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
+            recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), recyclerView, new ClickListener() {
+                @Override
+                public void onClick(View view, int position) {
 
                 /* whenever an item is selected, the regioneChosen attribute is update as to keep track of selection and later
                 * used in SQL queries (to display only related information);
                 * */
-                ConfigAdapterDataProvider provider = adapter.getData().get(position);
-                setChosenLocation(provider,position);
-                Toast.makeText(getApplicationContext(),getResources().getString(R.string.you_chose) + " " +provider.getName(),Toast.LENGTH_SHORT).show();
+                    ConfigAdapterDataProvider provider = adapter.getData().get(position);
+                    setChosenLocation(provider, position);
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.you_chose) + " " + provider.getName(), Toast.LENGTH_SHORT).show();
 
 
-                //checks if selected comune has collection available in local db
-                TextView tv = (TextView) view.findViewById(R.id.name);
-                if(step == ConfigStep.END) {
-                    int comuniWithCollectionSize = comuniWithCollection.size();
-                    boolean hasCollection = false;
-                    for(int i = 0;i < comuniWithCollectionSize; i++){
-                        if(comuniWithCollection.get(i).getName().equals(tv.getText())){
-                            hasCollection = true;
+                    //checks if selected comune has collection available in local db
+                    TextView tv = (TextView) view.findViewById(R.id.name);
+                    if (step == ConfigStep.END) {
+                        int comuniWithCollectionSize = comuniWithCollection.size();
+                        boolean hasCollection = false;
+                        for (int i = 0; i < comuniWithCollectionSize; i++) {
+                            if (comuniWithCollection.get(i).getName().equals(tv.getText())) {
+                                hasCollection = true;
+                            }
+                        }
+
+                        // if it doesn't , set it to null
+                        if (!hasCollection) {
+                            comuneChosen = null;
                         }
                     }
 
-                    // if it doesn't , set it to null
-                    if(!hasCollection){
-                        comuneChosen = null;
-                    }
+                    btnContinue.setEnabled(true);
+
                 }
 
-                btnContinue.setEnabled(true);
+                @Override
+                public void onLongClick(View view, int position) {
 
-            }
+                }
+            }));
 
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
+        } else {
+            return;
+        }
     }
 
     private void disableSwitch() {
@@ -701,5 +705,43 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    private void showNoNetworkDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.YellowAlertDialogStyle);
+        builder.setTitle(getString(R.string.no_internet));
+        builder.setMessage(getString(R.string.open_internet));
+
+        String positiveText = getString(R.string.try_again);
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // check if internet connect and try again
+                        if(isNetworkAvailable()){
+                            asyncTask = new LoadFromDB();
+                            asyncTask.execute();
+                        }else {
+                            showNoNetworkDialog();
+                        }
+
+                    }
+                });
+
+        String negativeText = getString(R.string.exit);
+        builder.setNegativeButton(negativeText, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+
+
+        AlertDialog dialog = builder.create();
+        // display dialog
+        dialog.show();
+
+
     }
 }
