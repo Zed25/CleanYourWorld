@@ -152,6 +152,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                     adapter.animateTo(comuniWithCollection);
                 } else {
                     adapter.animateTo(data);
+                    recyclerView.scrollToPosition(0);
                 }
             }
         });
@@ -181,6 +182,9 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                         break;
                     case END:
                         step = ConfigStep.PROVINCIA;
+                        comuniWithCollection.clear();
+                        disableSwitch();
+
                         break;
                     default:
                         step = ConfigStep.COMUNE;
@@ -202,7 +206,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
                 * */
                 ConfigAdapterDataProvider provider = adapter.getData().get(position);
                 setChosenLocation(provider,position);
-                Toast.makeText(getApplicationContext(),getResources().getString(R.string.you_chose) + provider.getName(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),getResources().getString(R.string.you_chose) + " " +provider.getName(),Toast.LENGTH_SHORT).show();
 
 
                 //checks if selected comune has collection available in local db
@@ -231,6 +235,14 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
 
             }
         }));
+    }
+
+    private void disableSwitch() {
+        //make it unchecked
+        switchRecycle.setChecked(false);
+        switchRecycle.setVisibility(View.INVISIBLE);
+        trashIV.setVisibility(View.INVISIBLE);
+
     }
 
     // private async task that gets from local db all regioni,province and comuni
@@ -426,7 +438,7 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.MyAlertDialogStyle);
         builder.setTitle(getResources().getString(R.string.location));
-        builder.setMessage(getResources().getString(R.string.you_are_in) + "\n" + comuneChosen.getName() + ","+provinciaChosen.getName() + "," + regioneChosen.getName());
+        builder.setMessage(getResources().getString(R.string.you_are_in) + "\n" + comuneChosen.getName() + ", "+provinciaChosen.getName() + ", " + regioneChosen.getName());
         builder.setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -594,7 +606,12 @@ public class ConfigurationActivity extends AppCompatActivity implements SearchVi
     @Override
     public boolean onQueryTextChange(String newText) {
         //filters list by new inserted text
-        final List<ConfigAdapterDataProvider> filteredModelList = filter(data, newText);
+        List<ConfigAdapterDataProvider> filteredModelList;
+        if(switchRecycle.isChecked()){
+            filteredModelList = filter(comuniWithCollection,newText);
+        } else {
+            filteredModelList = filter(data, newText);
+        }
         //shows only filtered rows
         adapter.animateTo(filteredModelList);
         //scroll to top
