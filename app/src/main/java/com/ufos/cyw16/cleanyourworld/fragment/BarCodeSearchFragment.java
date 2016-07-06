@@ -407,26 +407,25 @@ public class BarCodeSearchFragment extends Fragment{
 
             ProductScanDao productScanDao = DaoFactory_def.getInstance(getContext()).getProtuctScanDao();
 
-            try{
+            try {
                 productScanList = productScanDao.findAll();
             } catch (DaoException e) {
                 Message4Debug.log(e.getMessage());
             }
 
-            if(productScanList != null) {
+            if (productScanList != null) {
                 if (productScanList.size() == 0) {
                     tvSuggest.setText(getResources().getString(R.string.strClickOnFABToScann));
-                    return;
-                }
+                } else {
 
-                for (ProductScan p : productScanList) {
-                    ProductScanInfo productScanInfo = computeCardStructure(p);
-                    productScanInfoList.add(productScanInfo);
+                    for (ProductScan p : productScanList) {
+                        ProductScanInfo productScanInfo = computeCardStructure(p);
+                        productScanInfoList.add(productScanInfo);
+                    }
                 }
-                return;
+            }else{
+                tvSuggest.setText(getResources().getString(R.string.strClickOnFABToScann));
             }
-            tvSuggest.setText(getResources().getString(R.string.strClickOnFABToScann));
-
         }
 
         private ProductScanInfo computeCardStructure(ProductScan productScan){
